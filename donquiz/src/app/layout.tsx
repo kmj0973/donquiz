@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Jost } from "next/font/google";
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-jost",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${jost.variable} font-jost`}>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
