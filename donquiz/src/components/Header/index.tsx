@@ -4,10 +4,10 @@ const Header = () => {
   return (
     <header className="bg-black">
       <nav className="w-full h-16 px-10 py-7 text-white text-xl font-bold flex justify-between items-center">
-        <div className="text-5xl">
+        <Link className="text-5xl" href="/">
           <span className="text-[#FF0000]">D</span>ON
           <span className="text-[#FFF700]">Q</span>UIZ
-        </div>
+        </Link>
         <div className="flex">
           <Link className="mx-9" href="/about">
             about

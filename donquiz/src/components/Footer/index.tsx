@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="absolute bottom-0 w-full bg-black">
+    <footer className="relative bottom-0 w-full bg-black">
       <nav className="h-14 flex items-center justify-between p-6">
         <div className="text-white text-sm">
           © 2020 Your Company, Inc. All rights reserved.
