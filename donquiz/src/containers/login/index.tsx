@@ -1,15 +1,14 @@
 "use client";
 
-// import Image from "next/image";
-// import kakao_image from "../../../public/image/kakao.png";
-// import google_image from "../../../public/image/google.png";
 import Link from "next/link";
 import React, { useState } from "react";
-import { auth } from "../../../firebase/firebasedb";
+import { updateProfile } from "firebase/auth";
+import { auth, db } from "../../../firebase/firebasedb";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
@@ -19,6 +18,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isCheckNick, setIsCheckNick] = useState(false);
   const [isCheckEmail, setIsCheckEmail] = useState(false);
   const [isCheckPassword, setIsCheckPassword] = useState(false);
 
@@ -29,6 +29,7 @@ const Login = () => {
     setNickname("");
     setEmail("");
     setPassword("");
+    setIsCheckNick(false);
     setIsCheckEmail(false);
     setIsCheckPassword(false);
   };
@@ -36,12 +37,14 @@ const Login = () => {
   const onSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
+      .then(async (userCredential) => {
         const user = userCredential.user;
+        const accessToken = await user.getIdToken();
+
         console.log(user);
+
+        localStorage.setItem("accessToken", accessToken);
         router.push("/");
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -58,18 +61,34 @@ const Login = () => {
 
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsCheckNick(false);
     setIsCheckEmail(false);
     setIsCheckPassword(false);
 
-    if (email.length < 3) {
+    if (nickname.length < 2) {
+      setIsCheckNick(true);
+    } else if (email.length < 3) {
       setIsCheckEmail(true);
     } else if (password.length < 6) {
       setIsCheckPassword(true);
     } else {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
           console.log(user);
+
+          if (auth.currentUser) {
+            updateProfile(auth.currentUser, {
+              displayName: nickname,
+            });
+          }
+
+          await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            displayName: nickname,
+            email: email,
+          });
+
           onPopUp();
         })
         .catch((error) => {
@@ -118,7 +137,7 @@ const Login = () => {
           />
           <button
             type="submit"
-            className="bg-[#222222] rounded-lg p-3 text-white"
+            className="bg-[#222222] hover:bg-black rounded-lg p-3 text-white"
           >
             SIGN IN
           </button>
@@ -137,7 +156,7 @@ const Login = () => {
       <div className="flex flex-col items-center justify-center">
         <button
           onClick={onPopUp}
-          className="w-[400px] text-center text-white bg-[#222222] rounded-lg p-3 mb-2"
+          className="w-[400px] text-center text-white bg-[#222222] hover:bg-black rounded-lg p-3 mb-2"
         >
           SIGN UP
         </button>
@@ -148,7 +167,7 @@ const Login = () => {
               className="absolute w-screen h-screen top-0 bg-black opacity-70 flex justify-center items-center"
             ></div>
             <div className="absolute w-[550px] h-[550px] bottom-[25%] bg-white rounded-3xl flex flex-col justify-center items-center">
-              <div className="text-5xl font-bold mb-10 ">회원 가입</div>
+              <div className="text-5xl font-bold mb-10 ">SIGN UP</div>
               <form onSubmit={onSignUp} className="flex flex-col w-[400px]">
                 <label htmlFor="nickname" className="text-[#999999] mb-2">
                   Nickname
@@ -187,9 +206,14 @@ const Login = () => {
                     console.log(password);
                   }}
                 />
-                <button className="bg-[#222222] rounded-lg p-3 text-white">
+                <button className="bg-[#222222] hover:bg-black rounded-lg p-3 text-white">
                   SIGN UP
                 </button>
+                {isCheckNick ? (
+                  <div className="text-red-600 font-bold mt-1 text-center">
+                    허용되지 않은 닉네임입니다
+                  </div>
+                ) : null}
                 {isCheckEmail ? (
                   <div className="text-red-600 font-bold mt-1 text-center">
                     허용되지 않은 이메일입니다
