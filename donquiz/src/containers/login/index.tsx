@@ -51,11 +51,7 @@ const Login = () => {
         const errorMessage = error.message;
         console.log("code:" + errorCode + errorMessage);
 
-        if (errorCode.includes("email")) {
-          setIsCheckEmail(true);
-        } else {
-          setIsCheckPassword(true);
-        }
+        setIsCheckEmail(true);
       });
   };
 
