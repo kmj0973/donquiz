@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const Header = () => {
   const { isLogin, checkLogin } = useAuthStore();
+
   useEffect(() => {
     checkLogin();
   }, [checkLogin]);
@@ -33,7 +34,7 @@ const Header = () => {
         </div>
         {isLogin ? (
           <Link className="text-base" href="/myInfo">
-            마이페이지
+            MYPAGE
           </Link>
         ) : (
           <Link className="text-base" href="/login">

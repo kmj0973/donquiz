@@ -36,10 +36,11 @@ const Login = () => {
         const user = userCredential.user;
         const accessToken = await user.getIdToken();
 
+        setCookie("token", accessToken);
+
+        if (user.displayName) saveUser(user.displayName, accessToken);
         console.log(user);
 
-        setCookie("token", accessToken);
-        saveUser(accessToken);
         router.replace("/");
       })
       .catch((error) => {

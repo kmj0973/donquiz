@@ -12,7 +12,12 @@ const MyInfo = () => {
     router.push("/login");
   };
 
-  return <button onClick={onLogout}>mypage</button>;
+  return (
+    <>
+      <div></div>
+      <button onClick={onLogout}>mypage</button>
+    </>
+  );
 };
 
 export default MyInfo;
