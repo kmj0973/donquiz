@@ -133,7 +133,6 @@ const Auth = () => {
             placeholder="6자 이상"
             onChange={(e) => {
               setPassword(e.target.value);
-              console.log(password);
             }}
           />
           <button className="bg-[#222222] hover:bg-black rounded-lg p-3 text-white">

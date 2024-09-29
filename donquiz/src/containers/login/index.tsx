@@ -38,9 +38,7 @@ const Login = () => {
 
         setCookie("token", accessToken);
 
-        if (user.displayName) saveUser(user.displayName, accessToken);
-        console.log(user);
-
+        if (user.displayName) saveUser(user.displayName, user.uid);
         router.replace("/");
       })
       .catch((error) => {
@@ -68,7 +66,6 @@ const Login = () => {
             id="email"
             type="email"
             onChange={(e) => {
-              console.log(email);
               setEmail(e.target.value);
             }}
           />

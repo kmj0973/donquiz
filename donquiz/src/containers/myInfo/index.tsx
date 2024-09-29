@@ -1,21 +1,12 @@
 "use client";
 
-import { useAuthStore } from "@/hooks/useAuthStore";
-import { useRouter } from "next/navigation";
+import Logout from "./Logout";
 
 const MyInfo = () => {
-  const { logout } = useAuthStore();
-  const router = useRouter();
-
-  const onLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
   return (
     <>
       <div></div>
-      <button onClick={onLogout}>mypage</button>
+      <Logout />
     </>
   );
 };

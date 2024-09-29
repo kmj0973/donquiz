@@ -1,16 +1,7 @@
-"use client";
-
-import { useAuthStore } from "@/hooks/useAuthStore";
 import Link from "next/link";
-import { useEffect } from "react";
+import MyPage from "./MyPage";
 
 const Header = () => {
-  const { isLogin, checkLogin } = useAuthStore();
-
-  useEffect(() => {
-    checkLogin();
-  }, [checkLogin]);
-
   return (
     <header className="bg-black">
       <nav className="w-full h-16 px-10 py-7 text-white text-xl font-bold flex justify-between items-center">
@@ -32,15 +23,7 @@ const Header = () => {
             교환소
           </Link>
         </div>
-        {isLogin ? (
-          <Link className="text-base" href="/myInfo">
-            MYPAGE
-          </Link>
-        ) : (
-          <Link className="text-base" href="/login">
-            로그인
-          </Link>
-        )}
+        <MyPage />
       </nav>
     </header>
   );
