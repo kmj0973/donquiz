@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Jost } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jost.variable} font-jost`}>
         <Header />
+        <Toaster />
         {children}
         <Footer />
       </body>

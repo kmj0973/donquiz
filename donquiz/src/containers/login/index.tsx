@@ -9,6 +9,7 @@ import { setCookie } from "../../global/cookie";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { usePopUp } from "@/hooks/usePopUp";
 import Auth from "../auth";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const router = useRouter();
@@ -39,6 +40,7 @@ const Login = () => {
         setCookie("token", accessToken);
 
         if (user.displayName) saveUser(user.displayName, user.uid);
+        toast.success("로그인 성공");
         router.replace("/");
       })
       .catch((error) => {

@@ -1,12 +1,12 @@
 import { deleteCookie, getCookie } from "@/global/cookie";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface userInfoProps {
   displayName: string | null;
   uid: string | null;
-  saveUser: (displayName: string, uid: string) => void;
   isLogin: boolean; // 로그인 여부
+  saveUser: (displayName: string, uid: string) => void;
   checkLogin: () => void; // 로그인 여부 확인 함수
   logout: () => void; // 로그아웃
 }
@@ -38,7 +38,6 @@ export const useAuthStore = create(
     },
     {
       name: "authStore",
-      storage: createJSONStorage(() => localStorage),
     }
   )
 );
