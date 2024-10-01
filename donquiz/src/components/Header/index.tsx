@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MyPage from "./MyPage";
+import Navbar from "./Navbar";
 
 const Header = () => {
   return (
@@ -9,20 +10,7 @@ const Header = () => {
           <span className="text-[#FF0000]">D</span>ON
           <span className="text-[#FFF700]">Q</span>UIZ
         </Link>
-        <div className="flex">
-          <Link className="mx-9" href="/about">
-            about
-          </Link>
-          <Link className="mx-9" href="/create">
-            퀴즈 만들기
-          </Link>
-          <Link className="mx-9" href="/lanking">
-            랭킹
-          </Link>
-          <Link className="mx-9" href="/change">
-            교환소
-          </Link>
-        </div>
+        <Navbar />
         <MyPage />
       </nav>
     </header>
