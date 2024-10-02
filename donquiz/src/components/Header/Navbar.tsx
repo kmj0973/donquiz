@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const onDialog = () => {
     if (!isLogin) {
-      toast.error("로그인이 필요합니다.");
+      toast.error("로그인이 필요합니다.", { duration: 800 });
       router.push("/login");
     } else {
       OpenDialog();

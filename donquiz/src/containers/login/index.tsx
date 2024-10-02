@@ -40,7 +40,7 @@ const Login = () => {
         setCookie("token", accessToken);
 
         if (user.displayName) saveUser(user.displayName, user.uid);
-        toast.success("로그인 성공");
+        toast.success("로그인 성공", { duration: 1000 });
         router.replace("/");
       })
       .catch((error) => {
@@ -53,8 +53,8 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center justify-center">
-      <div className="h-36 text-[108px] text-white bg-black px-6 flex items-center mt-12 mb-20">
+    <div className="w-full h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-center">
+      <div className="h-36 text-[108px] text-white bg-black px-6 pb-3 flex items-center mt-12 mb-20">
         <span className="text-[#FF0000]">D</span>ON
         <span className="text-[#FFF700]">Q</span>UIZ
       </div>
