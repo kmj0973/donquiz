@@ -20,14 +20,10 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isCheckEmail, setIsCheckEmail] = useState(false);
-  const [isCheckPassword, setIsCheckPassword] = useState(false);
+  const [isCheckAuth, setIsCheckAuth] = useState(false);
   const onOpenPopUp = () => {
     OpenPopUp();
-    setEmail("");
-    setPassword("");
-    setIsCheckEmail(false);
-    setIsCheckPassword(false);
+    setIsCheckAuth(false);
   };
 
   const onSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +37,7 @@ const Login = () => {
 
         if (user.displayName) saveUser(user.displayName, user.uid);
         toast.success("로그인 성공", { duration: 1000 });
+
         router.replace("/");
       })
       .catch((error) => {
@@ -48,7 +45,7 @@ const Login = () => {
         const errorMessage = error.message;
         console.log("code:" + errorCode + errorMessage);
 
-        setIsCheckEmail(true);
+        setIsCheckAuth(true);
       });
   };
 
@@ -88,12 +85,7 @@ const Login = () => {
           >
             SIGN IN
           </button>
-          {isCheckEmail ? (
-            <div className="text-red-600 font-bold mt-1 text-center">
-              이메일과 비밀번호를 확인해주세요
-            </div>
-          ) : null}
-          {isCheckPassword ? (
+          {isCheckAuth ? (
             <div className="text-red-600 font-bold mt-1 text-center">
               이메일과 비밀번호를 확인해주세요
             </div>
