@@ -73,6 +73,7 @@ const Auth = () => {
             uid: user.uid,
             displayName: nickname,
             email: email,
+            quizList: [],
           });
 
           onClosePopUp();

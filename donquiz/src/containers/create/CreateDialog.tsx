@@ -1,9 +1,53 @@
 "use client";
 
 import { useDialog } from "@/hooks/useDialog";
+import { ref, uploadBytes } from "firebase/storage";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { db, storage } from "../../../firebase/firebasedb";
+import { arrayUnion, doc, setDoc } from "firebase/firestore";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
 const CreateDialog = () => {
   const { CloseDialog } = useDialog();
+  const uid = useAuthStore((state) => state.uid);
+
+  const [title, setTitle] = useState("");
+  const [titleImage, setTitleImage] = useState();
+
+  const [isCheckTitleImage, setIsCheckTitleImage] = useState(false);
+
+  const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const uploadFileName = uuidv4();
+    console.log(uploadFileName);
+
+    if (!titleImage) {
+      setIsCheckTitleImage(false);
+      return;
+    }
+    const imageRef = ref(storage, `images/${uploadFileName}`);
+    uploadBytes(imageRef, titleImage);
+
+    if (uid) {
+      await setDoc(doc(db, "quizList", uid), {
+        quizList: arrayUnion({
+          title,
+          uploadFileName: arrayUnion(uploadFileName),
+        }),
+      });
+    }
+
+    console.log(title, titleImage);
+  };
+
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files !== null) {
+      setTitleImage(e.target.files[0]);
+      console.log(e.target.files[0]);
+      setIsCheckTitleImage(true);
+    }
+  };
 
   return (
     <>
@@ -14,18 +58,35 @@ const CreateDialog = () => {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="absolute w-[600px] h-[500px]
+          className="absolute w-[550px] h-[550px]
        bottom-[35%] text-black bg-white rounded-3xl flex flex-col justify-center items-center"
         >
-          <div className="text-4xl font-bold mb-10">퀴즈 만들기</div>
-          <form>
+          <div className="text-4xl font-bold mb-8">퀴즈 만들기</div>
+          <form onSubmit={handleQuizFrame}>
             <input
               className="w-[450px] border-0 bg-[#f2f2f2] rounded-lg p-3 mb-5"
               placeholder="제목을 입력해주세요"
+              id="title"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
             />
-            <div className="w-[450px] h-[200px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-8">
-              <label htmlFor="file">썸네일을 선택해주세요</label>
-              <input id="file" type="file" className="overflow-hidden" />
+            <div className="w-[450px] h-[270px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-6">
+              <label
+                htmlFor="file"
+                className="flex flex-col justify-center items-center"
+              >
+                <div className="mb-2">썸네일을 선택해주세요</div>
+                <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
+                  파일 업로드
+                </div>
+              </label>
+              <input
+                id="file"
+                type="file"
+                className="hidden"
+                onChange={handleImage}
+              />
             </div>
             <div className="flex justify-around items-center">
               <button
