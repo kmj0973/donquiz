@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 const Create = () => {
-  const { isLogin } = useAuthStore();
+  const isLogin = useAuthStore((state) => state.isLogin);
   const router = useRouter();
 
   useEffect(() => {

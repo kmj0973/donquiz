@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const MyPage = () => {
-  const { isLogin, checkLogin } = useAuthStore();
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const checkLogin = useAuthStore((state) => state.checkLogin);
   const [auth, setAuth] = useState<string | null>("");
 
   useEffect(() => {

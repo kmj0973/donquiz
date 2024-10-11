@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 const Login = () => {
   const router = useRouter();
 
-  const { saveUser } = useAuthStore();
+  const saveUser = useAuthStore((state) => state.saveUser);
   const { isOpen, OpenPopUp } = usePopUp();
 
   const [email, setEmail] = useState("");

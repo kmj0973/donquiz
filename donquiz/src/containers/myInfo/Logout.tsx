@@ -1,16 +1,17 @@
 "use client";
 
 import { useAuthStore } from "@/hooks/useAuthStore";
-import { useStore } from "@/hooks/useStore";
+// import { useStore } from "@/hooks/useStore";
 import { useRouter } from "next/navigation";
 
 const Logout = () => {
   const router = useRouter();
-  const { logout } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
+  const displayName = useAuthStore((state) => state.displayName);
 
-  const displayName = useStore(useAuthStore, (state) => {
-    return state.displayName;
-  }); //zustand persist 적용
+  // const displayName = useStore(useAuthStore, (state) => {
+  //   return state.displayName;
+  // }); //zustand persist 적용
 
   const clearUserStorage = () => {
     useAuthStore.persist.clearStorage();
@@ -24,7 +25,7 @@ const Logout = () => {
 
   return (
     <>
-      <div>{displayName}</div>
+      <div>{displayName ? displayName : "undefined"}</div>
       <button onClick={onLogout}>logout</button>
     </>
   );

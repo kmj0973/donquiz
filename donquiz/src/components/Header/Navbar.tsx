@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { isOpen, OpenDialog } = useDialog();
-  const { isLogin } = useAuthStore();
+  const isLogin = useAuthStore((state) => state.isLogin);
   const router = useRouter();
 
   const onDialog = () => {
