@@ -5,48 +5,60 @@ import { ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../firebase/firebasedb";
-import { arrayUnion, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const CreateDialog = () => {
   const { CloseDialog } = useDialog();
   const uid = useAuthStore((state) => state.uid);
 
-  const [title, setTitle] = useState("");
-  const [titleImage, setTitleImage] = useState();
+  const router = useRouter();
 
-  const [isCheckTitleImage, setIsCheckTitleImage] = useState(false);
+  const [title, setTitle] = useState<string>("");
+  const [titleImage, setTitleImage] = useState<File | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | null>("");
 
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const uploadFileName = uuidv4();
-    console.log(uploadFileName);
-
-    if (!titleImage) {
-      setIsCheckTitleImage(false);
+    if (!titleImage || title.length < 3) {
+      console.log("제목을 3글자 이상 입력해주세요");
       return;
     }
-    const imageRef = ref(storage, `images/${uploadFileName}`);
+
+    const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
+    console.log(uploadFileName);
+
+    const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
     uploadBytes(imageRef, titleImage);
 
     if (uid) {
-      await setDoc(doc(db, "quizList", uid), {
-        quizList: arrayUnion({
-          title,
-          uploadFileName: arrayUnion(uploadFileName),
-        }),
+      //파이어스토어에 제목과 썸네일 저장
+      await setDoc(doc(collection(db, "users", uid, "quizList")), {
+        title,
+        thumbnail: uploadFileName,
       });
     }
-
-    console.log(title, titleImage);
+    CloseDialog();
+    router.push("/create");
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
-      setTitleImage(e.target.files[0]);
-      console.log(e.target.files[0]);
-      setIsCheckTitleImage(true);
+    if (e.target.files == null) {
+      return;
     }
+    setTitleImage(e.target.files[0]);
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(e.target.files[0]);
+
+    reader.onload = (e) => {
+      if (reader.readyState === 2) {
+        setThumbnail(e.target.result);
+      }
+    };
   };
 
   return (
@@ -71,24 +83,38 @@ const CreateDialog = () => {
                 setTitle(e.target.value);
               }}
             />
+
             <div className="w-[450px] h-[270px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-6">
-              <label
-                htmlFor="file"
-                className="flex flex-col justify-center items-center"
-              >
-                <div className="mb-2">썸네일을 선택해주세요</div>
-                <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
-                  파일 업로드
+              {thumbnail ? (
+                <div className="relative w-[440px] h-[270px]">
+                  <Image
+                    src={thumbnail}
+                    alt="썸네일"
+                    fill
+                    style={{ borderRadius: "8px" }}
+                  />
                 </div>
-              </label>
-              <input
-                id="file"
-                type="file"
-                className="hidden"
-                onChange={handleImage}
-              />
+              ) : (
+                <>
+                  <label
+                    htmlFor="file"
+                    className="flex flex-col justify-center items-center"
+                  >
+                    <div className="mb-2">썸네일을 선택해주세요</div>
+                    <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
+                      파일 업로드
+                    </div>
+                  </label>
+                  <input
+                    id="file"
+                    type="file"
+                    className="hidden"
+                    onChange={handleImage}
+                  />
+                </>
+              )}
             </div>
-            <div className="flex justify-around items-center">
+            <div className="flex justify-around items-center mb-2">
               <button
                 type="submit"
                 className="w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
