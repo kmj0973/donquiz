@@ -18,7 +18,7 @@ const CreateDialog = () => {
 
   const [title, setTitle] = useState<string>("");
   const [titleImage, setTitleImage] = useState<File | null>(null);
-  const [thumbnail, setThumbnail] = useState<string | null>("");
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
 
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,13 +35,17 @@ const CreateDialog = () => {
 
     if (uid) {
       //파이어스토어에 제목과 썸네일 저장
-      await setDoc(doc(collection(db, "users", uid, "quizList")), {
+      const docRef = doc(collection(db, "users", uid, "quizList"));
+
+      await setDoc(docRef, {
         title,
         thumbnail: uploadFileName,
       });
+      console.log(docRef.id);
+
+      CloseDialog();
+      router.push(`/create/${docRef.id}`);
     }
-    CloseDialog();
-    router.push("/create");
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +60,7 @@ const CreateDialog = () => {
 
     reader.onload = (e) => {
       if (reader.readyState === 2) {
-        setThumbnail(e.target.result);
+        setThumbnail(String(e.target!.result));
       }
     };
   };
