@@ -4,7 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const Create = () => {
@@ -18,37 +18,59 @@ const Create = () => {
   const [answer, setAnswer] = useState<string>("");
   const [source, setSource] = useState<string>("");
 
-  const [showImageIndex, setShowImageIndex] = useState<string | null>();
+  const [showImageIndex, setShowImageIndex] = useState<number | null>();
 
   const handleAnswerAndSource = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(imageList);
+    console.log(answerList);
+    console.log(sourceList);
     if (answer == "" || source == "") {
       console.log("정답과 출처를 작성해주세요");
       return;
     }
 
-    setAnswerList([...answerList, answer]);
-    setSourceList([...sourceList, source]);
+    if (showImageIndex != null) answerList[showImageIndex] = answer;
+    setAnswerList([...answerList]);
+
+    if (showImageIndex != null) sourceList[showImageIndex] = source;
+    setSourceList([...sourceList]);
   };
 
   const handleShowImage = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     //리스트에 있는 이미지 클릭시 대표이미지 변경 및 정답, 이미지 출처 보여주기
-    console.log(e.currentTarget.parentElement?.id);
     const imageIndex = e.currentTarget.parentElement?.id;
     if (imageIndex) {
-      setShowImageIndex(imageIndex);
+      setShowImageIndex(Number(imageIndex));
       setShowImage(imageList[Number(imageIndex)]);
+      setAnswer(answerList[Number(imageIndex)]);
+      setSource(sourceList[Number(imageIndex)]);
     }
   };
 
   const handleCancel = (e: React.MouseEvent<SVGAElement, MouseEvent>) => {
-    console.log(e.currentTarget.parentElement?.id);
     const imageIndex = e.currentTarget.parentElement?.id;
     if (imageIndex) {
-      // if (imageIndex !== "0") setShowImage(imageList[0]);
-      // else setShowImage("");
-
       setImageList(imageList.filter((image, idx) => idx != Number(imageIndex)));
+      setAnswerList(
+        answerList.filter((answer, idx) => idx != Number(imageIndex))
+      );
+      setSourceList(
+        sourceList.filter((source, idx) => idx != Number(imageIndex))
+      );
+
+      if (imageIndex !== "0" && imageList.length > 0) {
+        setShowImage(imageList[Number(imageIndex) - 1]);
+        setShowImageIndex(Number(imageIndex) - 1);
+      } else if (imageIndex == "0" && imageList.length > 0) {
+        setShowImage(imageList[1]);
+        setShowImageIndex(0);
+      } else {
+        setShowImage("");
+        setShowImageIndex(null);
+        // setAnswer("");
+        // setSource("");
+      }
     }
   };
 
@@ -58,7 +80,6 @@ const Create = () => {
       return;
     }
     setUploadFile(e.target.files[0]);
-    console.log("upload");
     const reader = new FileReader();
 
     reader.readAsDataURL(e.target.files[0]);
@@ -67,6 +88,11 @@ const Create = () => {
       if (reader.readyState === 2) {
         setShowImage(String(e.target!.result));
         setImageList([...imageList, String(e.target!.result)]);
+        setAnswerList([...answerList, ""]);
+        setSourceList([...sourceList, ""]);
+        setAnswer("");
+        setSource("");
+        setShowImageIndex(imageList.length);
       }
     };
   };
@@ -88,7 +114,7 @@ const Create = () => {
       <div className="w-[90%] h-[600px] flex justify-center mb-4">
         <div className="w-[100%] max-w-[600px] mr-10">
           <div className="relative h-[500px] border-4 flex justify-center items-center">
-            {showImage != "" ? (
+            {imageList.length != 0 ? (
               <Image src={showImage} fill alt="이미지" />
             ) : (
               <CiImageOff size="24px" />
@@ -150,6 +176,7 @@ const Create = () => {
               className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
+              value={showImageIndex != null ? answer : ""}
             />
           </div>
           <div className="mb-14">
@@ -166,6 +193,7 @@ const Create = () => {
               className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
+              value={showImageIndex != null ? source : ""}
             />
           </div>
           {/* <div className="mb-10">
