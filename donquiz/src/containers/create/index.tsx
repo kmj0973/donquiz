@@ -28,6 +28,7 @@ const Create = () => {
   const router = useRouter();
 
   const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
+  const [newQuizList, setNewQuizList] = useState<QuizList[]>([]);
 
   const [showImage, setShowImage] = useState<string>("");
   const [quizList, setQuizList] = useState<QuizList[]>([]);
@@ -40,31 +41,35 @@ const Create = () => {
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(docId);
-    if (quizList.length < 3) {
-      toast.error("문제를 3개 이상 등록해주세요", {
-        duration: 3000,
-      });
-      return;
-    }
+    // if (quizList.length < 3) {
+    //   toast.error("문제를 3개 이상 등록해주세요", {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
 
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
       console.log(docRef.id);
 
+      uploadFileList.map((uploadFile, index) => {
+        const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
+        console.log(uploadFileName);
+
+        const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
+        uploadBytes(imageRef, uploadFile);
+
+        newQuizList[index].image = uploadFileName;
+        setNewQuizList(newQuizList);
+      });
+
       toast.promise(
         updateDoc(docRef, {
-          quizList: quizList,
+          quizList: newQuizList,
         }),
         {
           loading: "Saving...",
           success: () => {
-            uploadFileList.map((uploadFile) => {
-              const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
-              console.log(uploadFileName);
-
-              const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
-              uploadBytes(imageRef, uploadFile);
-            });
             router.replace("/");
             return <b>Settings saved!</b>;
           },
@@ -113,6 +118,9 @@ const Create = () => {
     const quizIndex = e.currentTarget.parentElement?.id;
     if (quizIndex) {
       setQuizList(quizList.filter((quiz, index) => index != Number(quizIndex)));
+      setNewQuizList(
+        newQuizList.filter((quiz, index) => index != Number(quizIndex))
+      );
       setUploadFileList(
         uploadFileList.filter((uploadFile, index) => index != Number(quizIndex))
       );
@@ -147,6 +155,10 @@ const Create = () => {
       if (reader.readyState === 2) {
         setQuizList([
           ...quizList,
+          { image: String(e.target!.result), answer: "", source: "" },
+        ]);
+        setNewQuizList([
+          ...newQuizList,
           { image: String(e.target!.result), answer: "", source: "" },
         ]);
         setShowImage(String(e.target!.result));
