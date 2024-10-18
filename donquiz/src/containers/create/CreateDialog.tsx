@@ -67,10 +67,10 @@ const CreateDialog = () => {
 
   return (
     <>
-      <div className="absolute w-screen h-screen left-0 top-0 bg-black opacity-70 flex justify-center items-center"></div>
+      <div className="absolute w-screen h-screen left-0 top-0 bg-black opacity-70 flex justify-center items-center z-10"></div>
       <div
         onClick={CloseDialog}
-        className="absolute w-screen h-screen left-0 top-0 flex justify-center items-center"
+        className="absolute w-screen h-screen left-0 top-0 flex justify-center items-center z-10"
       >
         <div
           onClick={(e) => e.stopPropagation()}

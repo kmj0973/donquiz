@@ -4,7 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 const Create = () => {
@@ -25,6 +25,10 @@ const Create = () => {
     console.log(imageList);
     console.log(answerList);
     console.log(sourceList);
+    if (imageList.length == 0) {
+      console.log("사진을 등록해주세요");
+      return;
+    }
     if (answer == "" || source == "") {
       console.log("정답과 출처를 작성해주세요");
       return;
@@ -62,14 +66,15 @@ const Create = () => {
       if (imageIndex !== "0" && imageList.length > 0) {
         setShowImage(imageList[Number(imageIndex) - 1]);
         setShowImageIndex(Number(imageIndex) - 1);
+        setAnswer(answerList[Number(imageIndex) - 1]);
+        setSource(sourceList[Number(imageIndex) - 1]);
       } else if (imageIndex == "0" && imageList.length > 0) {
         setShowImage(imageList[1]);
         setShowImageIndex(0);
+        setAnswer(answerList[1]);
+        setSource(sourceList[1]);
       } else {
-        setShowImage("");
         setShowImageIndex(null);
-        // setAnswer("");
-        // setSource("");
       }
     }
   };
@@ -113,7 +118,7 @@ const Create = () => {
       </form>
       <div className="w-[90%] h-[600px] flex justify-center mb-4">
         <div className="w-[100%] max-w-[600px] mr-10">
-          <div className="relative h-[500px] border-4 flex justify-center items-center">
+          <div className="relative h-[500px] border-4 flex justify-center items-center z-0">
             {imageList.length != 0 ? (
               <Image src={showImage} fill alt="이미지" />
             ) : (
@@ -176,7 +181,7 @@ const Create = () => {
               className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
-              value={showImageIndex != null ? answer : ""}
+              value={imageList.length != 0 ? answer : ""}
             />
           </div>
           <div className="mb-14">
@@ -193,7 +198,7 @@ const Create = () => {
               className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
-              value={showImageIndex != null ? source : ""}
+              value={imageList.length != 0 ? source : ""}
             />
           </div>
           {/* <div className="mb-10">
