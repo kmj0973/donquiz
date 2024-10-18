@@ -5,12 +5,14 @@ import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../firebase/firebasedb";
+import { db, storage } from "../../../firebase/firebasedb";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { ref, uploadBytes } from "firebase/storage";
 
 interface QuizList {
   image: string;
@@ -18,11 +20,14 @@ interface QuizList {
   source: string;
 }
 
+//문제점: 사진만 등록하고 정답 및 이미지 출처 작성하지않고 업로드할 경우가 있음
+// 정답과 이미지 출처 중 빈칸이 있는 걸 확인해야함
 const Create = () => {
   const docId = usePathname().slice(8); //documnet id
   const uid = useAuthStore((state) => state.uid); //user id
+  const router = useRouter();
 
-  const [uploadFile, setUploadFile] = useState<File | null>(); //현재 추가한 이미지
+  const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
 
   const [showImage, setShowImage] = useState<string>("");
   const [quizList, setQuizList] = useState<QuizList[]>([]);
@@ -35,13 +40,37 @@ const Create = () => {
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(docId);
+    if (quizList.length < 3) {
+      toast.error("문제를 3개 이상 등록해주세요", {
+        duration: 3000,
+      });
+      return;
+    }
+
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
       console.log(docRef.id);
 
-      await updateDoc(docRef, {
-        quizList: quizList,
-      });
+      toast.promise(
+        updateDoc(docRef, {
+          quizList: quizList,
+        }),
+        {
+          loading: "Saving...",
+          success: () => {
+            uploadFileList.map((uploadFile) => {
+              const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
+              console.log(uploadFileName);
+
+              const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
+              uploadBytes(imageRef, uploadFile);
+            });
+            router.replace("/");
+            return <b>Settings saved!</b>;
+          },
+          error: <b>Could not save.</b>,
+        }
+      );
     }
   };
 
@@ -84,6 +113,9 @@ const Create = () => {
     const quizIndex = e.currentTarget.parentElement?.id;
     if (quizIndex) {
       setQuizList(quizList.filter((quiz, index) => index != Number(quizIndex)));
+      setUploadFileList(
+        uploadFileList.filter((uploadFile, index) => index != Number(quizIndex))
+      );
 
       if (quizIndex !== "0" && quizList.length > 1) {
         setShowImage(quizList[Number(quizIndex) - 1].image);
@@ -106,7 +138,7 @@ const Create = () => {
       console.log("error");
       return;
     }
-    setUploadFile(e.target.files[0]); //storage에 추가하기위한 file 변수
+    setUploadFileList([...uploadFileList, e.target.files[0]]); //storage에 추가하기위한 file 변수
     const reader = new FileReader();
 
     reader.readAsDataURL(e.target.files[0]);
