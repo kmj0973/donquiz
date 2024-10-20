@@ -40,13 +40,12 @@ const Create = () => {
 
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(docId);
-    // if (quizList.length < 3) {
-    //   toast.error("문제를 3개 이상 등록해주세요", {
-    //     duration: 3000,
-    //   });
-    //   return;
-    // }
+    if (quizList.length < 3) {
+      toast.error("문제를 3개 이상 등록해주세요", {
+        duration: 3000,
+      });
+      return;
+    }
 
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
@@ -99,6 +98,11 @@ const Create = () => {
       quizList[showImageIndex].answer = answer;
       quizList[showImageIndex].source = source;
       setQuizList([...quizList]);
+    }
+    if (showImageIndex != null) {
+      newQuizList[showImageIndex].answer = answer;
+      newQuizList[showImageIndex].source = source;
+      setNewQuizList([...newQuizList]);
     }
     toast.success("저장되었습니다");
   };
