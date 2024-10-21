@@ -42,13 +42,15 @@ const Create = () => {
 
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (quizList.length < 3) {
-    //   toast.error("문제를 3개 이상 등록해주세요", {
-    //     duration: 3000,
-    //   });
-    //   return;
-    // }
-    trueUpload();
+    if (quizList.length < 3) {
+      toast.error("문제를 3개 이상 등록해주세요", {
+        duration: 3000,
+      });
+      return;
+    }
+
+    trueUpload(); // 페이지 이동 감지 피하기
+
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
 
@@ -71,9 +73,9 @@ const Create = () => {
           loading: "Saving...",
           success: () => {
             router.replace("/");
-            return <b>Settings saved!</b>;
+            return <b>저장되었습니다!</b>;
           },
-          error: <b>Could not save.</b>,
+          error: <b>저장에 실패했습니다!</b>,
         }
       );
     }
@@ -148,7 +150,7 @@ const Create = () => {
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files == null) {
-      console.log("error");
+      console.log("file error");
       return;
     }
     setUploadFileList([...uploadFileList, e.target.files[0]]); //storage에 추가하기위한 file 변수

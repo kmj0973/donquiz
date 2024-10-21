@@ -9,6 +9,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const CreateDialog = () => {
   const { CloseDialog } = useDialog();
@@ -23,7 +24,9 @@ const CreateDialog = () => {
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!titleImage || title.length < 3) {
-      console.log("제목을 3글자 이상 입력해주세요");
+      toast.error("제목을 3글자 이상 입력해주세요", {
+        duration: 3000,
+      });
       return;
     }
 

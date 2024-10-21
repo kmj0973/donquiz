@@ -10,6 +10,7 @@ import { useUpload } from "@/hooks/useUpload";
 export function RouteChangeListener() {
   //이탈 감지 함수
   const isUpload = useUpload((state) => state.isUpload);
+  const falseUpload = useUpload((state) => state.FalseUpload);
   const [prevPathname, setPrevPathname] = useState<string | null>(null); // 이전 경로 저장
   const pathname: string = usePathname(); // 현재 경로
   const router = useRouter();
@@ -37,6 +38,8 @@ export function RouteChangeListener() {
           }
         }
       }
+    } else {
+      falseUpload();
     }
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
