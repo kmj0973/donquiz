@@ -15,11 +15,11 @@ const MyPage = () => {
   return (
     <>
       {isLogin ? (
-        <Link className="text-base" href="/myInfo">
+        <Link className="text-base" href="/myInfo" replace={true}>
           MYPAGE
         </Link>
       ) : (
-        <Link className="text-base" href="/login">
+        <Link className="text-base" href="/login" replace={true}>
           로그인
         </Link>
       )}

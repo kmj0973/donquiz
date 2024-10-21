@@ -49,7 +49,6 @@ const Create = () => {
 
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
-      console.log(docRef.id);
 
       uploadFileList.map((uploadFile, index) => {
         const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
@@ -211,6 +210,7 @@ const Create = () => {
               type="file"
               className="hidden"
               onChange={handleImage}
+              accept=".jpg, .jpeg, .png"
             />
             <div className="w-[70%] overflow-x-auto h-[100px] flex items-center">
               {quizList.length != 0

@@ -24,16 +24,16 @@ const Navbar = () => {
   return (
     <>
       <div className="flex">
-        <Link className="mx-9" href="/about">
+        <Link className="mx-9" href="/about" replace={true}>
           about
         </Link>
         <button className="mx-9" onClick={onDialog}>
           퀴즈 만들기
         </button>
-        <Link className="mx-9" href="/lanking">
+        <Link className="mx-9" href="/lanking" replace={true}>
           랭킹
         </Link>
-        <Link className="mx-9" href="/change">
+        <Link className="mx-9" href="/change" replace={true}>
           교환소
         </Link>
       </div>

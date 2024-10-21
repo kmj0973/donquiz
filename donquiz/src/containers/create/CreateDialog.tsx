@@ -114,6 +114,7 @@ const CreateDialog = () => {
                     type="file"
                     className="hidden"
                     onChange={handleImage}
+                    accept=".jpg, .jpeg, .png"
                   />
                 </>
               )}
