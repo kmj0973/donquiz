@@ -26,7 +26,7 @@ interface QuizList {
 const Create = () => {
   const docId = usePathname().slice(8); //documnet id
   const uid = useAuthStore((state) => state.uid); //user id
-  const isUpload = useUpload((state) => state.isUpload);
+  const trueUpload = useUpload((state) => state.TrueUpload);
   const router = useRouter();
 
   const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
@@ -42,13 +42,13 @@ const Create = () => {
 
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (quizList.length < 3) {
-      toast.error("문제를 3개 이상 등록해주세요", {
-        duration: 3000,
-      });
-      return;
-    }
-
+    // if (quizList.length < 3) {
+    //   toast.error("문제를 3개 이상 등록해주세요", {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
+    trueUpload();
     if (uid && docId) {
       const docRef = doc(db, "users", uid, "quizList", docId);
 

@@ -5,9 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { db } from "../../../firebase/firebasedb";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { useUpload } from "@/hooks/useUpload";
 
 export function RouteChangeListener() {
   //이탈 감지 함수
+  const isUpload = useUpload((state) => state.isUpload);
   const [prevPathname, setPrevPathname] = useState<string | null>(null); // 이전 경로 저장
   const pathname: string = usePathname(); // 현재 경로
   const router = useRouter();
@@ -15,7 +17,7 @@ export function RouteChangeListener() {
   const uid = useAuthStore((state) => state.uid); //user id
 
   useEffect(() => {
-    if (prevPathname && prevPathname !== pathname) {
+    if (prevPathname && prevPathname !== pathname && !isUpload) {
       // 경로가 변경되기 전에 alert 창을 띄움
 
       if (prevPathname.length > 10) {

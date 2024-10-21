@@ -2,8 +2,8 @@ import { create } from "zustand";
 
 interface PopUpProps {
   isUpload: boolean;
-  OpenDialog: () => void;
-  CloseDialog: () => void;
+  TrueUpload: () => void;
+  FalseUpload: () => void;
 }
 
 export const useUpload = create<PopUpProps>((set) => {
