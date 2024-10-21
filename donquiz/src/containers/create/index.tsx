@@ -13,6 +13,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../firebase/firebasedb";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { ref, uploadBytes } from "firebase/storage";
+import { useUpload } from "@/hooks/useUpload";
 
 interface QuizList {
   image: string;
@@ -25,6 +26,7 @@ interface QuizList {
 const Create = () => {
   const docId = usePathname().slice(8); //documnet id
   const uid = useAuthStore((state) => state.uid); //user id
+  const isUpload = useUpload((state) => state.isUpload);
   const router = useRouter();
 
   const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
@@ -170,6 +172,7 @@ const Create = () => {
         setSource("");
       }
     };
+    e.target.value = "";
   };
 
   return (
