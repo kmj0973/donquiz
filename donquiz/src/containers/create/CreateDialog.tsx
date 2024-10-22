@@ -31,7 +31,6 @@ const CreateDialog = () => {
     }
 
     const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
-    console.log(uploadFileName);
 
     const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
     uploadBytes(imageRef, titleImage);
@@ -41,10 +40,10 @@ const CreateDialog = () => {
       const docRef = doc(collection(db, "users", uid, "quizList"));
 
       await setDoc(docRef, {
+        quizId: docRef.id,
         title,
         thumbnail: uploadFileName,
       });
-      console.log(docRef.id);
 
       CloseDialog();
       router.push(`/create/${docRef.id}`);
