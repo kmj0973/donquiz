@@ -6,6 +6,8 @@ import { FaUser } from "react-icons/fa";
 import { db, storage } from "../../../firebase/firebasedb";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref } from "firebase/storage";
+import Loading from "@/app/loading";
+import Link from "next/link";
 
 interface Quiz {
   quizId: string;
@@ -21,6 +23,7 @@ const QuizList = () => {
   const [allUsersQuizLists, setAllUsersQuizLists] = useState<UserQuizList[]>(
     []
   );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchedQuizLists: UserQuizList[] = [];
@@ -76,11 +79,17 @@ const QuizList = () => {
         setAllUsersQuizLists(fetchedQuizLists);
       } catch (error) {
         console.error("Error fetching quiz lists:", error);
+      } finally {
+        setLoading(false); // 데이터를 모두 불러오면 로딩 상태 해제
       }
     };
 
     fetchQuizLists();
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -106,12 +115,12 @@ const QuizList = () => {
                     <Image src={quiz.imageUrl} alt="썸네일" fill />
                   )}
                 </div>
-                <button
-                  key={user.userId}
-                  className="bg-[#FF4848] text-white rounded-3xl py-2 px-6 my-2"
+                <Link
+                  href={`/quiz/${quiz.quizId}`}
+                  className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-6 my-2"
                 >
                   시작하기
-                </button>
+                </Link>
               </div>
             );
           }
