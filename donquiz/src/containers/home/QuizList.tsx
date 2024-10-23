@@ -99,7 +99,7 @@ const QuizList = () => {
             return (
               <div
                 key={quiz.quizId}
-                className="flex flex-col items-center justify-center border-4 border-black w-[24%] min-w-[280px] min-h-[280px] rounded-2xl"
+                className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-4 border-black w-[24%] min-w-[280px] min-h-[280px] rounded-2xl"
               >
                 <div className="w-[95%] flex items-center justify-between my-1">
                   <div className="text-[14px] flex items-center">
@@ -116,7 +116,14 @@ const QuizList = () => {
                   )}
                 </div>
                 <Link
-                  href={`/quiz/${quiz.quizId}`}
+                  href={{
+                    pathname: `/quiz/1`,
+                    query: {
+                      userId: user.userId,
+                      quizId: quiz.quizId,
+                      title: quiz.title,
+                    },
+                  }}
                   className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-6 my-2"
                 >
                   시작하기

@@ -215,7 +215,7 @@ const Create = () => {
               type="file"
               className="hidden"
               onChange={handleImage}
-              accept=".jpg, .jpeg, .png"
+              accept="image/*"
             />
             <div className="w-[70%] overflow-x-auto h-[100px] flex items-center">
               {quizList.length != 0
