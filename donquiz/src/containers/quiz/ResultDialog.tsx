@@ -1,9 +1,18 @@
 "use client";
 
+import CelebrateLeft from "../../../public/image/CelebrateLeft.png";
+import CelebrateRight from "../../../public/image/CelebrateRight.png";
 import { useUpload } from "@/hooks/useUpload";
+import Image from "next/image";
 import Link from "next/link";
 
-const ResultDialog = () => {
+const ResultDialog = ({
+  rightCount,
+  wrongCount,
+}: {
+  rightCount: number;
+  wrongCount: number;
+}) => {
   const trueUpload = useUpload((state) => state.TrueUpload);
 
   return (
@@ -15,19 +24,27 @@ const ResultDialog = () => {
           className="absolute w-[550px] h-[550px]
         text-black bg-white rounded-3xl flex flex-col justify-center items-center"
         >
-          <div className="text-[50px]  my-2">퀴즈 결과</div>
-          <div className="flex flex-col justify-center items-center w-[450px] h-[430px] border-4 border-black mb-2 rounded-2xl">
-            <div>맞춘 거 틀린 거</div>
+          <div className="text-[50px] font-extrabold my-2 flex">
+            <Image src={CelebrateLeft} alt="결과" width="75" height="75" />
+            퀴즈 결과
+            <Image src={CelebrateRight} alt="결과" width="75" height="75" />
           </div>
-          <Link
-            onClick={() => {
-              trueUpload();
-            }}
-            className="p-2 px-6 mb-2 bg-[#222222] hover:bg-black text-white text-[20px] rounded-xl"
-            href="/"
-          >
-            홈으로
-          </Link>
+          <div className="flex flex-col justify-center items-center w-[450px] h-[430px] border-4 border-black mb-2 rounded-2xl">
+            <div className="text-[30px] mb-4">정답 개수 : {rightCount}개</div>
+            <div className="text-[30px] mb-4">오답 개수 : {wrongCount}개</div>
+            <div className="text-[30px] mb-14">
+              포인트 적립 : {rightCount * 10}점
+            </div>
+            <Link
+              onClick={() => {
+                trueUpload();
+              }}
+              className="p-2 px-6 mb-2 bg-[#222222] hover:bg-black text-white text-[20px] rounded-xl"
+              href="/"
+            >
+              홈으로
+            </Link>
+          </div>
         </div>
       </div>
     </>

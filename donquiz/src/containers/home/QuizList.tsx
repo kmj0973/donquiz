@@ -7,7 +7,9 @@ import { db, storage } from "../../../firebase/firebasedb";
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "@/app/loading";
-import Link from "next/link";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface Quiz {
   quizId: string;
@@ -23,6 +25,9 @@ const QuizList = () => {
   const [allUsersQuizLists, setAllUsersQuizLists] = useState<UserQuizList[]>(
     []
   );
+  const isLogin = useAuthStore((state) => state.isLogin);
+
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -91,6 +96,20 @@ const QuizList = () => {
     return <Loading />;
   }
 
+  const handleStartQuiz = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    userId: string,
+    quizId: string,
+    title: string
+  ) => {
+    if (!isLogin) {
+      toast.error("로그인이 필요합니다.", { duration: 800 });
+      router.push("/login");
+    } else {
+      router.push(`/quiz?userId=${userId}&quizId=${quizId}&title=${title}`);
+    }
+  };
+
   return (
     <>
       {allUsersQuizLists.map((user) =>
@@ -115,19 +134,14 @@ const QuizList = () => {
                     <Image src={quiz.imageUrl} alt="썸네일" fill />
                   )}
                 </div>
-                <Link
-                  href={{
-                    pathname: `/quiz/1`,
-                    query: {
-                      userId: user.userId,
-                      quizId: quiz.quizId,
-                      title: quiz.title,
-                    },
-                  }}
+                <button
+                  onClick={(event) =>
+                    handleStartQuiz(event, user.userId, quiz.quizId, quiz.title)
+                  }
                   className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-6 my-2"
                 >
                   시작하기
-                </Link>
+                </button>
               </div>
             );
           }
