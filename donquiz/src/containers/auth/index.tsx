@@ -57,7 +57,6 @@ const Auth = () => {
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          console.log(user);
 
           if (auth.currentUser) {
             updateProfile(auth.currentUser, {
@@ -74,6 +73,7 @@ const Auth = () => {
             uid: user.uid,
             displayName: nickname,
             email: email,
+            point: 0,
           });
 
           await addDoc(collection(db, `users/${user.uid}/quizList`), {});

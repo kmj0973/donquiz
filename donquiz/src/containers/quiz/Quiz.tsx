@@ -1,6 +1,6 @@
 "use client";
 
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BiSolidRightArrowSquare } from "react-icons/bi";
@@ -15,6 +15,7 @@ import ResultDialog from "./ResultDialog";
 import toast from "react-hot-toast";
 
 interface Quiz {
+  participant: number;
   imageUrl: string;
   quizList: QuizObject;
 }
@@ -61,6 +62,7 @@ const QuizComponents = () => {
             }
 
             fetchedQuizData.push({
+              participant: quizData.quizList.participant,
               imageUrl, // 이미지 URL
               quizList: quiz, // 퀴즈 데이터
             });
@@ -82,7 +84,7 @@ const QuizComponents = () => {
     return <Loading />;
   }
 
-  const handleIsAnswer = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleIsAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (answer == "") {
       toast.error("정답을 입력해주세요", { duration: 2000 });
@@ -103,6 +105,11 @@ const QuizComponents = () => {
 
     if (quizArray.length == targetIndex + 1) {
       //미지막문제 시
+      const docRef = doc(db, `users/${userId}/quizList/${quizId}`);
+      await updateDoc(docRef, {
+        participant: increment(1),
+      });
+
       setIsLoading(false);
       setTimeout(() => {
         setIsLoading(true);
@@ -111,7 +118,6 @@ const QuizComponents = () => {
   };
 
   const handleNextQuiz = () => {
-    console.log(quizArray[0]);
     setTargetIndex(targetIndex + 1);
     setAnswer("");
     setIsAnswer(null);
@@ -142,6 +148,7 @@ const QuizComponents = () => {
           src={quizArray[targetIndex].imageUrl}
           alt={quizArray[targetIndex].quizList.source}
           fill
+          priority
           loading="eager"
         />
         {isAnswer == true && (
@@ -173,14 +180,16 @@ const QuizComponents = () => {
         </button>
       </form>
       <div className="flex flex-col justify-center items-center h-[100px]">
-        {isAnswer != null && targetIndex + 1 != quizArray.length ? (
+        {isAnswer != null ? (
           <>
             <div className="text-red-500 mb-1">
               답 : {quizArray[targetIndex].quizList.answer}
             </div>
-            <button onClick={handleNextQuiz} className="mb-4">
-              <BiSolidRightArrowSquare size="26" />
-            </button>
+            {targetIndex + 1 != quizArray.length && (
+              <button onClick={handleNextQuiz} className="mb-4">
+                <BiSolidRightArrowSquare size="26" />
+              </button>
+            )}
           </>
         ) : null}
       </div>

@@ -4,7 +4,7 @@ const MyInfo = () => {
   return (
     <>
       <div
-        className="h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-center
+        className="h-auto overflow-auto font-bold flex flex-col items-center justify-center
       "
       >
         <Logout />

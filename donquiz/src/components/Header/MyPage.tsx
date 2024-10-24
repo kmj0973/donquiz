@@ -7,6 +7,7 @@ import { useEffect } from "react";
 const MyPage = () => {
   const isLogin = useAuthStore((state) => state.isLogin);
   const checkLogin = useAuthStore((state) => state.checkLogin);
+  const uid = useAuthStore((state) => state.uid);
 
   useEffect(() => {
     checkLogin();
@@ -15,7 +16,7 @@ const MyPage = () => {
   return (
     <>
       {isLogin ? (
-        <Link className="text-base" href="/myInfo" replace={true}>
+        <Link className="text-base" href={`/myInfo/${uid}`} replace={true}>
           MYPAGE
         </Link>
       ) : (

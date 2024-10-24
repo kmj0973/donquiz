@@ -43,6 +43,7 @@ const CreateDialog = () => {
         quizId: docRef.id,
         title,
         thumbnail: uploadFileName,
+        participant: 0,
       });
 
       CloseDialog();

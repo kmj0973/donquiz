@@ -3,8 +3,11 @@
 import CelebrateLeft from "../../../public/image/CelebrateLeft.png";
 import CelebrateRight from "../../../public/image/CelebrateRight.png";
 import { useUpload } from "@/hooks/useUpload";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
+import { db } from "../../../firebase/firebasedb";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
 const ResultDialog = ({
   rightCount,
@@ -13,7 +16,25 @@ const ResultDialog = ({
   rightCount: number;
   wrongCount: number;
 }) => {
+  const uid = useAuthStore((state) => state.uid);
   const trueUpload = useUpload((state) => state.TrueUpload);
+
+  const handleAddPoint = async () => {
+    trueUpload();
+    const docRef = doc(db, `users/${uid}`);
+
+    const user = await getDoc(docRef);
+    if (user.exists()) {
+      const userData = user.data();
+      await setDoc(
+        docRef,
+        {
+          point: userData.point + rightCount * 10,
+        },
+        { merge: true }
+      );
+    }
+  };
 
   return (
     <>
@@ -36,9 +57,7 @@ const ResultDialog = ({
               포인트 적립 : {rightCount * 10}점
             </div>
             <Link
-              onClick={() => {
-                trueUpload();
-              }}
+              onClick={handleAddPoint}
               className="p-2 px-6 mb-2 bg-[#222222] hover:bg-black text-white text-[20px] rounded-xl"
               href="/"
             >

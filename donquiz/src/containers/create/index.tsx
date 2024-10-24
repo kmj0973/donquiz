@@ -56,7 +56,6 @@ const Create = () => {
 
       uploadFileList.map((uploadFile, index) => {
         const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
-        console.log(uploadFileName);
 
         const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
         uploadBytes(imageRef, uploadFile);
@@ -83,7 +82,6 @@ const Create = () => {
 
   const handleAnswerAndSource = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("퀴즈리스트:", quizList);
     if (quizList.length == 0) {
       toast.error("사진을 등록해주세요", {
         duration: 3000,
