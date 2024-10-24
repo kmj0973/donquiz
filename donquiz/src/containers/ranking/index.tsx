@@ -32,12 +32,13 @@ const Ranking = () => {
         const usersQuery = query(usersRef, orderBy("point", "desc"));
         const querySnapshot = await getDocs(usersQuery);
 
-        const users = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          displayName: doc.data().displayName,
-          point: doc.data().point,
-        }));
-
+        const users = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            displayName: doc.data().displayName,
+            point: doc.data().point,
+          }))
+          .slice(0, 100);
         const totalUsers = users.length;
 
         setUserRanking({
@@ -59,7 +60,10 @@ const Ranking = () => {
 
   return (
     <div className="w-full h-auto overflow-auto font-bold flex flex-col items-center justify-center my-4">
-      <div className="flex justify-around items-end gap-4 mb-8">
+      <div className="relative flex justify-around items-end gap-4 mb-8">
+        <div className="absolute top-0 right-0 text-[#F9D132] text-[24px]">
+          <div>1~100위</div>
+        </div>
         <div className="flex flex-col justify-center items-center">
           <div className="w-[100px] h-[100px] rounded-full border-2 flex justify-center items-center">
             <FaUser size={60} />
@@ -107,7 +111,7 @@ const Ranking = () => {
             return (
               <div className="w-[90%] flex justify-between items-center mb-4">
                 <div className="flex justify-center items-center">
-                  <div className="text-[32px] mr-8 ml-4">3</div>
+                  <div className="text-[32px] mr-8 ml-4">{index + 1}</div>
                   <div className="w-[80px] h-[80px] rounded-full border-2 flex justify-center items-center">
                     <FaUser size={60} />
                   </div>
