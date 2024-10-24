@@ -3,7 +3,6 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../../firebase/firebasedb";
-import { useAuthStore } from "@/hooks/useAuthStore";
 import { FaUser } from "react-icons/fa";
 import crown from "../../../public/image/crown.png";
 import Image from "next/image";
@@ -21,7 +20,6 @@ interface UserRanking {
 }
 
 const Ranking = () => {
-  const uid = useAuthStore((state) => state.uid);
   const [userRanking, setUserRanking] = useState<UserRanking | null>(null);
   const [loading, setLoading] = useState(true); //fetch loading
 
@@ -109,7 +107,10 @@ const Ranking = () => {
         {userRanking?.users.map((user, index) => {
           if (index > 2) {
             return (
-              <div className="w-[90%] flex justify-between items-center mb-4">
+              <div
+                key={index}
+                className="w-[90%] flex justify-between items-center mb-4"
+              >
                 <div className="flex justify-center items-center">
                   <div className="text-[32px] mr-8 ml-4">{index + 1}</div>
                   <div className="w-[80px] h-[80px] rounded-full border-2 flex justify-center items-center">
