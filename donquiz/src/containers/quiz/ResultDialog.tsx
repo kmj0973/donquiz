@@ -60,6 +60,7 @@ const ResultDialog = ({
               onClick={handleAddPoint}
               className="p-2 px-6 mb-2 bg-[#222222] hover:bg-black text-white text-[20px] rounded-xl"
               href="/"
+              replace
             >
               홈으로
             </Link>
