@@ -24,7 +24,7 @@ const Navbar = () => {
   return (
     <>
       <div className="flex">
-        <Link className="mx-9" href="/about" replace={true}>
+        <Link className="mx-9" href="/" replace={true}>
           about
         </Link>
         <button className="mx-9" onClick={onDialog}>
