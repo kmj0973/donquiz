@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { Jost } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { RouteChangeListener } from "@/containers/create/RouterChangeListener";
+import { Suspense } from "react";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -24,10 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <RouteChangeListener />
       <body className={`${jost.variable} font-jost`}>
         <Header />
         <Toaster />
+        {/* Suspense로 RouteChangeListener 감싸기 */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <RouteChangeListener />
+        </Suspense>
         {children}
         <Footer />
       </body>
