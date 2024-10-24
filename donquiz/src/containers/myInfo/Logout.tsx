@@ -10,6 +10,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Loading from "@/app/loading";
+import MyRank from "./MyRank";
 
 interface QuizList {
   imageUrl: string;
@@ -52,36 +53,42 @@ const Logout = () => {
     };
 
     const fetchQuizList = async () => {
-      const fetchedQuizList: QuizList[] = [];
-      const quizListData = await getDocs(docRef);
+      try {
+        const fetchedQuizList: QuizList[] = [];
+        const quizListData = await getDocs(docRef);
 
-      for (const quiz of quizListData.docs) {
-        if (quiz.exists()) {
-          const quizData = quiz.data();
-          let imageUrl = "";
+        for (const quiz of quizListData.docs) {
+          if (quiz.exists()) {
+            const quizData = quiz.data();
+            let imageUrl = "";
 
-          if (quizData.thumbnail) {
-            const imageRef = ref(storage, `images/${quizData.thumbnail}`);
-            imageUrl = await getDownloadURL(imageRef);
+            if (quizData.thumbnail) {
+              const imageRef = ref(storage, `images/${quizData.thumbnail}`);
+              imageUrl = await getDownloadURL(imageRef);
+            }
+
+            fetchedQuizList.push({
+              imageUrl, // 이미지 URL
+              quizList: {
+                participant: quizData.participant,
+                quizId: quizData.quizId,
+                quizList: quizData.quizList,
+                thumbnail: quizData.thumbnail,
+                title: quizData.title,
+              }, // 퀴즈 데이터
+            });
           }
-
-          fetchedQuizList.push({
-            imageUrl, // 이미지 URL
-            quizList: {
-              participant: quizData.participant,
-              quizId: quizData.quizId,
-              quizList: quizData.quizList,
-              thumbnail: quizData.thumbnail,
-              title: quizData.title,
-            }, // 퀴즈 데이터
-          });
         }
+        setMyQuizList(fetchedQuizList);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-      setMyQuizList(fetchedQuizList);
     };
+
     fetchUser();
     fetchQuizList();
-    setLoading(false);
   }, [uid]);
 
   // const displayName = useStore(useAuthStore, (state) => {
@@ -104,8 +111,13 @@ const Logout = () => {
     quizId: string,
     title: string
   ) => {
+    if (uid == userId) {
+      toast.error("생성자는 참여할 수 없습니다", { duration: 800 });
+      return;
+    }
+
     if (!isLogin) {
-      toast.error("로그인이 필요합니다.", { duration: 800 });
+      toast.error("로그인이 필요합니다", { duration: 800 });
       router.push("/login");
     } else {
       router.push(`/quiz?userId=${userId}&quizId=${quizId}&title=${title}`);
@@ -125,7 +137,7 @@ const Logout = () => {
         <div className="text-[15px] text-[#000000] ">
           현재 포인트 : {myPoint}점
         </div>
-        <div className="text-[15px] text-[#8F8F8F] mb-2">포인트 랭킹 1위</div>
+        <MyRank />
       </div>
       <div className="w-[80%] max-w-[1200px] border-4 border-[#FF6868] rounded-2xl flex flex-col justify-center items-center">
         <div className="w-[40%] flex justify-center items-center my-8">
@@ -133,50 +145,55 @@ const Logout = () => {
             마이 퀴즈
           </div>
         </div>
-        <div className="w-[95%] h-auto flex flex-wrap justify-center items-start gap-4 mb-4">
-          {!loading ? (
-            myQuizList.map((quiz) => {
-              return (
-                <div
-                  key={quiz.quizList.quizId}
-                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-4 border-black w-[24%] min-w-[330px] min-h-[330px] rounded-2xl"
-                >
-                  <div className="w-[95%] flex items-center justify-between my-1">
-                    <div className="text-[14px] flex items-center">
-                      <FaUser size="20" />
-                      <div className="ml-1">{quiz.quizList.participant}</div>
-                    </div>
-                    <div className="text-[1.2rem] 2xl:text-[1.4rem]">
-                      {quiz.quizList.title}
-                    </div>
-                    <div className="text-[14px]">
-                      {quiz.quizList.quizList && quiz.quizList.quizList.length}
-                      문제
-                    </div>
-                  </div>
-                  <div className="relative w-full pb-[80%]">
-                    {quiz.imageUrl && (
-                      <Image src={quiz.imageUrl} alt="썸네일" fill />
-                    )}
-                  </div>
-                  <button
-                    onClick={(event) =>
-                      handleStartQuiz(
-                        event,
-                        uid,
-                        quiz.quizList.quizId,
-                        quiz.quizList.title
-                      )
-                    }
-                    className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-6 my-2"
+        <div className="w-[95%] h-auto min-h-[350px] flex flex-wrap justify-center items-center gap-4 mb-4">
+          {myQuizList.length != 0 ? (
+            !loading ? (
+              myQuizList.map((quiz) => {
+                return (
+                  <div
+                    key={quiz.quizList.quizId}
+                    className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-4 border-black w-[30%] min-w-[250px] min-h-[250px] rounded-2xl"
                   >
-                    시작하기
-                  </button>
-                </div>
-              );
-            })
+                    <div className="w-[95%] flex items-center justify-between my-1">
+                      <div className="text-[14px] flex items-center">
+                        <FaUser size="20" />
+                        <div className="ml-1">{quiz.quizList.participant}</div>
+                      </div>
+                      <div className="text-[1rem] xl:text-[1.1rem] 2xl:text-[1.3rem]">
+                        {quiz.quizList.title}
+                      </div>
+                      <div className="text-[14px]">
+                        {quiz.quizList.quizList &&
+                          quiz.quizList.quizList.length}
+                        문제
+                      </div>
+                    </div>
+                    <div className="relative w-full pb-[80%]">
+                      {quiz.imageUrl && (
+                        <Image src={quiz.imageUrl} alt="썸네일" fill />
+                      )}
+                    </div>
+                    <button
+                      onClick={(event) =>
+                        handleStartQuiz(
+                          event,
+                          uid,
+                          quiz.quizList.quizId,
+                          quiz.quizList.title
+                        )
+                      }
+                      className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-6 my-2"
+                    >
+                      시작하기
+                    </button>
+                  </div>
+                );
+              })
+            ) : (
+              <Loading />
+            )
           ) : (
-            <Loading />
+            <div className="text-[20px]">퀴즈를 만들어주세요!</div>
           )}
         </div>
         <button onClick={onLogout}>logout</button>

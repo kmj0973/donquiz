@@ -101,6 +101,7 @@ const QuizComponents = () => {
       setAnswer("");
     } else {
       setIsAnswer(false);
+      setAnswer("");
     }
 
     if (quizArray.length == targetIndex + 1) {

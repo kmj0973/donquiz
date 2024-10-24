@@ -32,6 +32,7 @@ const QuizList = () => {
     []
   );
   const isLogin = useAuthStore((state) => state.isLogin);
+  const uid = useAuthStore((state) => state.uid);
 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -113,8 +114,13 @@ const QuizList = () => {
     quizId: string,
     title: string
   ) => {
+    if (uid == userId) {
+      toast.error("생성자는 참여할 수 없습니다", { duration: 800 });
+      return;
+    }
+
     if (!isLogin) {
-      toast.error("로그인이 필요합니다.", { duration: 800 });
+      toast.error("로그인이 필요합니다", { duration: 800 });
       router.push("/login");
     } else {
       router.push(`/quiz?userId=${userId}&quizId=${quizId}&title=${title}`);
@@ -136,7 +142,7 @@ const QuizList = () => {
                     <FaUser size="20" />
                     <div className="ml-1">{quiz.participant}</div>
                   </div>
-                  <div className="text-[1.2rem] 2xl:text-[1.4rem]">
+                  <div className="text-[1rem] xl:text-[1.1rem] 2xl:text-[1.3rem]">
                     {quiz.title}
                   </div>
                   <div className="text-[14px]">

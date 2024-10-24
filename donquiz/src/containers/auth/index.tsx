@@ -5,7 +5,6 @@ import { auth, db } from "../../../firebase/firebasedb";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { usePopUp } from "@/hooks/usePopUp";
 import {
-  addDoc,
   collection,
   doc,
   getDocs,
@@ -75,8 +74,6 @@ const Auth = () => {
             email: email,
             point: 0,
           });
-
-          await addDoc(collection(db, `users/${user.uid}/quizList`), {});
 
           onClosePopUp();
         })

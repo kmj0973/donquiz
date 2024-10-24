@@ -30,12 +30,18 @@ const Navbar = () => {
         <button className="mx-9" onClick={onDialog}>
           퀴즈 만들기
         </button>
-        <Link className="mx-9" href="/lanking" replace={true}>
+        <Link className="mx-9" href="/ranking" replace={true}>
           랭킹
         </Link>
-        <Link className="mx-9" href="/change" replace={true}>
+        <button
+          onClick={() => {
+            toast.error("곧 출시할 예정입니다", { duration: 800 });
+            return;
+          }}
+          className="mx-9"
+        >
           교환소
-        </Link>
+        </button>
       </div>
       {isOpen ? <CreateDialog /> : null}
     </>

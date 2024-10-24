@@ -61,7 +61,7 @@ export function RouteChangeListener() {
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       //새로고침 불가
-      if (pathname.length > 15) {
+      if (pathname.includes("create") || pathname.includes("quiz")) {
         event.preventDefault();
         event.returnValue = ""; // 크롬에서는 빈 문자열이 필요함
       }
