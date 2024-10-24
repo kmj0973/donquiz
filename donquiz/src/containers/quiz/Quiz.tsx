@@ -96,6 +96,7 @@ const QuizComponents = () => {
     ) {
       setIsAnswer(true);
       setRightCount(rightCount + 1);
+      setAnswer("");
     } else {
       setIsAnswer(false);
     }
@@ -141,14 +142,15 @@ const QuizComponents = () => {
           src={quizArray[targetIndex].imageUrl}
           alt={quizArray[targetIndex].quizList.source}
           fill
+          loading="eager"
         />
         {isAnswer == true && (
-          <div className="absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
+          <div className="animate-pulse absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
             <Image src={O} alt="맞음" width={350} height={350} />
           </div>
         )}
         {isAnswer == false && (
-          <div className="absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
+          <div className="animate-pulse absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
             <Image src={X} alt="맞음" width={350} height={350} />
           </div>
         )}
@@ -171,7 +173,7 @@ const QuizComponents = () => {
         </button>
       </form>
       <div className="flex flex-col justify-center items-center h-[100px]">
-        {isAnswer != null && (
+        {isAnswer != null && targetIndex + 1 != quizArray.length ? (
           <>
             <div className="text-red-500 mb-1">
               답 : {quizArray[targetIndex].quizList.answer}
@@ -180,7 +182,7 @@ const QuizComponents = () => {
               <BiSolidRightArrowSquare size="26" />
             </button>
           </>
-        )}
+        ) : null}
       </div>
     </>
   );
