@@ -21,6 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const [isCheckAuth, setIsCheckAuth] = useState(false);
+
   const onOpenPopUp = () => {
     OpenPopUp();
     setIsCheckAuth(false);
@@ -50,7 +51,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-center">
+    <div className="w-full min-h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-center">
       <div className="h-36 text-[108px] text-white bg-black px-6 pb-3 flex items-center mt-12 mb-20">
         <span className="text-[#FF0000]">D</span>ON
         <span className="text-[#FFF700]">Q</span>UIZ

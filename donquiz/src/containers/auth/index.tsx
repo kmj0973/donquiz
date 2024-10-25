@@ -99,11 +99,16 @@ const Auth = () => {
     <>
       <div
         onClick={onClosePopUp}
-        className="absolute w-screen h-screen top-0 bg-black opacity-70 flex justify-center items-center"
+        className="fixed inset-0 bg-black opacity-70 flex justify-center items-center"
       ></div>
-      <div className="absolute w-[550px] h-[550px] bottom-[25%] bg-white rounded-3xl flex flex-col justify-center items-center">
-        <div className="text-5xl font-bold mb-10 ">SIGN UP</div>
-        <form onSubmit={onSignUp} className="flex flex-col w-[400px]">
+      <div className="absolute w-[90%] max-w-[550px] h-auto lg:h-[550px] bottom-[10%] lg:bottom-[25%] bg-white rounded-3xl flex flex-col justify-center items-center p-5">
+        <div className="text-3xl lg:text-5xl font-bold mb-6 lg:mb-10">
+          SIGN UP
+        </div>
+        <form
+          onSubmit={onSignUp}
+          className="flex flex-col w-full max-w-[400px]"
+        >
           <label htmlFor="nickname" className="text-[#999999] mb-2">
             Nickname
           </label>

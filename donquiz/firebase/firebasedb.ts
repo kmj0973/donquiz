@@ -25,3 +25,7 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// const db2 = initializeFirestore(app, {
+//   cacheSizeBytes: CACHE_SIZE_UNLIMITED, // 무제한 캐싱
+// });
