@@ -70,20 +70,21 @@ const CreateDialog = () => {
 
   return (
     <>
-      <div className="absolute w-screen h-screen left-0 top-0 bg-black opacity-70 flex justify-center items-center z-10"></div>
+      <div className="fixed inset-0 bg-black opacity-70 flex justify-center items-center z-10"></div>
       <div
         onClick={CloseDialog}
-        className="absolute w-screen h-screen left-0 top-0 flex justify-center items-center z-10"
+        className="fixed inset-0 flex justify-center items-center z-20"
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="absolute w-[550px] h-[550px]
-       bottom-[35%] text-black bg-white rounded-3xl flex flex-col justify-center items-center"
+          className="relative w-[90%] text-black max-w-[550px] h-auto sm:h-[550px] bg-white rounded-3xl flex flex-col justify-center items-center p-6 sm:pb-8"
         >
-          <div className="text-4xl font-bold mb-8">퀴즈 만들기</div>
+          <div className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-8">
+            퀴즈 만들기
+          </div>
           <form onSubmit={handleQuizFrame}>
             <input
-              className="w-[450px] border-0 bg-[#f2f2f2] rounded-lg p-3 mb-5"
+              className="w-full sm:w-[450px] border-0 bg-[#f2f2f2] rounded-lg p-2 sm:p-3 mb-4 sm:mb-5"
               placeholder="제목을 입력해주세요"
               id="title"
               onChange={(e) => {
@@ -91,9 +92,9 @@ const CreateDialog = () => {
               }}
             />
 
-            <div className="w-[450px] h-[270px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-6">
+            <div className="w-full sm:w-[450px] h-[180px] sm:h-[270px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-4 sm:mb-6">
               {thumbnail ? (
-                <div className="relative w-[440px] h-[270px]">
+                <div className="relative w-full sm:w-[440px] h-[180px] sm:h-[270px]">
                   <Image
                     src={thumbnail}
                     alt="썸네일"
@@ -107,7 +108,9 @@ const CreateDialog = () => {
                     htmlFor="file"
                     className="flex flex-col justify-center items-center"
                   >
-                    <div className="mb-2">썸네일을 선택해주세요</div>
+                    <div className="mb-2 text-sm sm:text-base">
+                      썸네일을 선택해주세요
+                    </div>
                     <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
                       파일 업로드
                     </div>
@@ -125,14 +128,14 @@ const CreateDialog = () => {
             <div className="flex justify-around items-center mb-2">
               <button
                 type="submit"
-                className="w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+                className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
               >
                 생성하기
               </button>
               <button
                 type="button"
                 onClick={CloseDialog}
-                className="w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+                className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
               >
                 취소
               </button>

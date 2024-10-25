@@ -47,13 +47,19 @@ const MobileNav = () => {
         }`}
       >
         <div className="flex flex-col items-center space-y-4 py-4">
-          <Link href="/" replace={true} onClick={toggleMenu}>
+          <Link onClick={toggleMenu} href="/" replace={true}>
             About
           </Link>
-          <button onClick={onDialog} className="mx-2">
+          <button
+            onClick={() => {
+              toggleMenu();
+              onDialog();
+            }}
+            className="mx-2"
+          >
             퀴즈 만들기
           </button>
-          <Link href="/ranking" replace={true} onClick={toggleMenu}>
+          <Link onClick={toggleMenu} href="/ranking" replace={true}>
             랭킹
           </Link>
           <button

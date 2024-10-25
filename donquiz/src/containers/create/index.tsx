@@ -176,35 +176,37 @@ const Create = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-around">
+    <div className="w-full min-h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-around">
       <form
         onSubmit={handleSubmitDB}
-        className="w-[90%] flex justify-between items-center "
+        className="w-full max-w-[1000px] flex sm:flex-row justify-between items-center mb-6 sm:m-8 px-4 md:px-0"
       >
-        <div>
+        <div className="w-[80px] sm:w-[120px]">
           <FaArrowLeft size="30px" />
         </div>
-        <div className="text-[40px]">퀴즈 만들기</div>
+        <div className="text-[24px] sm:text-[32px] lg:text-[40px]">
+          퀴즈 만들기
+        </div>
         <button
           type="submit"
-          className="w-[90px] h-[50px] text-[20px]  bg-[#222222] hover:bg-black rounded-xl text-white"
+          className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px]  bg-[#222222] hover:bg-black rounded-xl text-white"
         >
           업로드
         </button>
       </form>
-      <div className="w-[90%] h-[600px] flex justify-center mb-4">
-        <div className="w-[100%] max-w-[600px] mr-10">
-          <div className="relative h-[500px] border-4 flex justify-center items-center z-0">
+      <div className="w-full max-w-[1000px] flex flex-col lg:flex-row justify-center items-center mb-4">
+        <div className="w-full max-w-[600px] lg:mr-10 mb-6 lg:mb-0 flex flex-col justify-center items-center lg:items-start">
+          <div className="relative w-[300px] sm:w-[400px] lg:w-[500px] h-[300px] sm:h-[400px] lg:h-[500px] border-4 flex justify-center items-center z-0">
             {quizList.length != 0 ? (
               <Image src={showImage} fill alt="이미지" />
             ) : (
               <CiImageOff size="24px" />
             )}
           </div>
-          <div className="h-[100px] flex justify-around items-center">
+          <div className="w-[300px] sm:w-[400px] lg:w-[500px] sm h-[100px] flex justify-start items-center mt-4">
             <label
               htmlFor="file"
-              className="w-[80px] h-[80px] mr-1 flex items-center justify-center"
+              className="w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] mr-1 flex items-center justify-center"
             >
               <BsPlusSquare size="75px" color="#e5e7eb" />
             </label>
@@ -215,14 +217,14 @@ const Create = () => {
               onChange={handleImage}
               accept="image/*"
             />
-            <div className="w-[70%] overflow-x-auto h-[100px] flex items-center">
+            <div className="w-full overflow-x-auto h-[80px] sm:h-[100px] flex items-center">
               {quizList.length != 0
                 ? quizList.map((quiz, idx) => {
                     return (
                       <div
                         id={String(idx)}
                         key={idx}
-                        className="relative w-[80px] h-[80px] flex-[0_0_auto] border-2 mx-1"
+                        className="relative w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] flex-[0_0_auto] border-2 mx-1"
                       >
                         <Image
                           key={idx}
@@ -244,12 +246,12 @@ const Create = () => {
         </div>
         <form
           onSubmit={handleAnswerAndSource}
-          className="w-[100%] max-w-[500px] ml-10 flex flex-col justify-center items-center"
+          className="w-[100%] max-w-[500px] lg:ml-10 flex flex-col justify-center items-center"
         >
           <div className="mb-10">
             <label
               htmlFor="answer"
-              className="inline-block w-[120px] text-[20px] mr-4 text-center"
+              className="inline-block w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] mr-4 text-center"
             >
               정답
             </label>
@@ -257,16 +259,16 @@ const Create = () => {
               onChange={(e) => {
                 setAnswer(e.target.value);
               }}
-              className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
+              className="w-[200px] sm:w-[250px] text-[16px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
               value={quizList.length != 0 ? answer : ""}
             />
           </div>
-          <div className="mb-14">
+          <div className="mb-8 sm:mb-14">
             <label
               htmlFor="answer"
-              className="inline-block w-[120px] text-[20px] mr-4 text-center"
+              className="inline-block w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] mr-4 text-center"
             >
               이미지 출처
             </label>
@@ -274,7 +276,7 @@ const Create = () => {
               onChange={(e) => {
                 setSource(e.target.value);
               }}
-              className="w-[250px] text-[18px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
+              className="w-[200px] sm:w-[250px] text-[16px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
               type="text"
               value={quizList.length != 0 ? source : ""}
@@ -282,7 +284,7 @@ const Create = () => {
           </div>
           <button
             type="submit"
-            className="w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+            className="w-[100px] sm:w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
           >
             저장하기
           </button>
