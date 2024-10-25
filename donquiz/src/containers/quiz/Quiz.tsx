@@ -133,57 +133,63 @@ const QuizComponents = () => {
           wrongCount={quizArray.length - rightCount}
         />
       ) : null}
-      <div className="text-[48px] my-8">{title}</div>
-      <div className="flex items-center justify-between min-w-[500px]">
-        <div className="text-[#999999] ">
+      <div className="text-[32px] sm:text-[40px] lg:text-[48px] my-4 sm:my-8">
+        {title}
+      </div>
+      <div className="flex items-center justify-between w-full max-w-[500px] mb-4 text-center sm:text-left ">
+        <div className="text-[#999999] text-[14px] sm:text-base mb-2 sm:mb-0 ">
           {quizArray[targetIndex].quizList.source.length > 40
             ? `${quizArray[targetIndex].quizList.source.slice(0, 40)}...`
             : quizArray[targetIndex].quizList.source}
         </div>
-        <div>
+        <div className="text-[14px] sm:text-base">
           {targetIndex + 1}/{quizArray.length}
         </div>
       </div>
-      <div className="relative min-w-[500px] min-h-[500px] mb-8">
+      <div className="relative w-full max-w-[400px] sm:max-w-[500px] h-[300px] sm:h-[400px] md:h-[500px] mb-6">
         <Image
           src={quizArray[targetIndex].imageUrl}
           alt={quizArray[targetIndex].quizList.source}
           fill
           priority
           loading="eager"
+          className="rounded-lg"
         />
         {isAnswer == true && (
-          <div className="animate-pulse absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
-            <Image src={O} alt="맞음" width={350} height={350} />
+          <div className="animate-pulse absolute inset-0 flex justify-center items-center">
+            <Image src={O} alt="맞음" width={250} height={250} />
           </div>
         )}
         {isAnswer == false && (
-          <div className="animate-pulse absolute min-w-[500px] min-h-[500px] flex justify-center items-center">
-            <Image src={X} alt="맞음" width={350} height={350} />
+          <div className="animate-pulse absolute inset-0 flex justify-center items-center">
+            <Image src={X} alt="맞음" width={250} height={250} />
           </div>
         )}
       </div>
       <form
         onSubmit={handleIsAnswer}
-        className="border-2 mb-4 flex hover:border-black "
+        className="border-2 mb-4 flex w-full max-w-[400px] sm:max-w-[500px] hover:border-black "
       >
         <input
           onChange={(e) => {
             setAnswer(e.target.value);
           }}
-          className="px-2 py-1 w-[464px] outline-none"
+          className="px-2 py-1 w-full outline-none text-sm sm:text-base"
           type="text"
           placeholder="정답을 입력해주세요"
           value={answer}
         />
-        <button type="submit" className="px-2 flex justify-center items-center">
-          <FaArrowRight size="" />
+        <button
+          type="submit"
+          className="px-2 flex justify-center items-center bg-black text-white"
+        >
+          <FaArrowRight size="20" />
         </button>
       </form>
       <div className="flex flex-col justify-center items-center h-[100px]">
         {isAnswer != null ? (
           <>
-            <div className="text-red-500 mb-1">
+            <div className="text-red-500 mb-1 text-sm sm:text-base">
               답 : {quizArray[targetIndex].quizList.answer}
             </div>
             {targetIndex + 1 != quizArray.length && (
