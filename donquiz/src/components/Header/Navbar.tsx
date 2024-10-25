@@ -23,14 +23,14 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex">
-        <Link className="mx-9" href="/" replace={true}>
+      <div className="hidden sm:flex items-center space-x-6 gap-4">
+        <Link className="mx-2" href="/" replace={true}>
           about
         </Link>
-        <button className="mx-9" onClick={onDialog}>
+        <button className="mx-2" onClick={onDialog}>
           퀴즈 만들기
         </button>
-        <Link className="mx-9" href="/ranking" replace={true}>
+        <Link className="mx-2" href="/ranking" replace={true}>
           랭킹
         </Link>
         <button
@@ -38,7 +38,7 @@ const Navbar = () => {
             toast.error("곧 출시할 예정입니다", { duration: 800 });
             return;
           }}
-          className="mx-9"
+          className="mx-2"
         >
           교환소
         </button>

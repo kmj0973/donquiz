@@ -14,7 +14,7 @@ const MyPage = () => {
   }, [checkLogin]);
 
   return (
-    <>
+    <div className="hidden sm:flex pl-4">
       {isLogin ? (
         <Link className="text-base" href={`/myInfo/${uid}`} replace={true}>
           MYPAGE
@@ -24,7 +24,7 @@ const MyPage = () => {
           로그인
         </Link>
       )}
-    </>
+    </div>
   );
 };
 
