@@ -23,6 +23,8 @@ const Auth = () => {
   const [isCheckEmail, setIsCheckEmail] = useState(false);
   const [isCheckPassword, setIsCheckPassword] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onClosePopUp = () => {
     ClosePopUp();
     setNickname("");
@@ -35,6 +37,7 @@ const Auth = () => {
 
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     setIsCheckNick(false);
     setIsCheckEmail(false);
     setIsCheckPassword(false);
@@ -89,6 +92,7 @@ const Auth = () => {
           }
         });
     }
+    setIsLoading(false);
   };
 
   return (
@@ -136,9 +140,15 @@ const Auth = () => {
               setPassword(e.target.value);
             }}
           />
-          <button className="bg-[#222222] hover:bg-black rounded-lg p-3 text-white">
-            SIGN UP
-          </button>
+          {!isLoading ? (
+            <button className="bg-[#222222] hover:bg-black rounded-lg p-3 text-white">
+              SIGN UP
+            </button>
+          ) : (
+            <div className="flex flex-col justify-center items-center">
+              <div className="border-4 border-r-white border-black rounded-full w-[50px] h-[50px] animate-spin mb-1" />
+            </div>
+          )}
           {isCheckNick ? (
             <div className="text-red-600 font-bold mt-1 text-center">
               허용되지 않은 닉네임입니다
