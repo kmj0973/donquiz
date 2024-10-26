@@ -59,7 +59,7 @@ const Ranking = () => {
   return (
     <div className="w-full min-h-screen overflow-auto font-bold flex flex-col items-center justify-center my-4 px-4">
       <div className="relative flex justify-around items-end gap-4 mb-8">
-        <div className="absolute top-0 right-0 text-[#F9D132] text-[24px]">
+        <div className="absolute top-0 right-0 text-[#F9D132] text-[24px] px-4 sm:px2">
           <div>1~100위</div>
         </div>
         <div className="flex flex-col justify-center items-center">
