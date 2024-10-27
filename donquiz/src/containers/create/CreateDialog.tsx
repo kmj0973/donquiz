@@ -2,7 +2,7 @@
 
 import { useDialog } from "@/hooks/useDialog";
 import { ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../firebase/firebasedb";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -20,6 +20,10 @@ const CreateDialog = () => {
   const [title, setTitle] = useState<string>("");
   const [titleImage, setTitleImage] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log("Thumbnail updated to:", thumbnail);
+  }, [thumbnail]);
 
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,22 +56,19 @@ const CreateDialog = () => {
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setTitleImage(file);
+    if (e.target.files == null) {
+      return;
+    }
+    setTitleImage(e.target.files[0]);
 
     const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+
     reader.onload = () => {
       if (reader.result) {
-        setThumbnail(reader.result as string); // 파일을 읽어온 후, thumbnail 상태 업데이트
+        setThumbnail(reader.result as string);
       }
     };
-    reader.onerror = () => {
-      toast.error("파일을 읽는 데 실패했습니다.");
-    };
-
-    reader.readAsDataURL(file); // 파일을 읽기 시작
   };
 
   return (
@@ -93,7 +94,6 @@ const CreateDialog = () => {
                 setTitle(e.target.value);
               }}
             />
-
             <div className="w-full sm:w-[450px] h-[180px] sm:h-[270px] text-[#999999] border-4 border-dashed rounded-xl flex flex-col justify-center items-center mb-4 sm:mb-6">
               {thumbnail ? (
                 <div className="relative w-full sm:w-[440px] h-[180px] sm:h-[270px]">

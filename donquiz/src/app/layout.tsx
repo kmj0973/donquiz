@@ -6,6 +6,7 @@ import { Jost } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { RouteChangeListener } from "@/containers/create/RouterChangeListener";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
           <RouteChangeListener />
         </Suspense>
         {children}
+        <Analytics />
         <Footer />
       </body>
     </html>
