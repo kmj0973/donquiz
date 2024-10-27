@@ -2,7 +2,6 @@
 
 import { useDialog } from "@/hooks/useDialog";
 import { ref, uploadBytes } from "firebase/storage";
-import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../firebase/firebasedb";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -10,6 +9,7 @@ import { useAuthStore } from "@/hooks/useAuthStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const CreateDialog = () => {
   const { CloseDialog } = useDialog();
@@ -20,10 +20,6 @@ const CreateDialog = () => {
   const [title, setTitle] = useState<string>("");
   const [titleImage, setTitleImage] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
-
-  useEffect(() => {
-    console.log("Thumbnail updated to:", thumbnail);
-  }, [thumbnail]);
 
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

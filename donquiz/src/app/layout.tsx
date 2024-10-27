@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { RouteChangeListener } from "@/containers/create/RouterChangeListener";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import ReactQueryProvider from "@/global/reactQuery";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -27,15 +28,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${jost.variable} font-jost`}>
-        <Header />
-        <Toaster />
-        {/* Suspense로 RouteChangeListener 감싸기 */}
-        <Suspense fallback={<div>Loading...</div>}>
-          <RouteChangeListener />
-        </Suspense>
-        {children}
-        <Analytics />
-        <Footer />
+        <ReactQueryProvider>
+          <Header />
+          <Toaster />
+          {/* Suspense로 RouteChangeListener 감싸기 */}
+          <Suspense fallback={<div>Loading...</div>}>
+            <RouteChangeListener />
+          </Suspense>
+          {children}
+          <Analytics />
+          <Footer />
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -5,15 +5,12 @@ import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
-import { doc, updateDoc } from "firebase/firestore";
-import { db, storage } from "../../../firebase/firebasedb";
 import { useAuthStore } from "@/hooks/useAuthStore";
-import { ref, uploadBytes } from "firebase/storage";
 import { useUpload } from "@/hooks/useUpload";
+import { useUploadQuizList } from "@/hooks/useQuizMutations";
 
 interface QuizList {
   image: string;
@@ -27,18 +24,18 @@ const Create = () => {
   const docId = usePathname().slice(8); //documnet id
   const uid = useAuthStore((state) => state.uid); //user id
   const trueUpload = useUpload((state) => state.TrueUpload);
+
   const router = useRouter();
 
   const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
   const [newQuizList, setNewQuizList] = useState<QuizList[]>([]);
-
   const [showImage, setShowImage] = useState<string>("");
   const [quizList, setQuizList] = useState<QuizList[]>([]);
-
   const [answer, setAnswer] = useState<string>("");
   const [source, setSource] = useState<string>("");
-
   const [showImageIndex, setShowImageIndex] = useState<number | null>();
+
+  const { uploadMutation, updateMutation } = useUploadQuizList(uid, docId);
 
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,33 +47,23 @@ const Create = () => {
     }
 
     trueUpload(); // 페이지 이동 감지 피하기
+    const loadingToastId = toast.loading("저장 중입니다...");
 
-    if (uid && docId) {
-      const docRef = doc(db, "users", uid, "quizList", docId);
-
-      uploadFileList.map((uploadFile, index) => {
-        const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
-
-        const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
-        uploadBytes(imageRef, uploadFile);
-
-        newQuizList[index].image = uploadFileName;
-        setNewQuizList(newQuizList);
-      });
-
-      toast.promise(
-        updateDoc(docRef, {
-          quizList: newQuizList,
-        }),
-        {
-          loading: "Saving...",
-          success: () => {
-            router.replace("/");
-            return <b>저장되었습니다!</b>;
-          },
-          error: <b>저장에 실패했습니다!</b>,
-        }
+    try {
+      // 이미지 업로드 및 QuizList에 이미지 ID 추가
+      const updatedQuizList = await Promise.all(
+        uploadFileList.map(async (uploadFile, index) => {
+          const uploadFileName = await uploadMutation.mutateAsync(uploadFile);
+          return { ...newQuizList[index], image: uploadFileName };
+        })
       );
+
+      // Firestore에 퀴즈 리스트 업데이트
+      await updateMutation.mutateAsync(updatedQuizList);
+      toast.success("저장되었습니다!", { id: loadingToastId });
+      router.replace("/");
+    } catch {
+      toast.error("저장에 실패했습니다!");
     }
   };
 
