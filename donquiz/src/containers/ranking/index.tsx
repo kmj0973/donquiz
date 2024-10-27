@@ -59,7 +59,7 @@ const Ranking = () => {
   return (
     <div className="w-full min-h-screen overflow-auto font-bold flex flex-col items-center justify-center my-4 px-4">
       <div className="relative flex justify-around items-end gap-4 mb-8">
-        <div className="absolute top-0 right-0 text-[#F9D132] text-[24px] px-4 sm:px2">
+        <div className="absolute top-0 right-0 text-[#F9D132] text-[18px] sm:text-[24px] px-4 sm:px2">
           <div>1~100위</div>
         </div>
         <div className="flex flex-col justify-center items-center">
@@ -69,7 +69,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[1].displayName}
           </div>
-          <div className="min-w-[160px] sm:min-w-[200px] h-[140px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[80px] sm:min-w-[200px] h-[140px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">2</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[1].point}점
@@ -85,7 +85,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[0].displayName}
           </div>
-          <div className="min-w-[160px] sm:min-w-[200px] h-[180px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[80px] sm:min-w-[200px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">1</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[0].point}점
@@ -100,7 +100,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[2].displayName}
           </div>
-          <div className="min-w-[160px] sm:min-w-[200px] h-[120px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[80px] sm:min-w-[200px] h-[120px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">3</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[2].point}점

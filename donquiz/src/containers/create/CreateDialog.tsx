@@ -24,7 +24,7 @@ const CreateDialog = () => {
   const handleQuizFrame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!titleImage || title.length < 3) {
-      toast.error("제목을 3글자 이상 입력해주세요", {
+      toast.error("제목을 3글자 이상 입력해주세요, 썸네일을 등록해주세요", {
         duration: 3000,
       });
       return;
@@ -33,7 +33,7 @@ const CreateDialog = () => {
     const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
 
     const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
-    uploadBytes(imageRef, titleImage);
+    await uploadBytes(imageRef, titleImage);
 
     if (uid) {
       //파이어스토어에 제목과 썸네일 저장
@@ -52,20 +52,22 @@ const CreateDialog = () => {
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files == null) {
-      return;
-    }
-    setTitleImage(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setTitleImage(file);
 
     const reader = new FileReader();
-
-    reader.readAsDataURL(e.target.files[0]);
-
-    reader.onload = (e) => {
-      if (reader.readyState === 2) {
-        setThumbnail(String(e.target!.result));
+    reader.onload = () => {
+      if (reader.result) {
+        setThumbnail(reader.result as string); // 파일을 읽어온 후, thumbnail 상태 업데이트
       }
     };
+    reader.onerror = () => {
+      toast.error("파일을 읽는 데 실패했습니다.");
+    };
+
+    reader.readAsDataURL(file); // 파일을 읽기 시작
   };
 
   return (

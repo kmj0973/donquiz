@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -26,6 +26,9 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+if (process.env.NODE_ENV === "development") {
+  connectFirestoreEmulator(db, "localhost", 8080);
+}
 // const db2 = initializeFirestore(app, {
 //   cacheSizeBytes: CACHE_SIZE_UNLIMITED, // 무제한 캐싱
 // });

@@ -7,13 +7,13 @@ const Home = () => {
         Quiz List
       </div>
       <div className="w-full max-w-[1400px] flex items-center justify-between mb-8 px-4">
-        <div className="text-[18px] sm:text-[20px] mb-2 sm:mb-0">
+        <div className="text-[16px] sm:text-[20px] mb-2 sm:mb-0">
           최신순/인기순
         </div>
         <div>
           <input
             id="search"
-            className="border-2 rounded-lg mr-2 p-1 border-black text-sm sm:text-base "
+            className="w-[120px] sm:w-[240px] border-2 rounded-lg mr-2 p-1 border-black text-sm sm:text-base "
             type="text"
             placeholder=""
           />
