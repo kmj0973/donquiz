@@ -3,11 +3,10 @@
 import CelebrateLeft from "../../../public/image/CelebrateLeft.png";
 import CelebrateRight from "../../../public/image/CelebrateRight.png";
 import { useUpload } from "@/hooks/useUpload";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
-import { db } from "../../../firebase/firebasedb";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { useUserPoints } from "./hooks/useUserPoints";
 
 const ResultDialog = ({
   rightCount,
@@ -19,21 +18,11 @@ const ResultDialog = ({
   const uid = useAuthStore((state) => state.uid);
   const trueUpload = useUpload((state) => state.TrueUpload);
 
-  const handleAddPoint = async () => {
-    trueUpload();
-    const docRef = doc(db, `users/${uid}`);
+  const { updatePointsMutation } = useUserPoints(uid);
 
-    const user = await getDoc(docRef);
-    if (user.exists()) {
-      const userData = user.data();
-      await setDoc(
-        docRef,
-        {
-          point: userData.point + rightCount * 10,
-        },
-        { merge: true }
-      );
-    }
+  const handleAddPoint = () => {
+    trueUpload();
+    updatePointsMutation.mutate(rightCount * 10); // 정답 개수에 따라 포인트 추가
   };
 
   return (

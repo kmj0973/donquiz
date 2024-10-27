@@ -7,7 +7,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { db, storage } from "../../firebase/firebasedb";
+import { db, storage } from "../../../../firebase/firebasedb";
 
 interface Quiz {
   quizId: string;

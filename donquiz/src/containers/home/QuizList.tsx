@@ -6,7 +6,7 @@ import Loading from "@/app/loading";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useFetchUserQuizLists } from "@/hooks/useFetchUserQuizLists";
+import { useFetchUserQuizLists } from "@/containers/home/hooks/useFetchUserQuizLists";
 
 const QuizList = () => {
   const isLogin = useAuthStore((state) => state.isLogin);

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-import { db, storage } from "../../firebase/firebasedb";
+import { db, storage } from "../../../../firebase/firebasedb";
 
 interface QuizList {
   image: string;

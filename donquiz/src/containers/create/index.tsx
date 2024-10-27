@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useUpload } from "@/hooks/useUpload";
-import { useUploadQuizList } from "@/hooks/useQuizMutations";
+import { useUploadQuizList } from "@/containers/create/hooks/useQuizMutations";
 
 interface QuizList {
   image: string;
@@ -47,8 +47,6 @@ const Create = () => {
     }
 
     trueUpload(); // 페이지 이동 감지 피하기
-    const loadingToastId = toast.loading("저장 중입니다...");
-
     try {
       // 이미지 업로드 및 QuizList에 이미지 ID 추가
       const updatedQuizList = await Promise.all(
@@ -60,7 +58,9 @@ const Create = () => {
 
       // Firestore에 퀴즈 리스트 업데이트
       await updateMutation.mutateAsync(updatedQuizList);
-      toast.success("저장되었습니다!", { id: loadingToastId });
+      toast.success("저장되었습니다!", {
+        id: toast.loading("저장 중입니다..."),
+      });
       router.replace("/");
     } catch {
       toast.error("저장에 실패했습니다!");

@@ -3,27 +3,11 @@
 import { FaUser } from "react-icons/fa";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { db, storage } from "../../../firebase/firebasedb";
-import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Loading from "@/app/loading";
 import MyRank from "./MyRank";
-
-interface QuizList {
-  imageUrl: string;
-  quizList: Quiz;
-}
-
-interface Quiz {
-  participant: number;
-  quizId: string;
-  quizList: [];
-  thumbnail: string;
-  title: string;
-}
+import { useFetchUserData } from "./hooks/useFetchUserData";
 
 const Logout = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -33,63 +17,9 @@ const Logout = () => {
   const uid = usePathname().slice(8);
   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
-  const [myQuizList, setMyQuizList] = useState<QuizList[]>([]);
-  const [myPoint, setMyPoint] = useState(0);
-
-  useEffect(() => {
-    const docRef = collection(db, `users/${uid}/quizList`);
-
-    const fetchUser = async () => {
-      const userRef = doc(db, `users/${uid}`);
-
-      const userDataDoc = await getDoc(userRef);
-
-      if (userDataDoc.exists()) {
-        const userData = userDataDoc.data();
-
-        setMyPoint(userData.point);
-      }
-    };
-
-    const fetchQuizList = async () => {
-      try {
-        const fetchedQuizList: QuizList[] = [];
-        const quizListData = await getDocs(docRef);
-
-        for (const quiz of quizListData.docs) {
-          if (quiz.exists()) {
-            const quizData = quiz.data();
-            let imageUrl = "";
-
-            if (quizData.thumbnail) {
-              const imageRef = ref(storage, `images/${quizData.thumbnail}`);
-              imageUrl = await getDownloadURL(imageRef);
-            }
-
-            fetchedQuizList.push({
-              imageUrl, // 이미지 URL
-              quizList: {
-                participant: quizData.participant,
-                quizId: quizData.quizId,
-                quizList: quizData.quizList,
-                thumbnail: quizData.thumbnail,
-                title: quizData.title,
-              }, // 퀴즈 데이터
-            });
-          }
-        }
-        setMyQuizList(fetchedQuizList);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-    fetchQuizList();
-  }, [uid]);
+  const { data, isLoading, isError } = useFetchUserData(uid);
+  const userPoint = data?.userPoint || 0;
+  const myQuizList = data?.quizList || [];
 
   // const displayName = useStore(useAuthStore, (state) => {
   //   return state.displayName;
@@ -124,6 +54,9 @@ const Logout = () => {
     }
   };
 
+  if (isLoading) return <Loading />;
+  if (isError) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
+
   return (
     <div className="w-full max-w-[1200px] flex flex-col items-center justify-center py-4 px-2">
       <div className="mb-4 h-[350px] border-4 border-black rounded-2xl flex flex-col justify-center items-center">
@@ -135,7 +68,7 @@ const Logout = () => {
         </div>
 
         <div className="text-[14px] sm:text-[15px] text-[#000000] ">
-          현재 포인트 : {myPoint}점
+          현재 포인트 : {userPoint}점
         </div>
         <MyRank />
       </div>
@@ -147,7 +80,7 @@ const Logout = () => {
         </div>
         <div className="w-full max-w-[95%] h-auto min-h-[200px] sm:min-h-[350px] flex flex-wrap justify-center items-center gap-2 sm:gap-4 mb-4 px-2">
           {myQuizList.length != 0 ? (
-            !loading ? (
+            isLoading ? (
               myQuizList.map((quiz) => {
                 return (
                   <div

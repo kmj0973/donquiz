@@ -1,84 +1,37 @@
 "use client";
 
-import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiSolidRightArrowSquare } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
-import { db, storage } from "../../../firebase/firebasedb";
 import { useSearchParams } from "next/navigation";
-import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "@/app/loading";
 import X from "../../../public/image/X.png";
 import O from "../../../public/image/O.png";
 import ResultDialog from "./ResultDialog";
 import toast from "react-hot-toast";
-
-interface Quiz {
-  participant: number;
-  imageUrl: string;
-  quizList: QuizObject;
-}
-
-interface QuizObject {
-  answer: string;
-  image: string;
-  source: string;
-}
+import {
+  useFetchQuizData,
+  useUpdateParticipantCount,
+} from "./hooks/useFetchQuizData";
 
 const QuizComponents = () => {
-  const [quizArray, setQuizArray] = useState<Quiz[]>([]);
   const [answer, setAnswer] = useState<string>("");
   const [rightCount, setRightCount] = useState<number>(0);
   const [isAnswer, setIsAnswer] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false); //last result page loading
   const [targetIndex, setTargetIndex] = useState<number>(0); //타겟인 배열 인덱스
 
-  const [loading, setLoading] = useState(true); //fetch loading
-
   const params = useSearchParams();
+  const userId = params.get("userId") ?? "";
+  const quizId = params.get("quizId") ?? "";
+  const title = params.get("title") ?? "";
 
-  const userId = params.get("userId");
-  const quizId = params.get("quizId");
-  const title = params.get("title");
-
-  useEffect(() => {
-    // 첫 렌더링 시에 fetch하여 배열에 퀴즈 정보 저장
-    const fetchQuizData = async () => {
-      const fetchedQuizData: Quiz[] = [];
-      try {
-        const docRef = doc(db, `users/${userId}/quizList/${quizId}`);
-        const docData = await getDoc(docRef); // quizList 컬렉션에서 quizId에 맞는 데이터 가져옴
-
-        if (docData.exists()) {
-          const quizData = docData.data();
-
-          // 이미지가 있다면 Firebase Storage에서 다운로드 URL을 가져옴
-          for (const quiz of quizData.quizList) {
-            let imageUrl = "";
-            if (quiz.image) {
-              const imageRef = ref(storage, `images/${quiz.image}`);
-              imageUrl = await getDownloadURL(imageRef);
-            }
-
-            fetchedQuizData.push({
-              participant: quizData.quizList.participant,
-              imageUrl, // 이미지 URL
-              quizList: quiz, // 퀴즈 데이터
-            });
-          }
-        }
-
-        setQuizArray(fetchedQuizData);
-      } catch (error) {
-        console.error("Error fetching quiz data:", error);
-      } finally {
-        setLoading(false); // 로딩 완료
-      }
-    };
-
-    fetchQuizData();
-  }, [userId, quizId]);
+  const { data: quizArray = [], isLoading: loading } = useFetchQuizData(
+    userId,
+    quizId
+  );
+  const updateParticipantMutation = useUpdateParticipantCount(userId, quizId);
 
   if (loading) {
     return <Loading />;
@@ -106,11 +59,7 @@ const QuizComponents = () => {
 
     if (quizArray.length == targetIndex + 1) {
       //미지막문제 시
-      const docRef = doc(db, `users/${userId}/quizList/${quizId}`);
-      await updateDoc(docRef, {
-        participant: increment(1),
-      });
-
+      updateParticipantMutation.mutate();
       setIsLoading(false);
       setTimeout(() => {
         setIsLoading(true);
