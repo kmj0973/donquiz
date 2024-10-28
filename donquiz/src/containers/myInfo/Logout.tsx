@@ -9,7 +9,7 @@ import Loading from "@/app/loading";
 import MyRank from "./MyRank";
 import { useFetchUserData } from "./hooks/useFetchUserData";
 
-const Logout = () => {
+const MyInfo = () => {
   const logout = useAuthStore((state) => state.logout);
   const displayName = useAuthStore((state) => state.displayName);
   const isLogin = useAuthStore((state) => state.isLogin);
@@ -150,4 +150,4 @@ const Logout = () => {
   );
 };
 
-export default Logout;
+export default MyInfo;

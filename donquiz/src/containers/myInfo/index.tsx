@@ -1,16 +1,16 @@
-import Logout from "./Logout";
+import MyInfo from "./Logout";
 
-const MyInfo = () => {
+const MyInfoPage = () => {
   return (
     <>
       <div
         className="h-auto overflow-auto font-bold flex flex-col items-center justify-center
       "
       >
-        <Logout />
+        <MyInfo />
       </div>
     </>
   );
 };
 
-export default MyInfo;
+export default MyInfoPage;
