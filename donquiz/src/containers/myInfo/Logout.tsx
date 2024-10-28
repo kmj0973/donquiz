@@ -111,7 +111,7 @@ const Logout = () => {
                     </div>
                     <div className="relative w-full pb-[60%] sm:pb-[80%]">
                       {quiz.imageUrl && (
-                        <Image src={quiz.imageUrl} alt="썸네일" fill />
+                        <Image src={quiz.imageUrl} alt="썸네일" fill priority />
                       )}
                     </div>
                     <button
