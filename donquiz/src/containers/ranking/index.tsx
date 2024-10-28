@@ -1,58 +1,15 @@
 "use client";
 
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { db } from "../../../firebase/firebasedb";
 import { FaUser } from "react-icons/fa";
 import crown from "../../../public/image/crown.png";
 import Image from "next/image";
 import Loading from "@/app/loading";
-
-interface Users {
-  id: string;
-  displayName: string;
-  point: number;
-}
-
-interface UserRanking {
-  users: Users[];
-  totalUsers: number;
-}
+import { useUserRank } from "./hooks/useUserRank";
 
 const Ranking = () => {
-  const [userRanking, setUserRanking] = useState<UserRanking | null>(null);
-  const [loading, setLoading] = useState(true); //fetch loading
+  const { data: userRanking = { users: [] }, isLoading } = useUserRank();
 
-  useEffect(() => {
-    const getUserRank = async () => {
-      try {
-        const usersRef = collection(db, "users");
-        const usersQuery = query(usersRef, orderBy("point", "desc"));
-        const querySnapshot = await getDocs(usersQuery);
-
-        const users = querySnapshot.docs
-          .map((doc) => ({
-            id: doc.id,
-            displayName: doc.data().displayName,
-            point: doc.data().point,
-          }))
-          .slice(0, 100);
-        const totalUsers = users.length;
-
-        setUserRanking({
-          users,
-          totalUsers,
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getUserRank();
-  });
-
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -69,7 +26,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[1].displayName}
           </div>
-          <div className="min-w-[80px] sm:min-w-[200px] h-[140px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[100px] sm:min-w-[200px] h-[130px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">2</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[1].point}점
@@ -85,7 +42,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[0].displayName}
           </div>
-          <div className="min-w-[80px] sm:min-w-[200px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[100px] sm:min-w-[200px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">1</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[0].point}점
@@ -100,7 +57,7 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[2].displayName}
           </div>
-          <div className="min-w-[80px] sm:min-w-[200px] h-[120px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
+          <div className="min-w-[100px] sm:min-w-[200px] h-[110px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
             <div className="text-[50px] sm:text-[70px]">3</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[2].point}점
