@@ -67,7 +67,7 @@ export const useFetchUserQuizLists = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["userQuizLists"],
     queryFn: fetchUserQuizLists,
-    staleTime: 1000 * 60, // 5분 동안 데이터 캐싱 유지
+    staleTime: 1000 * 60 * 10,
   });
 
   useEffect(() => {

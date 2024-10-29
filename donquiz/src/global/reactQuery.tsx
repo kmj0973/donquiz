@@ -14,8 +14,7 @@ export default function ReactQueryProvider({
         defaultOptions: {
           queries: {
             retry: 1,
-            staleTime: 60 * 1000 * 5,
-            gcTime: 10 * 60 * 1000,
+            staleTime: 60 * 1000 * 10,
           },
         },
       })
