@@ -26,7 +26,7 @@ export const useUserPoints = (uid: string | null) => {
 
   // 포인트 조회용 useQuery
   const { data: points = 0 } = useQuery({
-    queryKey: ["userData", uid], // 고유 queryKey
+    queryKey: ["userDataPoint", uid], // 고유 queryKey
     queryFn: () => fetchUserPoints(uid), // fetch 함수
     enabled: !!uid, // uid가 있을 때만 실행
   });
@@ -36,6 +36,8 @@ export const useUserPoints = (uid: string | null) => {
     mutationFn: (additionalPoints: number) =>
       updateUserPoints({ uid, newPoints: points + additionalPoints }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userDataPoint", uid] });
+      queryClient.invalidateQueries({ queryKey: ["userRank", uid] });
       queryClient.invalidateQueries({ queryKey: ["userData", uid] }); // 업데이트 성공 시 캐시 무효화
     },
   });

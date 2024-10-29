@@ -4,17 +4,18 @@ import { FaUser } from "react-icons/fa";
 import Image from "next/image";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useFetchUserData } from "./hooks/useFetchUserData";
-import MyRank from "./MyRank";
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useUserRank } from "./hooks/useUserRank";
 
 const MyInfo = () => {
   const uid = useAuthStore((state) => state.uid);
   const displayName = useAuthStore((state) => state.displayName);
   const logout = useAuthStore((state) => state.logout);
 
-  const { data, isLoading, error } = useFetchUserData(uid);
+  const { data: userData, isLoading, error } = useFetchUserData(uid);
+  const { data: userRanking } = useUserRank(uid);
   const router = useRouter();
 
   const clearUserStorage = () => {
@@ -41,9 +42,11 @@ const MyInfo = () => {
         <div className="text-[24px] sm:text-[30px]">{displayName} 님</div>
 
         <div className="text-[14px] sm:text-[15px] text-[#000000] ">
-          현재 포인트 : {data?.userPoint}점
+          현재 포인트 : {userData?.userPoint}점
         </div>
-        <MyRank />
+        <div className="text-[15px] text-[#8F8F8F] mb-2">
+          포인트 랭킹 {userRanking?.rank}위
+        </div>
       </div>
       <div className="w-full max-w-[1200px] border-4 border-[#FF6868] rounded-2xl flex flex-col justify-center items-center">
         <div className="w-full sm:w-[40%] flex justify-center items-center my-4 sm:my-8">
@@ -52,8 +55,8 @@ const MyInfo = () => {
           </div>
         </div>
         <div className="w-full max-w-[95%] h-auto min-h-[200px] sm:min-h-[350px] flex flex-wrap justify-center items-center gap-2 sm:gap-4 mb-4 px-2">
-          {data?.fetchedQuizList ? (
-            data?.fetchedQuizList.map((quizData, index) => {
+          {userData?.fetchedQuizList ? (
+            userData?.fetchedQuizList.map((quizData, index) => {
               return (
                 <div
                   key={index}

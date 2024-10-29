@@ -27,12 +27,12 @@ const fetchUserRank = async (): Promise<UserRankingData> => {
   return { users };
 };
 
-export const useUserRank = () => {
+export const useAllUserPoints = () => {
   return useQuery({
     // queryKey는 캐시에서 이 쿼리를 식별하기 위해 사용합니다.
-    queryKey: ["userData"],
+    queryKey: ["userPoints"],
     // queryFn은 데이터를 가져오기 위해 호출하는 함수입니다.
     queryFn: fetchUserRank,
-    staleTime: 1000 * 60 * 5, // 5분 동안 캐싱
+    staleTime: 0,
   });
 };
