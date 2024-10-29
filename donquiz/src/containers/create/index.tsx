@@ -205,7 +205,6 @@ const Create = () => {
               className="hidden"
               onChange={handleImage}
               accept="image/*"
-              capture="environment"
             />
             <div className="w-full overflow-x-auto h-[80px] sm:h-[100px] flex items-center">
               {quizList.length != 0
