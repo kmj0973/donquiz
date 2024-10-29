@@ -35,7 +35,7 @@ const MyRank = () => {
     };
 
     getUserRank();
-  });
+  }, [uid]);
 
   return (
     <div className="text-[15px] text-[#8F8F8F] mb-2">
