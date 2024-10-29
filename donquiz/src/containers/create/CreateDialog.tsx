@@ -61,10 +61,11 @@ const CreateDialog = () => {
     reader.readAsDataURL(e.target.files[0]);
 
     reader.onload = () => {
-      if (reader.result) {
-        setThumbnail(reader.result as string);
-      }
+      console.log("Reader onload event:", reader.result);
+      setThumbnail(reader.result as string);
     };
+
+    e.target.value = "";
   };
 
   return (
@@ -98,25 +99,26 @@ const CreateDialog = () => {
                     alt="썸네일"
                     fill
                     style={{ borderRadius: "8px" }}
+                    priority
                   />
                 </div>
               ) : (
                 <>
                   <label
-                    htmlFor="file"
-                    className="flex flex-col justify-center items-center"
+                    htmlFor="fileInput"
+                    className="flex flex-col justify-center items-center cursor-pointer"
                   >
                     <div className="mb-2 text-sm sm:text-base">
                       썸네일을 선택해주세요
                     </div>
-                    <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
+                    {/* <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
                       파일 업로드
-                    </div>
+                    </div> */}
                   </label>
                   <input
-                    id="file"
+                    id="fileInput"
                     type="file"
-                    className="hidden"
+                    className="w-[40%] mt-3"
                     onChange={handleImage}
                     accept="image/*"
                   />
