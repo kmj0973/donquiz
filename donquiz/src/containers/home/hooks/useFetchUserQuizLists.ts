@@ -12,7 +12,9 @@ import { db, storage } from "../../../../firebase/firebasedb";
 interface Quiz {
   quizId: string;
   imageUrl: string;
-  [key: string]: string;
+  title: string;
+  participant: number;
+  quizList: string[];
 }
 
 interface UserQuizList {
@@ -21,7 +23,7 @@ interface UserQuizList {
 }
 
 // 데이터 fetching 함수
-const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
+export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
   const usersSnapshot = await getDocs(collection(db, "users"));
   const updatedQuizLists: UserQuizList[] = [];
 
@@ -48,8 +50,9 @@ const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
         return {
           quizId: quizDoc.id,
           imageUrl,
+          title: quizData.title,
           participant: quizData.participant,
-          ...quizData,
+          quizList: quizData.quizList || [],
         };
       })
     );

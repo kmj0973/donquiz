@@ -1,6 +1,10 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  HydrationBoundary,
+} from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function ReactQueryProvider({
@@ -21,6 +25,8 @@ export default function ReactQueryProvider({
   ); // 컴포넌트 마운트 시 한 번만 생성
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={null}>{children}</HydrationBoundary>
+    </QueryClientProvider>
   );
 }
