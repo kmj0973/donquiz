@@ -47,6 +47,8 @@ const Create = () => {
     }
 
     trueUpload(); // 페이지 이동 감지 피하기
+    const toastId = toast.loading("저장 중입니다...");
+
     try {
       // 이미지 업로드 및 QuizList에 이미지 ID 추가
       const updatedQuizList = await Promise.all(
@@ -59,7 +61,7 @@ const Create = () => {
       // Firestore에 퀴즈 리스트 업데이트
       await updateMutation.mutateAsync(updatedQuizList);
       toast.success("저장되었습니다!", {
-        id: toast.loading("저장 중입니다..."),
+        id: toastId,
       });
       router.replace("/");
     } catch {
@@ -143,17 +145,17 @@ const Create = () => {
 
     reader.readAsDataURL(e.target.files[0]);
 
-    reader.onload = (e) => {
+    reader.onload = () => {
       if (reader.readyState === 2) {
         setQuizList([
           ...quizList,
-          { image: String(e.target!.result), answer: "", source: "" },
+          { image: String(reader.result), answer: "", source: "" },
         ]);
         setNewQuizList([
           ...newQuizList,
-          { image: String(e.target!.result), answer: "", source: "" },
+          { image: String(reader.result), answer: "", source: "" },
         ]);
-        setShowImage(String(e.target!.result));
+        setShowImage(String(reader.result));
         setShowImageIndex(quizList.length);
         setAnswer("");
         setSource("");
@@ -203,6 +205,7 @@ const Create = () => {
               className="hidden"
               onChange={handleImage}
               accept="image/*"
+              capture="environment"
             />
             <div className="w-full overflow-x-auto h-[80px] sm:h-[100px] flex items-center">
               {quizList.length != 0

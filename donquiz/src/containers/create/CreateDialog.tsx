@@ -60,8 +60,7 @@ const CreateDialog = () => {
     const reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
 
-    reader.onload = () => {
-      console.log("Reader onload event:", reader.result);
+    reader.onloadend = () => {
       setThumbnail(reader.result as string);
     };
 
@@ -108,10 +107,10 @@ const CreateDialog = () => {
                     htmlFor="fileInput"
                     className="flex flex-col justify-center items-center cursor-pointer"
                   >
-                    <div className="mb-2 text-sm sm:text-base">
+                    {/* <div className="mb-2 text-sm sm:text-base">
                       썸네일을 선택해주세요
                     </div>
-                    {/* <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
+                    <div className="p-1 px-4 border-2 rounded-xl hover:bg-[#f2f2f2]">
                       파일 업로드
                     </div> */}
                   </label>
