@@ -70,7 +70,7 @@ const QuizList = () => {
                 </div>
                 <div className="relative w-full pb-[80%]">
                   {quiz.imageUrl && (
-                    <Image src={quiz.imageUrl} alt="썸네일" fill priority />
+                    <Image src={quiz.imageUrl} alt="썸네일" fill />
                   )}
                 </div>
                 <button

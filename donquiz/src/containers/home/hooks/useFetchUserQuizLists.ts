@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -11,8 +13,10 @@ import { db, storage } from "../../../../firebase/firebasedb";
 
 interface Quiz {
   quizId: string;
+  title: string;
   imageUrl: string;
-  [key: string]: string;
+  participant: number;
+  quizList: string[]; // 문제 리스트의 각 항목이 어떤 형태인지 명확히 하시면 됩니다.
 }
 
 interface UserQuizList {
@@ -21,7 +25,7 @@ interface UserQuizList {
 }
 
 // 데이터 fetching 함수
-const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
+export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
   const usersSnapshot = await getDocs(collection(db, "users"));
   const updatedQuizLists: UserQuizList[] = [];
 
@@ -44,12 +48,13 @@ const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
             console.error("Error fetching image URL:", error);
           }
         }
-
+        console.log(quizData);
         return {
           quizId: quizDoc.id,
+          title: quizData.title,
           imageUrl,
           participant: quizData.participant,
-          ...quizData,
+          quizList: quizData.quizList,
         };
       })
     );

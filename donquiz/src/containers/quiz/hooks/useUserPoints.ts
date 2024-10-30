@@ -36,7 +36,7 @@ export const useUserPoints = (uid: string | null) => {
     mutationFn: (additionalPoints: number) =>
       updateUserPoints({ uid, newPoints: points + additionalPoints }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userDataPoint", uid] });
+      queryClient.invalidateQueries({ queryKey: ["userPoints"] });
       queryClient.invalidateQueries({ queryKey: ["userRank", uid] });
       queryClient.invalidateQueries({ queryKey: ["userData", uid] }); // 업데이트 성공 시 캐시 무효화
     },

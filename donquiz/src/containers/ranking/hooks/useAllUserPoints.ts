@@ -18,6 +18,7 @@ const fetchUserRank = async (): Promise<UserRankingData> => {
 
   const users = querySnapshot.docs.map((doc) => {
     const data = doc.data();
+
     return {
       displayName: data.displayName,
       point: data.point,
@@ -33,6 +34,6 @@ export const useAllUserPoints = () => {
     queryKey: ["userPoints"],
     // queryFn은 데이터를 가져오기 위해 호출하는 함수입니다.
     queryFn: fetchUserRank,
-    staleTime: 0,
+    staleTime: 1000 * 60 * 5,
   });
 };
