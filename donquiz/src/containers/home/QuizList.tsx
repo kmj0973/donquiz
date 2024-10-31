@@ -63,8 +63,10 @@ const QuizList = () => {
                     </div>
                   </div>
                 </div>
-                <div className="text-[12px] sm:text-[14px]">
-                  {quiz.quizList.length}문제
+                <div className="relative w-full pb-[80%]">
+                  {quiz.imageUrl && (
+                    <Image src={quiz.imageUrl} alt="썸네일" fill />
+                  )}
                 </div>
               </div>
               <div className="relative w-full pb-[80%]">

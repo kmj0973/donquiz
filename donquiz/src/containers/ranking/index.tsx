@@ -4,10 +4,10 @@ import { FaUser } from "react-icons/fa";
 import crown from "../../../public/image/crown.png";
 import Image from "next/image";
 import Loading from "@/app/loading";
-import { useUserRank } from "./hooks/useUserRank";
+import { useAllUserPoints } from "./hooks/useAllUserPoints";
 
 const Ranking = () => {
-  const { data: userRanking = { users: [] }, isLoading } = useUserRank();
+  const { data: userRanking = { users: [] }, isLoading } = useAllUserPoints();
 
   if (isLoading) {
     return <Loading />;
