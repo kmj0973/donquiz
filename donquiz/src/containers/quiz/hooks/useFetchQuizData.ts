@@ -15,7 +15,7 @@ interface QuizObject {
   source: string;
 }
 
-const fetchQuizData = async (
+export const fetchQuizData = async (
   userId: string | null,
   quizId: string | null
 ): Promise<Quiz[]> => {

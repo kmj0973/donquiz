@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from "../../../../firebase/firebasedb";
 
@@ -21,39 +21,41 @@ interface UserQuizList {
 // 데이터 fetching 함수
 export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
   const usersSnapshot = await getDocs(collection(db, "users"));
-  const updatedQuizLists: UserQuizList[] = [];
 
-  for (const userDoc of usersSnapshot.docs) {
-    const userId = userDoc.id;
-    const quizListSnapshot = await getDocs(
-      collection(db, `users/${userId}/quizList`)
-    );
+  // 모든 유저의 quizList 데이터를 병렬로 가져옴
+  const updatedQuizLists: UserQuizList[] = await Promise.all(
+    usersSnapshot.docs.map(async (userDoc) => {
+      const userId = userDoc.id;
+      const quizListSnapshot = await getDocs(
+        collection(db, `users/${userId}/quizList`)
+      );
 
-    const quizList: Quiz[] = await Promise.all(
-      quizListSnapshot.docs.map(async (quizDoc: QueryDocumentSnapshot) => {
-        const quizData = quizDoc.data();
-        let imageUrl = "";
+      const quizList: Quiz[] = await Promise.all(
+        quizListSnapshot.docs.map(async (quizDoc) => {
+          const quizData = quizDoc.data();
+          let imageUrl = "";
 
-        if (quizData.thumbnail) {
-          try {
+          if (quizData.thumbnail) {
             const imageRef = ref(storage, `images/${quizData.thumbnail}`);
-            imageUrl = await getDownloadURL(imageRef);
-          } catch (error) {
-            console.error("Error fetching image URL:", error);
+            imageUrl = await getDownloadURL(imageRef).catch((error) => {
+              console.error("Error fetching image URL:", error);
+              return ""; // 오류 시 빈 문자열 반환
+            });
           }
-        }
-        return {
-          quizId: quizDoc.id,
-          title: quizData.title,
-          imageUrl,
-          participant: quizData.participant,
-          quizList: quizData.quizList,
-        };
-      })
-    );
 
-    updatedQuizLists.push({ userId, quizList });
-  }
+          return {
+            quizId: quizDoc.id,
+            title: quizData.title,
+            imageUrl,
+            participant: quizData.participant,
+            quizList: quizData.quizList,
+          };
+        })
+      );
+
+      return { userId, quizList };
+    })
+  );
 
   return updatedQuizLists;
 };

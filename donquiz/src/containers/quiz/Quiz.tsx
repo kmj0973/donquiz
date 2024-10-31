@@ -100,8 +100,8 @@ const QuizComponents = () => {
           src={quizArray[targetIndex].imageUrl}
           alt={quizArray[targetIndex].quizList.source}
           fill
+          sizes="(max-width: 768px) 400, (max-width: 1200px) 500"
           priority
-          loading="eager"
           className="rounded-lg"
         />
         {isAnswer == true && (

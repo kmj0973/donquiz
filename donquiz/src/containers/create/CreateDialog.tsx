@@ -17,6 +17,7 @@ const CreateDialog = () => {
 
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [titleImage, setTitleImage] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
@@ -29,6 +30,7 @@ const CreateDialog = () => {
       });
       return;
     }
+    setIsLoading(true);
 
     const uploadFileName = uuidv4(); //이미지 파일 랜덤 이름 주기
 
@@ -46,6 +48,7 @@ const CreateDialog = () => {
         participant: 0,
       });
 
+      setIsLoading(false);
       CloseDialog();
       router.push(`/create/${docRef.id}`);
     }
@@ -124,20 +127,29 @@ const CreateDialog = () => {
                 </>
               )}
             </div>
+
             <div className="flex justify-around items-center mb-2">
-              <button
-                type="submit"
-                className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
-              >
-                생성하기
-              </button>
-              <button
-                type="button"
-                onClick={CloseDialog}
-                className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
-              >
-                취소
-              </button>
+              {!isLoading ? (
+                <>
+                  <button
+                    type="submit"
+                    className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+                  >
+                    생성하기
+                  </button>
+                  <button
+                    type="button"
+                    onClick={CloseDialog}
+                    className="w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+                  >
+                    취소
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col justify-center items-center">
+                  <div className="border-4 border-r-white border-black rounded-full w-[50px] h-[50px] animate-spin mb-1" />
+                </div>
+              )}
             </div>
           </form>
         </div>

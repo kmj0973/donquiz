@@ -16,7 +16,7 @@ const QuizList = () => {
   // Custom hook 사용하여 데이터 가져오기
   const { data: allUsersQuizLists, isLoading, error } = useFetchUserQuizLists();
 
-  const handleStartQuiz = (
+  const handleStartQuiz = async (
     e: React.MouseEvent<HTMLButtonElement>,
     userId: string,
     quizId: string,
@@ -31,6 +31,10 @@ const QuizList = () => {
       toast.error("로그인이 필요합니다", { duration: 800 });
       router.push("/login");
     } else {
+      // await queryClient.prefetchQuery({
+      //   queryKey: ["quizData", userId, quizId],
+      //   queryFn: () => fetchQuizData(userId, quizId),
+      // });
       router.push(`/quiz?userId=${userId}&quizId=${quizId}&title=${title}`);
     }
   };
@@ -70,7 +74,13 @@ const QuizList = () => {
                 </div>
                 <div className="relative w-full pb-[80%]">
                   {quiz.imageUrl && (
-                    <Image src={quiz.imageUrl} alt="썸네일" fill />
+                    <Image
+                      src={quiz.imageUrl}
+                      alt="썸네일"
+                      fill
+                      sizes="50vw"
+                      style={{ objectFit: "cover" }}
+                    />
                   )}
                 </div>
                 <button
