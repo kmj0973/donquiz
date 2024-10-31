@@ -1,13 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  QueryDocumentSnapshot,
-} from "firebase/firestore";
+import { useQuery } from "@tanstack/react-query";
+import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from "../../../../firebase/firebasedb";
 
@@ -48,7 +42,6 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
             console.error("Error fetching image URL:", error);
           }
         }
-        console.log(quizData);
         return {
           quizId: quizDoc.id,
           title: quizData.title,
@@ -67,7 +60,7 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
 
 // Custom Hook 정의
 export const useFetchUserQuizLists = () => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["userQuizLists"],
@@ -75,14 +68,14 @@ export const useFetchUserQuizLists = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "users"), async () => {
-      const updatedData = await fetchUserQuizLists();
-      queryClient.setQueryData(["userQuizLists"], updatedData);
-    });
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(collection(db, "users"), async () => {
+  //     const updatedData = await fetchUserQuizLists();
+  //     queryClient.setQueryData(["userQuizLists"], updatedData);
+  //   });
 
-    return () => unsubscribe();
-  }, [queryClient]);
+  //   return () => unsubscribe();
+  // }, [queryClient]);
 
   return { data, isLoading, error };
 };
