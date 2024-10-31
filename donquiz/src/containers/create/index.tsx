@@ -46,6 +46,16 @@ const Create = () => {
       return;
     }
 
+    const incompleteQuizzes = quizList.some(
+      (quiz) => quiz.answer.trim() === ""
+    );
+    if (incompleteQuizzes) {
+      toast.error("모든 문제에 정답을 입력해주세요", {
+        duration: 3000,
+      });
+      return;
+    }
+
     trueUpload(); // 페이지 이동 감지 피하기
     const toastId = toast.loading("저장 중입니다...");
 
@@ -94,6 +104,7 @@ const Create = () => {
       newQuizList[showImageIndex].source = source;
       setNewQuizList([...newQuizList]);
     }
+
     toast.success("저장되었습니다");
   };
 

@@ -120,7 +120,7 @@ const CreateDialog = () => {
                   <input
                     id="fileInput"
                     type="file"
-                    className="w-[40%] mt-3"
+                    className="w-[105px]"
                     onChange={handleImage}
                     accept="image/*"
                   />
