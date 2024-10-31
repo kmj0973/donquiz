@@ -25,18 +25,24 @@ export const fetchQuizData = async (
 
   if (docData.exists()) {
     const quizData = docData.data();
-    for (const quiz of quizData.quizList) {
+
+    // 모든 이미지 URL을 동시에 가져오는 부분
+    const quizPromises = quizData.quizList.map(async (quiz: QuizObject) => {
       let imageUrl = "";
       if (quiz.image) {
         const imageRef = ref(storage, `images/${quiz.image}`);
         imageUrl = await getDownloadURL(imageRef);
       }
-      fetchedQuizData.push({
+      return {
         participant: quizData.participant,
         imageUrl,
         quizList: quiz,
-      });
-    }
+      };
+    });
+
+    // 병렬 처리된 결과를 fetchedQuizData에 저장
+    const quizResults = await Promise.all(quizPromises);
+    fetchedQuizData.push(...quizResults);
   }
   return fetchedQuizData;
 };
