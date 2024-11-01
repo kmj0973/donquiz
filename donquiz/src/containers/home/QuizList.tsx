@@ -43,6 +43,16 @@ const QuizList = () => {
     }
   };
 
+  const handleSearch = () => {
+    setSearchWords(searchInput);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   if (isLoading) return <Loading />;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
 
@@ -59,15 +69,14 @@ const QuizList = () => {
             type="text"
             placeholder=""
             value={searchInput}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <input
             className="border-2 rounded-lg p-1 bg-black text-white border-black text-sm sm:text-base cursor-pointer"
             type="button"
             value="검색"
-            onClick={() => {
-              setSearchWords(searchInput);
-            }}
+            onClick={handleSearch}
           />
         </div>
       </div>
