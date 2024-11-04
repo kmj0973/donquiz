@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import { db, storage } from "../../../../firebase/firebasedb";
+import { db } from "../../../../firebase/firebasedb";
 
 interface Quiz {
   participant: number;
@@ -28,14 +27,9 @@ export const fetchQuizData = async (
 
     // 모든 이미지 URL을 동시에 가져오는 부분
     const quizPromises = quizData.quizList.map(async (quiz: QuizData) => {
-      let imageUrl = "";
-      if (quiz.image) {
-        const imageRef = ref(storage, `images/${quiz.image}`);
-        imageUrl = await getDownloadURL(imageRef);
-      }
       return {
         participant: quizData.participant,
-        imageUrl,
+        imageUrl: quiz.image,
         quizList: quiz,
       };
     });

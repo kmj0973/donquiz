@@ -1,7 +1,7 @@
 "use client";
 
 import { useDialog } from "@/hooks/useDialog";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../firebase/firebasedb";
 import { collection, doc, setDoc } from "firebase/firestore";
@@ -36,6 +36,7 @@ const CreateDialog = () => {
 
     const imageRef = ref(storage, `images/${uploadFileName}`); //파이어스토리지에 저장
     await uploadBytes(imageRef, titleImage);
+    const imageUrl = await getDownloadURL(imageRef);
 
     if (uid) {
       //파이어스토어에 제목과 썸네일 저장
@@ -44,7 +45,7 @@ const CreateDialog = () => {
       await setDoc(docRef, {
         quizId: docRef.id,
         title,
-        thumbnail: uploadFileName,
+        thumbnail: imageUrl,
         participant: 0,
       });
 

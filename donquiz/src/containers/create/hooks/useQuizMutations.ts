@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../../firebase/firebasedb";
 
@@ -19,7 +19,9 @@ export const useUploadQuizList = (uid: string | null, docId: string) => {
     const uploadFileName = uuidv4();
     const imageRef = ref(storage, `images/${uploadFileName}`);
     await uploadBytes(imageRef, file);
-    return uploadFileName;
+    const imageUrl = getDownloadURL(imageRef);
+
+    return imageUrl;
   };
 
   const updateQuizList = async (newQuizList: QuizData[]) => {
@@ -33,6 +35,7 @@ export const useUploadQuizList = (uid: string | null, docId: string) => {
   const uploadMutation = useMutation({
     mutationFn: uploadImage,
   });
+
   const updateMutation = useMutation({
     //퀴즈 리스트 업데이트 함수, 업데이트 후 userQuizLists키를 갖고있는 쿼리 한번 더 호출
     mutationFn: updateQuizList,

@@ -60,23 +60,25 @@ const QuizList = () => {
   };
 
   const handlePopular = () => {
-    if (toggle) {
-      setAllUsersQuizLists((prevAllUsersQuizLists) => {
-        const sortedList = [...prevAllUsersQuizLists].sort(
-          (a, b) => b.participant - a.participant
-        );
-        return sortedList;
-      });
-    } else {
-      if (data) {
-        const quizzes = data.reduce<Quiz[]>((acc, user) => {
-          return [...acc, ...user.quizList];
-        }, []);
-        setAllUsersQuizLists(quizzes);
-      }
+    setAllUsersQuizLists((prevAllUsersQuizLists) => {
+      const sortedList = [...prevAllUsersQuizLists].sort(
+        (a, b) => b.participant - a.participant
+      );
+      return sortedList;
+    });
+
+    setToggle(false);
+  };
+
+  const handleRecommand = () => {
+    if (data) {
+      const quizzes = data.reduce<Quiz[]>((acc, user) => {
+        return [...acc, ...user.quizList];
+      }, []);
+      setAllUsersQuizLists(quizzes);
     }
 
-    setToggle(!toggle);
+    setToggle(true);
   };
 
   const handleSearch = () => {
@@ -92,20 +94,27 @@ const QuizList = () => {
   if (isLoading) return <Loading />;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
 
+  const tabClass = (active: boolean) =>
+    `relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer p-1 px-2 rounded-xl ${
+      active ? "text-white bg-black" : "text-black bg-white"
+    }`;
+
   return (
     <>
       <div className="w-full max-w-[1400px] flex items-center justify-between mb-8 px-4">
-        <div
-          onClick={handlePopular}
-          className="relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer text-white bg-black p-1 px-2 rounded-xl"
-        >
-          {toggle ? "인기순" : "추천순"}
+        <div className="flex">
+          <div onClick={handleRecommand} className={tabClass(toggle)}>
+            추천순
+          </div>
+          <div onClick={handlePopular} className={tabClass(!toggle)}>
+            인기순
+          </div>
         </div>
         <div>
           <input
             className="w-[120px] sm:w-[240px] border-2 rounded-lg mr-2 p-1 border-black text-sm sm:text-base "
             type="text"
-            placeholder=""
+            placeholder="검색어 입력"
             value={searchInput}
             onKeyDown={handleKeyDown}
             onChange={(e) => setSearchInput(e.target.value)}
@@ -119,8 +128,9 @@ const QuizList = () => {
         </div>
       </div>
       <div className="w-full max-w-[1400px] h-[100%] min-h-[100vh] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto py-4 px-2">
-        {allUsersQuizLists.map((quiz) => {
-          if (quiz.quizList && quiz.title.includes(searchWords)) {
+        {allUsersQuizLists
+          .filter((quiz) => quiz.quizList && quiz.title.includes(searchWords))
+          .map((quiz) => {
             return (
               <div
                 key={quiz.quizId}
@@ -153,6 +163,7 @@ const QuizList = () => {
                       alt="썸네일"
                       fill
                       sizes="50vw"
+                      loading="lazy" // 지연 로딩
                       style={{ objectFit: "cover" }}
                     />
                   )}
@@ -168,8 +179,7 @@ const QuizList = () => {
                 </button>
               </div>
             );
-          }
-        })}
+          })}
       </div>
     </>
   );

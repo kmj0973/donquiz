@@ -2,8 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import { db, storage } from "../../../../firebase/firebasedb";
+import { db } from "../../../../firebase/firebasedb";
 
 interface Quiz {
   userId: string;
@@ -33,21 +32,12 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
       const quizList: Quiz[] = await Promise.all(
         quizListSnapshot.docs.map(async (quizDoc) => {
           const quizData = quizDoc.data();
-          let imageUrl = "";
-
-          if (quizData.thumbnail) {
-            const imageRef = ref(storage, `images/${quizData.thumbnail}`);
-            imageUrl = await getDownloadURL(imageRef).catch((error) => {
-              console.error("Error fetching image URL:", error);
-              return ""; // 오류 시 빈 문자열 반환
-            });
-          }
 
           return {
             userId: userId,
             quizId: quizDoc.id,
             title: quizData.title,
-            imageUrl,
+            imageUrl: quizData.thumbnail,
             participant: quizData.participant,
             quizList: quizData.quizList,
           };
