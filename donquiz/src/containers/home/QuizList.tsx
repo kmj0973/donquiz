@@ -64,7 +64,6 @@ const QuizList = () => {
         </div>
         <div>
           <input
-            id="search"
             className="w-[120px] sm:w-[240px] border-2 rounded-lg mr-2 p-1 border-black text-sm sm:text-base "
             type="text"
             placeholder=""
@@ -121,6 +120,7 @@ const QuizList = () => {
                     )}
                   </div>
                   <button
+                    aria-label="Submit quiz"
                     onClick={(event) =>
                       handleStartQuiz(
                         event,
@@ -129,7 +129,7 @@ const QuizList = () => {
                         quiz.title
                       )
                     }
-                    className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-2 px-4 sm:px-6 my-2 text-sm sm:text-base"
+                    className="bg-[#000000] hover:bg-red-500 text-white rounded-3xl py-2 px-4 sm:px-6 my-2 text-sm sm:text-base"
                   >
                     시작하기
                   </button>

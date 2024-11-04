@@ -6,10 +6,10 @@ import { db, storage } from "../../../../firebase/firebasedb";
 interface Quiz {
   participant: number;
   imageUrl: string;
-  quizList: QuizObject;
+  quizList: QuizData[];
 }
 
-interface QuizObject {
+interface QuizData {
   answer: string;
   image: string;
   source: string;
@@ -27,7 +27,7 @@ export const fetchQuizData = async (
     const quizData = docData.data();
 
     // 모든 이미지 URL을 동시에 가져오는 부분
-    const quizPromises = quizData.quizList.map(async (quiz: QuizObject) => {
+    const quizPromises = quizData.quizList.map(async (quiz: QuizData) => {
       let imageUrl = "";
       if (quiz.image) {
         const imageRef = ref(storage, `images/${quiz.image}`);

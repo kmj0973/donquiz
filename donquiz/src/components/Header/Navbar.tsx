@@ -24,13 +24,13 @@ const Navbar = () => {
   return (
     <>
       <div className="hidden sm:flex items-center space-x-6 gap-4">
-        <Link className="mx-2" href="/" replace={true}>
+        <Link className="mx-2" href="/">
           about
         </Link>
         <button className="mx-2" onClick={onDialog}>
           퀴즈 만들기
         </button>
-        <Link className="mx-2" href="/ranking" replace={true}>
+        <Link className="mx-2" href="/ranking">
           랭킹
         </Link>
         <button

@@ -10,7 +10,7 @@ interface Quiz {
   title: string;
   imageUrl: string;
   participant: number;
-  quizList: string[]; // 문제 리스트의 각 항목이 어떤 형태인지 명확히 하시면 됩니다.
+  quizList: string[];
 }
 
 interface UserQuizList {

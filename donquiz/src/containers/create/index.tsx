@@ -4,15 +4,17 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
 import { MdOutlineCancel } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useUpload } from "@/hooks/useUpload";
 import { useUploadQuizList } from "@/containers/create/hooks/useQuizMutations";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebasedb";
 
-interface QuizList {
+interface QuizData {
   image: string;
   answer: string;
   source: string;
@@ -28,14 +30,31 @@ const Create = () => {
   const router = useRouter();
 
   const [uploadFileList, setUploadFileList] = useState<File[]>([]); //현재 추가한 이미지
-  const [newQuizList, setNewQuizList] = useState<QuizList[]>([]);
-  const [showImage, setShowImage] = useState<string>("");
-  const [quizList, setQuizList] = useState<QuizList[]>([]);
+  const [showImage, setShowImage] = useState<string>(""); //대표 이미지
+  const [showImageIndex, setShowImageIndex] = useState<number | null>(); //대표 이미지 인덱스
+  const [quizList, setQuizList] = useState<QuizData[]>([]);
   const [answer, setAnswer] = useState<string>("");
   const [source, setSource] = useState<string>("");
-  const [showImageIndex, setShowImageIndex] = useState<number | null>();
 
   const { uploadMutation, updateMutation } = useUploadQuizList(uid, docId);
+
+  useEffect(() => {
+    const checkDocumentExists = async () => {
+      if (uid && docId) {
+        const docRef = doc(db, "users", uid, "quizList", docId);
+        const docSnap = await getDoc(docRef); // Firestore에서 문서 가져오기
+
+        if (!docSnap.exists()) {
+          toast.error("존재하지 않는 퀴즈입니다.", {
+            duration: 3000,
+          });
+          router.replace("/"); // 홈으로 리다이렉트
+        }
+      }
+    };
+
+    checkDocumentExists(); // 문서 존재 확인 함수 호출
+  }, [uid, docId, router]);
 
   const handleSubmitDB = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,10 +66,11 @@ const Create = () => {
     }
 
     const incompleteQuizzes = quizList.some(
+      // 문제마다 정답과 출처 작성했는 지 확인
       (quiz) => quiz.answer.trim() === ""
     );
     if (incompleteQuizzes) {
-      toast.error("모든 문제에 정답을 입력해주세요", {
+      toast.error("모든 문제에 정답과 출처를 입력해주세요", {
         duration: 3000,
       });
       return;
@@ -64,7 +84,7 @@ const Create = () => {
       const updatedQuizList = await Promise.all(
         uploadFileList.map(async (uploadFile, index) => {
           const uploadFileName = await uploadMutation.mutateAsync(uploadFile);
-          return { ...newQuizList[index], image: uploadFileName };
+          return { ...quizList[index], image: uploadFileName };
         })
       );
 
@@ -99,11 +119,6 @@ const Create = () => {
       quizList[showImageIndex].source = source;
       setQuizList([...quizList]);
     }
-    if (showImageIndex != null) {
-      newQuizList[showImageIndex].answer = answer;
-      newQuizList[showImageIndex].source = source;
-      setNewQuizList([...newQuizList]);
-    }
 
     toast.success("저장되었습니다");
   };
@@ -123,9 +138,6 @@ const Create = () => {
     const quizIndex = e.currentTarget.parentElement?.id;
     if (quizIndex) {
       setQuizList(quizList.filter((quiz, index) => index != Number(quizIndex)));
-      setNewQuizList(
-        newQuizList.filter((quiz, index) => index != Number(quizIndex))
-      );
       setUploadFileList(
         uploadFileList.filter((uploadFile, index) => index != Number(quizIndex))
       );
@@ -160,10 +172,6 @@ const Create = () => {
       if (reader.readyState === 2) {
         setQuizList([
           ...quizList,
-          { image: String(reader.result), answer: "", source: "" },
-        ]);
-        setNewQuizList([
-          ...newQuizList,
           { image: String(reader.result), answer: "", source: "" },
         ]);
         setShowImage(String(reader.result));

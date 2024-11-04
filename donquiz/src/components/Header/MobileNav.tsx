@@ -47,7 +47,7 @@ const MobileNav = () => {
         }`}
       >
         <div className="flex flex-col items-center space-y-4 py-4">
-          <Link onClick={toggleMenu} href="/" replace={true}>
+          <Link onClick={toggleMenu} href="/">
             About
           </Link>
           <button
@@ -59,7 +59,7 @@ const MobileNav = () => {
           >
             퀴즈 만들기
           </button>
-          <Link onClick={toggleMenu} href="/ranking" replace={true}>
+          <Link onClick={toggleMenu} href="/ranking">
             랭킹
           </Link>
           <button
@@ -72,11 +72,11 @@ const MobileNav = () => {
             교환소
           </button>
           {isLogin ? (
-            <Link href={`/myInfo/${uid}`} replace={true} onClick={toggleMenu}>
+            <Link href={`/myInfo/${uid}`} onClick={toggleMenu}>
               MYPAGE
             </Link>
           ) : (
-            <Link href="/login" replace={true} onClick={toggleMenu}>
+            <Link href="/login" onClick={toggleMenu}>
               로그인
             </Link>
           )}

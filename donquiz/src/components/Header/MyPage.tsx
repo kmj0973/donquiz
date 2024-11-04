@@ -16,11 +16,11 @@ const MyPage = () => {
   return (
     <div className="hidden sm:flex pl-4">
       {isLogin ? (
-        <Link className="text-base" href={`/myInfo/${uid}`} replace={true}>
+        <Link className="text-base" href={`/myInfo/${uid}`}>
           MYPAGE
         </Link>
       ) : (
-        <Link className="text-base" href="/login" replace={true}>
+        <Link className="text-base" href="/login">
           로그인
         </Link>
       )}
