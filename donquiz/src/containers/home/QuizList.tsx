@@ -97,7 +97,7 @@ const QuizList = () => {
       <div className="w-full max-w-[1400px] flex items-center justify-between mb-8 px-4">
         <div
           onClick={handlePopular}
-          className="relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer"
+          className="relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer text-white bg-black p-1 px-2 rounded-xl"
         >
           {toggle ? "인기순" : "추천순"}
         </div>
