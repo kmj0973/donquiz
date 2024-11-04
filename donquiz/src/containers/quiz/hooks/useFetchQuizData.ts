@@ -6,7 +6,7 @@ import { db, storage } from "../../../../firebase/firebasedb";
 interface Quiz {
   participant: number;
   imageUrl: string;
-  quizList: QuizData[];
+  quizList: QuizData;
 }
 
 interface QuizData {

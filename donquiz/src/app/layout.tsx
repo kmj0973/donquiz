@@ -36,7 +36,6 @@ export default function RootLayout({
         <ReactQueryProvider>
           <Header />
           <Toaster />
-          {/* Suspense로 RouteChangeListener 감싸기 */}
           <Suspense fallback={<div>Loading...</div>}>
             <RouteChangeListener />
           </Suspense>
