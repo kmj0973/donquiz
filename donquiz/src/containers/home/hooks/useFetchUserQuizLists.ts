@@ -6,6 +6,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from "../../../../firebase/firebasedb";
 
 interface Quiz {
+  userId: string;
   quizId: string;
   title: string;
   imageUrl: string;
@@ -14,7 +15,6 @@ interface Quiz {
 }
 
 interface UserQuizList {
-  userId: string;
   quizList: Quiz[];
 }
 
@@ -44,6 +44,7 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
           }
 
           return {
+            userId: userId,
             quizId: quizDoc.id,
             title: quizData.title,
             imageUrl,
@@ -53,7 +54,7 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
         })
       );
 
-      return { userId, quizList };
+      return { quizList };
     })
   );
 
