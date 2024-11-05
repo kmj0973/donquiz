@@ -32,11 +32,10 @@ const QuizComponents = () => {
     quizId
   );
   const updateParticipantMutation = useUpdateParticipantCount(userId, quizId);
-
   if (loading) {
     return <Loading />;
   }
-
+  console.log(quizArray);
   const handleIsAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (answer == "") {
@@ -45,6 +44,7 @@ const QuizComponents = () => {
     }
 
     const quiz = quizArray[targetIndex];
+
     if (
       quiz.quizList.answer.replace(/(\s*)/g, "").toUpperCase() ==
       answer.replace(/(\s*)/g, "").toUpperCase()
@@ -97,7 +97,7 @@ const QuizComponents = () => {
       </div>
       <div className="relative w-full max-w-[400px] sm:max-w-[500px] h-[300px] sm:h-[400px] md:h-[500px] mb-6">
         <Image
-          src={quizArray[targetIndex].imageUrl}
+          src={quizArray[targetIndex].quizList.image}
           alt={quizArray[targetIndex].quizList.source}
           fill
           sizes="(max-width: 768px) 400, (max-width: 1200px) 500"

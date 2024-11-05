@@ -29,20 +29,18 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
         collection(db, `users/${userId}/quizList`)
       );
 
-      const quizList: Quiz[] = await Promise.all(
-        quizListSnapshot.docs.map(async (quizDoc) => {
-          const quizData = quizDoc.data();
+      const quizList: Quiz[] = quizListSnapshot.docs.map((quizDoc) => {
+        const quizData = quizDoc.data();
 
-          return {
-            userId: userId,
-            quizId: quizDoc.id,
-            title: quizData.title,
-            imageUrl: quizData.thumbnail,
-            participant: quizData.participant,
-            quizList: quizData.quizList,
-          };
-        })
-      );
+        return {
+          userId: userId,
+          quizId: quizDoc.id,
+          title: quizData.title,
+          imageUrl: quizData.thumbnail,
+          participant: quizData.participant,
+          quizList: quizData.quizList,
+        };
+      });
 
       return { quizList };
     })

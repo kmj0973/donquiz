@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import { db, storage } from "../../../../firebase/firebasedb";
+import { db } from "../../../../firebase/firebasedb";
 
 interface UserData {
   imageUrl: string;
@@ -23,15 +22,9 @@ const fetchUserData = async (uid: string | null) => {
   const fetchedQuizList: UserData[] = await Promise.all(
     quizListSnapshot.docs.map(async (quizDoc) => {
       const quizData = quizDoc.data();
-      let imageUrl = "";
-
-      if (quizData.thumbnail) {
-        const imageRef = ref(storage, `images/${quizData.thumbnail}`);
-        imageUrl = await getDownloadURL(imageRef); // 비동기 처리로 URL 가져오기
-      }
 
       return {
-        imageUrl,
+        imageUrl: quizData.thumbnail,
         title: quizData.title,
         participant: quizData.participant,
         quizList: quizData.quizList,

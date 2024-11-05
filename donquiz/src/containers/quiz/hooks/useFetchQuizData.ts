@@ -3,8 +3,6 @@ import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/firebasedb";
 
 interface Quiz {
-  participant: number;
-  imageUrl: string;
   quizList: QuizData;
 }
 
@@ -18,26 +16,17 @@ export const fetchQuizData = async (
   userId: string | null,
   quizId: string | null
 ): Promise<Quiz[]> => {
-  const fetchedQuizData: Quiz[] = [];
   const docRef = doc(db, `users/${userId}/quizList/${quizId}`);
   const docData = await getDoc(docRef);
 
-  if (docData.exists()) {
-    const quizData = docData.data();
+  if (!docData.exists()) return []; // 데이터가 없으면 빈 배열 반환
 
-    // 모든 이미지 URL을 동시에 가져오는 부분
-    const quizPromises = quizData.quizList.map(async (quiz: QuizData) => {
-      return {
-        participant: quizData.participant,
-        imageUrl: quiz.image,
-        quizList: quiz,
-      };
-    });
+  const quizData = docData.data();
+  // quizList를 직접 가져와 반환
+  const fetchedQuizData: Quiz[] = quizData.quizList.map((quiz: QuizData) => ({
+    quizList: quiz,
+  }));
 
-    // 병렬 처리된 결과를 fetchedQuizData에 저장
-    const quizResults = await Promise.all(quizPromises);
-    fetchedQuizData.push(...quizResults);
-  }
   return fetchedQuizData;
 };
 
