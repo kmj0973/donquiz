@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiSolidRightArrowSquare } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
@@ -31,11 +31,22 @@ const QuizComponents = () => {
     userId,
     quizId
   );
+
   const updateParticipantMutation = useUpdateParticipantCount(userId, quizId);
+
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // 다음 문제로 넘어갈 때 버튼에 포커스를 자동으로 설정
+    if (isAnswer !== null && nextButtonRef.current) {
+      nextButtonRef.current.focus();
+    }
+  }, [targetIndex, isAnswer]);
+
   if (loading) {
     return <Loading />;
   }
-  console.log(quizArray);
+
   const handleIsAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (answer == "") {
@@ -51,10 +62,8 @@ const QuizComponents = () => {
     ) {
       setIsAnswer(true);
       setRightCount(rightCount + 1);
-      setAnswer("");
     } else {
       setIsAnswer(false);
-      setAnswer("");
     }
 
     if (quizArray.length == targetIndex + 1) {
@@ -115,40 +124,44 @@ const QuizComponents = () => {
           </div>
         )}
       </div>
-      <form
-        onSubmit={handleIsAnswer}
-        className="border-2 mb-4 flex w-full max-w-[400px] sm:max-w-[500px] hover:border-black "
-      >
-        <input
-          onChange={(e) => {
-            setAnswer(e.target.value);
-          }}
-          className="px-2 py-1 w-full outline-none text-sm sm:text-base"
-          type="text"
-          placeholder="정답을 입력해주세요"
-          value={answer}
-        />
-        <button
-          type="submit"
-          className="px-2 flex justify-center items-center bg-black text-white"
+      {isAnswer == null ? (
+        <form
+          onSubmit={handleIsAnswer}
+          className="border-2 mb-4 flex w-full max-w-[400px] sm:max-w-[500px] hover:border-black "
         >
-          <FaArrowRight size="20" />
-        </button>
-      </form>
-      <div className="flex flex-col justify-center items-center h-[100px]">
-        {isAnswer != null ? (
-          <>
-            <div className="text-red-500 mb-1 text-sm sm:text-base">
-              답 : {quizArray[targetIndex].quizList.answer}
-            </div>
-            {targetIndex + 1 != quizArray.length && (
-              <button onClick={handleNextQuiz} className="mb-4">
-                <BiSolidRightArrowSquare size="26" />
-              </button>
-            )}
-          </>
-        ) : null}
-      </div>
+          <input
+            onChange={(e) => {
+              setAnswer(e.target.value);
+            }}
+            className="px-2 py-1 w-full outline-none text-sm sm:text-base"
+            type="text"
+            placeholder="정답을 입력해주세요"
+            value={answer}
+            autoFocus
+          />
+          <button
+            type="submit"
+            className="px-2 flex justify-center items-center bg-black text-white"
+          >
+            <FaArrowRight size="20" />
+          </button>
+        </form>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-[55px]">
+          <div className="text-red-500 mb-1 text-sm sm:text-base">
+            답 : {quizArray[targetIndex].quizList.answer}
+          </div>
+          {targetIndex + 1 != quizArray.length && (
+            <button
+              ref={nextButtonRef}
+              onClick={handleNextQuiz}
+              className="mb-4"
+            >
+              <BiSolidRightArrowSquare size="26" />
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 };
