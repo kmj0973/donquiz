@@ -4,7 +4,7 @@ import { useDialog } from "@/hooks/useDialog";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../../firebase/firebasedb";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -47,6 +47,7 @@ const CreateDialog = () => {
         title,
         thumbnail: imageUrl,
         participant: 0,
+        createdAt: serverTimestamp(),
       });
 
       setIsLoading(false);

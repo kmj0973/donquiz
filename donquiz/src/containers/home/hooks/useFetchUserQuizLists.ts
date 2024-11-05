@@ -1,12 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../../../../firebase/firebasedb";
 
 interface Quiz {
   userId: string;
   quizId: string;
+  createdAt: Timestamp;
   title: string;
   imageUrl: string;
   participant: number;
@@ -35,6 +36,7 @@ export const fetchUserQuizLists = async (): Promise<UserQuizList[]> => {
         return {
           userId: userId,
           quizId: quizDoc.id,
+          createdAt: quizData.createdAt,
           title: quizData.title,
           imageUrl: quizData.thumbnail,
           participant: quizData.participant,

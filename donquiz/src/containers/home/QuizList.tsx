@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useFetchUserQuizLists } from "@/containers/home/hooks/useFetchUserQuizLists";
 import { useEffect, useState } from "react";
+import { Timestamp } from "firebase/firestore";
 
 interface Quiz {
   userId: string;
   quizId: string;
+  createdAt: Timestamp;
   title: string;
   imageUrl: string;
   participant: number;
@@ -36,7 +38,11 @@ const QuizList = () => {
       const quizzes = data.reduce<Quiz[]>((acc, user) => {
         return [...acc, ...user.quizList];
       }, []);
-      setAllUsersQuizLists(quizzes);
+      const sortedList = quizzes.sort(
+        (a, b) =>
+          b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
+      );
+      setAllUsersQuizLists(sortedList);
     }
   }, [data]);
 
@@ -70,13 +76,14 @@ const QuizList = () => {
     setToggle(false);
   };
 
-  const handleRecommand = () => {
-    if (data) {
-      const quizzes = data.reduce<Quiz[]>((acc, user) => {
-        return [...acc, ...user.quizList];
-      }, []);
-      setAllUsersQuizLists(quizzes);
-    }
+  const handleRecent = () => {
+    setAllUsersQuizLists((prevAllUsersQuizLists) => {
+      const sortedList = [...prevAllUsersQuizLists].sort(
+        (a, b) =>
+          b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
+      );
+      return sortedList;
+    });
 
     setToggle(true);
   };
@@ -103,8 +110,8 @@ const QuizList = () => {
     <>
       <div className="w-full max-w-[1400px] flex items-center justify-between mb-8 px-4">
         <div className="flex">
-          <div onClick={handleRecommand} className={tabClass(toggle)}>
-            추천순
+          <div onClick={handleRecent} className={tabClass(toggle)}>
+            최신순
           </div>
           <div onClick={handlePopular} className={tabClass(!toggle)}>
             인기순
