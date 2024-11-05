@@ -109,7 +109,7 @@ const CreateDialog = () => {
               ) : (
                 <>
                   <label
-                    htmlFor="fileInput"
+                    htmlFor="file"
                     className="flex flex-col justify-center items-center cursor-pointer"
                   >
                     {/* <div className="mb-2 text-sm sm:text-base">
@@ -120,9 +120,9 @@ const CreateDialog = () => {
                     </div> */}
                   </label>
                   <input
-                    id="fileInput"
+                    id="file"
                     type="file"
-                    className="w-[105px]"
+                    className="w-[98px]"
                     onChange={handleImage}
                     accept="image/*"
                   />

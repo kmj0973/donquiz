@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useFetchUserQuizLists } from "@/containers/home/hooks/useFetchUserQuizLists";
 import { useEffect, useState } from "react";
 import { Timestamp } from "firebase/firestore";
+import basicImage from "../../../public/image/basic-image.png";
 
 interface Quiz {
   userId: string;
@@ -164,13 +165,20 @@ const QuizList = () => {
                   </div>
                 </div>
                 <div className="relative w-full pb-[80%]">
-                  {quiz.imageUrl && (
+                  {quiz.imageUrl ? (
                     <Image
                       src={quiz.imageUrl}
                       alt="썸네일"
                       fill
                       sizes="50vw"
-                      loading="lazy" // 지연 로딩
+                      style={{ objectFit: "cover" }}
+                    />
+                  ) : (
+                    <Image
+                      src={basicImage}
+                      alt="기본 썸네일"
+                      fill
+                      sizes="50vw"
                       style={{ objectFit: "cover" }}
                     />
                   )}
