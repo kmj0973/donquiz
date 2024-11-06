@@ -60,7 +60,7 @@ const MyInfo = () => {
               return (
                 <div
                   key={index}
-                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-4 border-black w-[30%] sm:w-[48%] md:w-[30%] lg:w-[30%] min-w-[180px] sm:min-w-[250px] min-h-[180px] sm:min-h-[250px] rounded-2xl"
+                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-4 border-black w-[30%] sm:w-[48%] md:w-[30%] lg:w-[30%] min-w-[200px] sm:min-w-[250px] min-h-[180px] sm:min-h-[250px] rounded-2xl"
                 >
                   <div className="w-[95%] flex items-center justify-between my-1">
                     <div className="text-[12px] sm:text-[14px] flex items-center">
@@ -69,7 +69,7 @@ const MyInfo = () => {
                     </div>
                     <div className="relative group text-[0.9rem] sm:text-[1rem] xl:text-[1.1rem] 2xl:text-[1.3rem]">
                       {quizData.title.length > 8
-                        ? `${quizData.title.slice(0, 6) + "..."}`
+                        ? `${quizData.title.slice(0, 8) + "..."}`
                         : quizData.title}
                       <div className="absolute mb-2 px-3 py-1 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
                         <div className="relative">
