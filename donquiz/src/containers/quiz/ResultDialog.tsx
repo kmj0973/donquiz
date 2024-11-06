@@ -46,7 +46,8 @@ const ResultDialog = ({
               오답 개수 : {wrongCount}개
             </div>
             <div className="text-[20px] sm:text-[30px] mb-8 sm:mb-14">
-              포인트 적립 : {rightCount * 10}점
+              포인트 적립 :{" "}
+              <span className="text-red-500">{rightCount * 10}</span>점
             </div>
             <Link
               onClick={handleAddPoint}
