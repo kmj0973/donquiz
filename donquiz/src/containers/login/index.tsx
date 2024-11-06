@@ -35,7 +35,7 @@ const Login = () => {
         const accessToken = await user.getIdToken();
 
         setCookie("token", accessToken);
-
+        console.log(user);
         if (user.displayName) saveUser(user.displayName, user.uid);
         toast.success("로그인 성공", { duration: 1000 });
 
@@ -102,8 +102,8 @@ const Login = () => {
         </button>
         {isOpen ? <Auth /> : null}
         <Link
-          className="w-full text-center text-white bg-[#ffe921] rounded-lg p-2 sm:p-3 mb-2"
-          href="/auth"
+          className="w-full text-center text-white bg-[#fff022] rounded-lg p-2 sm:p-3 mb-2"
+          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
         >
           KAKAO
         </Link>
