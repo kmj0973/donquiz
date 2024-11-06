@@ -33,9 +33,10 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
   const [searchInput, setSearchInput] = useState("");
   const [allUsersQuizLists, setAllUsersQuizLists] = useState<Quiz[]>([]);
   const [toggle, setToggle] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Custom hook 사용하여 데이터 가져오기
-  const { data: quizzes, isLoading } = useQuery<Quiz[]>({
+  const { data: quizzes } = useQuery<Quiz[]>({
     queryKey: ["userQuizLists"],
     queryFn: async () => initialQuizzes,
     initialData: initialQuizzes,
@@ -44,7 +45,8 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
 
   useEffect(() => {
     setAllUsersQuizLists(quizzes);
-  }, []);
+    setIsLoading(false);
+  }, [quizzes]);
 
   const handleStartQuiz = async (
     e: React.MouseEvent<HTMLButtonElement>,
