@@ -13,13 +13,6 @@ import { setCookie } from "@/global/cookie";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import toast from "react-hot-toast";
 
-interface KakaoResponse {
-  id: number;
-  email: string;
-  access_token: string;
-  nickName: string;
-}
-
 const KaKao = () => {
   const router = useRouter();
   const saveUser = useAuthStore((state) => state.saveUser);
@@ -86,7 +79,7 @@ const KaKao = () => {
           toast.success("로그인 성공", { duration: 1000 });
         }
       );
-    } catch (error: any) {
+    } catch (error) {
       // 사용자 등록 (계정이 없으면 생성)
       await createUserWithEmailAndPassword(auth, email, tempPassword).then(
         async (userCredential) => {
@@ -97,6 +90,8 @@ const KaKao = () => {
             updateProfile(auth.currentUser, {
               displayName: nickName,
             });
+          } else {
+            console.log(error);
           }
           // await addDoc(collection(db, "users"), {
           //   uid: user.uid,
@@ -149,6 +144,7 @@ const KaKao = () => {
 
     router.replace("/"); // 홈으로 리다이렉트
   };
+
   useEffect(() => {
     loginOrRegisterWithKakao();
   }, []);
