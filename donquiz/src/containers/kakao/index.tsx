@@ -69,7 +69,7 @@ const KaKao = () => {
       return;
     }
 
-    const { id, email, nickName } = response;
+    const { id, email, nickName }: KakaoResponse = response;
     console.log(response);
     const tempPassword = `kakao_${id}`;
 
@@ -86,7 +86,7 @@ const KaKao = () => {
           toast.success("로그인 성공", { duration: 1000 });
         }
       );
-    } catch (error: any) {
+    } catch (error) {
       // 사용자 등록 (계정이 없으면 생성)
       await createUserWithEmailAndPassword(auth, email, tempPassword).then(
         async (userCredential) => {
@@ -117,6 +117,7 @@ const KaKao = () => {
           toast.success("로그인 성공", { duration: 1000 });
         }
       );
+      console.log(error);
     } finally {
       router.replace("/"); // 로그인 후 홈 페이지로 리다이렉트
     }
