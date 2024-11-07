@@ -4,7 +4,7 @@ import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 
 const About = () => {
-  const [rotate, setRotate] = useState([false, false, false]);
+  const [rotate, setRotate] = useState([true, true, true]);
 
   const handleRotate = (index: number) => {
     setRotate((prev) => prev.map((item, i) => (i === index ? !item : item)));
@@ -34,7 +34,7 @@ const About = () => {
             <div className="mb-2">
               <div className=" text-[#333333]">로그인, 회원가입 가이드</div>
               <div
-                className={`text-[#666666] transition-all duration-500 ease-in-out overflow-hidden ${
+                className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
                   rotate[0] ? "max-h-0" : "mt-4 max-h-52"
                 }`}
               >
@@ -65,7 +65,7 @@ const About = () => {
             <div className="mb-2">
               <div className="text-[#333333]">퀴즈 풀기 가이드</div>
               <div
-                className={`text-[#666666] transition-all duration-500 ease-in-out overflow-hidden ${
+                className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
                   rotate[1] ? "max-h-0" : "mt-4 max-h-52"
                 }`}
               >
@@ -98,7 +98,7 @@ const About = () => {
             <div className="mb-2">
               <div className=" text-[#333333]">퀴즈 만들기 가이드</div>
               <div
-                className={`text-[#666666] transition-all duration-500 ease-in-out overflow-hidden ${
+                className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
                   rotate[2] ? "max-h-0" : "mt-4 max-h-52"
                 }`}
               >
