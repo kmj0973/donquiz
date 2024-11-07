@@ -13,8 +13,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 const jost = Jost({
   subsets: ["latin"],
   weight: ["700"],
-  variable: "--font-jost",
 });
+
+// const anta = Anta({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DONQUIZ",
@@ -32,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jost.variable} font-jost`}>
+      <body className={jost.className}>
         <ReactQueryProvider>
           <Header />
           <Toaster />

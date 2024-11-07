@@ -47,7 +47,7 @@ const MobileNav = () => {
         }`}
       >
         <div className="flex flex-col items-center space-y-4 py-4">
-          <Link onClick={toggleMenu} href="/">
+          <Link onClick={toggleMenu} href="/about">
             About
           </Link>
           <button

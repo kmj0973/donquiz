@@ -24,7 +24,7 @@ const Navbar = () => {
   return (
     <>
       <div className="hidden sm:flex items-center space-x-6 gap-4">
-        <Link className="mx-2" href="/">
+        <Link className="mx-2" href="/about">
           about
         </Link>
         <button className="mx-2" onClick={onDialog}>

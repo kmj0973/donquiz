@@ -32,6 +32,7 @@ export const useAuthStore = create(
         },
         logout: () => {
           deleteCookie("token");
+          deleteCookie("kakaoToken");
           set({ displayName: null, uid: null, isLogin: false });
         },
       };

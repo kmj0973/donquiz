@@ -8,6 +8,7 @@ import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUserRank } from "./hooks/useUserRank";
+import { getCookie } from "@/global/cookie";
 
 const MyInfo = () => {
   const uid = useAuthStore((state) => state.uid);
@@ -22,7 +23,28 @@ const MyInfo = () => {
     useAuthStore.persist.clearStorage();
   };
 
+  const kakaoLogout = async () => {
+    try {
+      const kakaoToken = await getCookie("kakaoToken");
+      const response = await fetch("https://kapi.kakao.com/v1/user/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${kakaoToken}`,
+        },
+      });
+      const data = await response.json();
+      if (data.id) {
+        console.log("카카오 로그아웃 성공", data);
+      } else {
+        console.error("카카오 로그아웃 실패", data);
+      }
+    } catch (error) {
+      console.error("카카오 로그아웃 에러:", error);
+    }
+  };
+
   const handleLogout = () => {
+    kakaoLogout();
     logout();
     clearUserStorage();
     router.replace("/login");

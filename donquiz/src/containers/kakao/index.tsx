@@ -22,7 +22,9 @@ const KaKao = () => {
       const params = {
         grant_type: "authorization_code",
         client_id: process.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
-        REDIRECT_URI: "http://localhost:3000/kakao",
+        REDIRECT_URI:
+          process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI ||
+          "http://localhost:3000/kakao",
         code: code,
       };
 
@@ -44,7 +46,7 @@ const KaKao = () => {
       const id: number = UserResponseData.id;
       const email: string = UserResponseData.kakao_account.email;
       const nickName: string = UserResponseData.properties.nickname;
-      console.log(UserResponseData);
+
       return { id, email, access_token, nickName };
     } catch (e) {
       console.log(e);
@@ -62,8 +64,7 @@ const KaKao = () => {
       return;
     }
 
-    const { id, email, nickName }: KakaoResponse = response;
-    console.log(response);
+    const { id, email, nickName, access_token } = response;
     const tempPassword = `kakao_${id}`;
 
     try {
@@ -73,8 +74,8 @@ const KaKao = () => {
           const user = userCredential.user;
           const accessToken = await user.getIdToken();
 
+          setCookie("kakaoToken", access_token);
           setCookie("token", accessToken);
-          console.log(user);
           if (user.displayName) saveUser(user.displayName, user.uid);
           toast.success("로그인 성공", { duration: 1000 });
         }
@@ -93,11 +94,6 @@ const KaKao = () => {
           } else {
             console.log(error);
           }
-          // await addDoc(collection(db, "users"), {
-          //   uid: user.uid,
-          //   displayName: nickname,
-          //   email: email,
-          // }); //document id를 user의 uid로 만들기 위해 setDoc 함수 사용
 
           await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
@@ -106,6 +102,7 @@ const KaKao = () => {
             point: 0,
           });
 
+          setCookie("kakaoToken", access_token);
           setCookie("token", accessToken);
 
           if (user.displayName) saveUser(user.displayName, user.uid);
@@ -118,42 +115,14 @@ const KaKao = () => {
     }
   };
 
-  const kakaoLogout = async (accessToken: string) => {
-    try {
-      const response = await fetch("https://kapi.kakao.com/v1/user/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
-      if (data.id) {
-        console.log("카카오 로그아웃 성공", data);
-      } else {
-        console.error("카카오 로그아웃 실패", data);
-      }
-    } catch (error) {
-      console.error("카카오 로그아웃 에러:", error);
-    }
-  };
-  const handleLogout = async () => {
-    const code = new URL(window.location.href).searchParams.get("code");
-    if (!code) return;
-
-    const response = await getResponse(code);
-    await kakaoLogout(response?.access_token); // 카카오 로그아웃
-
-    router.replace("/"); // 홈으로 리다이렉트
-  };
-
   useEffect(() => {
     loginOrRegisterWithKakao();
   }, []);
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-around">
-      카카오 로그인 중...
-      <button onClick={handleLogout}>dd</button>
+    <div className="flex flex-col justify-center items-center h-[calc(100vh-120px)] z-30">
+      <div className="border-4 border-r-white border-[#fee500] rounded-full w-[80px] h-[80px] animate-spin mb-2" />
+      <div className="text-[#FEE500] text-[20px]">카카오 로그인 중...</div>
     </div>
   );
 };

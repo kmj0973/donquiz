@@ -102,17 +102,12 @@ const Login = () => {
         </button>
         {isOpen ? <Auth /> : null}
         <Link
-          className="w-full text-center text-white bg-[#fff022] rounded-lg p-2 sm:p-3 mb-2"
+          className="w-full text-center text-white bg-[#FEE500] rounded-lg p-2 sm:p-3 mb-2"
           href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
         >
           KAKAO
         </Link>
-        <Link
-          className="w-full text-center text-white bg-[#3bf8ff] rounded-lg p-2 sm:p-3 mb-2"
-          href="/auth"
-        >
-          GOOGLE
-        </Link>
+
         {/* <Image alt="kakao_login" src={kakao_image} width={400} height={50} />
         <Image alt="google_login" src={google_image} width={400} height={50} /> */}
       </div>
