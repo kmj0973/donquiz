@@ -121,8 +121,10 @@ const KaKao = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-[calc(100vh-120px)] z-30">
-      <div className="border-4 border-r-white border-[#fee500] rounded-full w-[80px] h-[80px] animate-spin mb-2" />
-      <div className="text-[#FEE500] text-[20px]">카카오 로그인 중...</div>
+      <div className="border-4 border-r-white border-[#fee500] rounded-full w-[50px] h-[50px] animate-spin mb-2" />
+      <div className="text-[#FEE500] border-2 border-black">
+        카카오 로그인 중...
+      </div>
     </div>
   );
 };

@@ -185,7 +185,7 @@ const Create = () => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] font-normal flex flex-col items-center justify-around my-4">
+    <div className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-around font-normal my-4">
       <form
         onSubmit={handleSubmitDB}
         className="w-full max-w-[1000px] flex sm:flex-row justify-between items-center mb-6 sm:m-8 px-4 md:px-0"
@@ -198,14 +198,14 @@ const Create = () => {
         </div>
         <button
           type="submit"
-          className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px]  bg-[#222222] hover:bg-black rounded-xl text-white mr-4 xl:mr-0"
+          className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px] text-white  bg-[#222222] hover:bg-black rounded-xl  mr-4 xl:mr-0"
         >
           Upload
         </button>
       </form>
       <div className="w-full max-w-[1000px] flex flex-col lg:flex-row justify-center items-center xl:items-start mb-4">
-        <div className="w-full max-w-[600px] lg:mr-10 mb-6 lg:mb-0 flex flex-col justify-center items-center lg:items-start">
-          <div className="relative w-[300px] sm:w-[400px] lg:w-[500px] h-[300px] sm:h-[400px] lg:h-[500px] border-4 flex justify-center items-center z-0">
+        <div className="w-full max-w-[600px] flex flex-col justify-center items-center lg:items-start lg:mr-10 mb-6 lg:mb-0 ">
+          <div className="relative w-[300px] sm:w-[400px] lg:w-[500px] h-[300px] sm:h-[400px] lg:h-[500px] flex justify-center items-center border-4 z-0">
             {quizList.length != 0 ? (
               <Image src={showImage} fill alt="이미지" />
             ) : (
@@ -215,7 +215,7 @@ const Create = () => {
           <div className="w-[300px] sm:w-[400px] lg:w-[500px] sm h-[100px] flex justify-start items-center mt-4">
             <label
               htmlFor="file"
-              className="w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] mr-1 flex items-center justify-center"
+              className="w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] flex items-center justify-center mr-1"
             >
               <BsPlusSquare size="75px" color="#e5e7eb" />
             </label>
@@ -226,7 +226,7 @@ const Create = () => {
               onChange={handleImage}
               accept="image/*"
             />
-            <div className="w-full overflow-x-auto h-[80px] sm:h-[100px] flex items-center">
+            <div className="w-full h-[80px] sm:h-[100px] flex items-center overflow-x-auto ">
               {quizList.length != 0
                 ? quizList.map((quiz, idx) => {
                     return (
@@ -255,9 +255,9 @@ const Create = () => {
         </div>
         <form
           onSubmit={handleAnswerAndSource}
-          className="w-[100%] max-w-[500px] h-auto xl:h-[500px] lg:ml-10 flex flex-col justify-between items-center"
+          className="w-[100%] max-w-[500px] h-auto xl:h-[500px] flex flex-col justify-between items-center lg:ml-10"
         >
-          <div className="flex flex-col justify-center items-center xl:items-start w-[100%]">
+          <div className="w-[100%] flex flex-col justify-center items-center xl:items-start">
             <label
               htmlFor="answer"
               className="w-[100px] sm:w-[120px] text-[36px] sm:text-[40px] mr-4"
@@ -275,7 +275,7 @@ const Create = () => {
               value={quizList.length != 0 ? answer : ""}
             />
           </div>
-          <div className="flex flex-col justify-center items-center xl:items-start w-[100%] mb-10 xl:mb-28">
+          <div className="w-[100%] flex flex-col justify-center items-center xl:items-start mb-10 xl:mb-28">
             <label
               htmlFor="source"
               className="w-[100px] sm:w-[120px] text-[36px] sm:text-[40px] mr-4 text-center"

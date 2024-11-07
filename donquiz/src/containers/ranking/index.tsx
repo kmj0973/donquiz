@@ -27,7 +27,7 @@ const Ranking = () => {
             {userRanking?.users[1].displayName}
           </div>
           <div className="min-w-[100px] sm:min-w-[200px] h-[130px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[70px]">2</div>
+            <div className="text-[50px] sm:text-[50px]">2nd</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[1].point}점
             </div>
@@ -43,7 +43,7 @@ const Ranking = () => {
             {userRanking?.users[0].displayName}
           </div>
           <div className="min-w-[100px] sm:min-w-[200px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[70px]">1</div>
+            <div className="text-[50px] sm:text-[50px]">1st</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[0].point}점
             </div>
@@ -58,7 +58,7 @@ const Ranking = () => {
             {userRanking?.users[2].displayName}
           </div>
           <div className="min-w-[100px] sm:min-w-[200px] h-[110px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[70px]">3</div>
+            <div className="text-[50px] sm:text-[50px]">3rd</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[2].point}점
             </div>
