@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Jost } from "next/font/google";
+import { Anta } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { RouteChangeListener } from "@/containers/create/RouterChangeListener";
 import { Suspense } from "react";
@@ -10,12 +10,7 @@ import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/global/reactQuery";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const jost = Jost({
-  subsets: ["latin"],
-  weight: ["700"],
-});
-
-// const anta = Anta({ weight: ["400"], subsets: ["latin"] });
+const anta = Anta({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DONQUIZ",
@@ -33,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={jost.className}>
+      <body className={anta.className}>
         <ReactQueryProvider>
           <Header />
           <Toaster />
