@@ -13,6 +13,7 @@ import { useUpload } from "@/hooks/useUpload";
 import { useUploadQuizList } from "@/containers/create/hooks/useQuizMutations";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebasedb";
+import Link from "next/link";
 
 interface QuizData {
   image: string;
@@ -184,25 +185,25 @@ const Create = () => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-around">
+    <div className="w-full min-h-[calc(100vh-120px)] font-normal flex flex-col items-center justify-around my-4">
       <form
         onSubmit={handleSubmitDB}
         className="w-full max-w-[1000px] flex sm:flex-row justify-between items-center mb-6 sm:m-8 px-4 md:px-0"
       >
-        <div className="w-[80px] sm:w-[120px]">
+        <Link href="/" className="w-[80px] sm:w-[120px] ml-4">
           <FaArrowLeft size="30px" />
-        </div>
-        <div className="text-[24px] sm:text-[32px] lg:text-[40px]">
-          퀴즈 만들기
+        </Link>
+        <div className="text-[24px] sm:text-[32px] lg:text-[40px] font-bold">
+          Making Quiz
         </div>
         <button
           type="submit"
-          className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px]  bg-[#222222] hover:bg-black rounded-xl text-white"
+          className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px]  bg-[#222222] hover:bg-black rounded-xl text-white mr-4 xl:mr-0"
         >
-          업로드
+          Upload
         </button>
       </form>
-      <div className="w-full max-w-[1000px] flex flex-col lg:flex-row justify-center items-center mb-4">
+      <div className="w-full max-w-[1000px] flex flex-col lg:flex-row justify-center items-center xl:items-start mb-4">
         <div className="w-full max-w-[600px] lg:mr-10 mb-6 lg:mb-0 flex flex-col justify-center items-center lg:items-start">
           <div className="relative w-[300px] sm:w-[400px] lg:w-[500px] h-[300px] sm:h-[400px] lg:h-[500px] border-4 flex justify-center items-center z-0">
             {quizList.length != 0 ? (
@@ -254,48 +255,52 @@ const Create = () => {
         </div>
         <form
           onSubmit={handleAnswerAndSource}
-          className="w-[100%] max-w-[500px] lg:ml-10 flex flex-col justify-center items-center"
+          className="w-[100%] max-w-[500px] h-auto xl:h-[500px] lg:ml-10 flex flex-col justify-between items-center"
         >
-          <div className="mb-10">
+          <div className="flex flex-col justify-center items-center xl:items-start w-[100%]">
             <label
               htmlFor="answer"
-              className="inline-block w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] mr-4 text-center"
+              className="w-[100px] sm:w-[120px] text-[36px] sm:text-[40px] mr-4"
             >
-              정답
+              answer
             </label>
             <input
               onChange={(e) => {
                 setAnswer(e.target.value);
               }}
-              className="w-[200px] sm:w-[250px] text-[16px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
+              className="w-[300px] sm:w-[400px] lg:w-[500px] text-[16px] p-2 border-0 bg-[#f2f2f2] rounded-lg mb-3"
               id="answer"
+              placeholder="정답을 입력하세요"
               type="text"
               value={quizList.length != 0 ? answer : ""}
             />
           </div>
-          <div className="mb-8 sm:mb-14">
+          <div className="flex flex-col justify-center items-center xl:items-start w-[100%] mb-10 xl:mb-28">
             <label
-              htmlFor="answer"
-              className="inline-block w-[100px] sm:w-[120px] text-[16px] sm:text-[20px] mr-4 text-center"
+              htmlFor="source"
+              className="w-[100px] sm:w-[120px] text-[36px] sm:text-[40px] mr-4 text-center"
             >
-              이미지 출처
+              source
             </label>
             <input
               onChange={(e) => {
                 setSource(e.target.value);
               }}
-              className="w-[200px] sm:w-[250px] text-[16px] p-1 border-0 bg-[#f2f2f2] rounded-lg mb-3"
-              id="answer"
+              className="w-[300px] sm:w-[400px] lg:w-[500px]  text-[16px] p-2 border-0 bg-[#f2f2f2] rounded-lg mb-3"
+              id="source"
+              placeholder="출처를 입력하세요"
               type="text"
               value={quizList.length != 0 ? source : ""}
             />
           </div>
-          <button
-            type="submit"
-            className="w-[100px] sm:w-[120px] bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
-          >
-            저장하기
-          </button>
+          <div className="w-full flex justify-center xl:justify-end ">
+            <button
+              type="submit"
+              className="w-[100px] sm:w-[120px] text-xl bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+            >
+              SAVE
+            </button>
+          </div>
         </form>
       </div>
     </div>

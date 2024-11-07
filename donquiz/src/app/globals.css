@@ -6,6 +6,9 @@ body {
   /* background-color: black; */
   height: 100%;
 }
+:lang(ko) {
+  font-family: "MainFont", sans-serif;
+}
 ::-webkit-scrollbar {
   width: 10px;
   height: 5px;

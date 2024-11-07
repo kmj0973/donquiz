@@ -11,7 +11,7 @@ const About = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center h-[calc(100vh-120px)] z-30 pt-10">
+    <div className="flex flex-col justify-start items-center h-auto min-h-[calc(100vh-120px)] z-30 pt-10">
       <div className="font-bold text-[50px] text-[#333333] pb-10">About</div>
       <div className="max-w-[1000px] w-full h-full px-4">
         <div className="w-full h-auto bg-[#f2f2f2] rounded-3xl pt-1 pl-2">
@@ -35,7 +35,7 @@ const About = () => {
               <div className=" text-[#333333]">로그인, 회원가입 가이드</div>
               <div
                 className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[0] ? "max-h-0" : "mt-4 max-h-52"
+                  rotate[0] ? "max-h-0" : "mt-4 max-h-80"
                 }`}
               >
                 1. 카카오톡과 이메일로 회원가입이 가능 <br /> 2. 이메일
@@ -66,7 +66,7 @@ const About = () => {
               <div className="text-[#333333]">퀴즈 풀기 가이드</div>
               <div
                 className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[1] ? "max-h-0" : "mt-4 max-h-52"
+                  rotate[1] ? "max-h-0" : "mt-4 max-h-80"
                 }`}
               >
                 1. 퀴즈 리스트에서 시작하기 버튼을 누르면 퀴즈 페이지로 이동
@@ -99,7 +99,7 @@ const About = () => {
               <div className=" text-[#333333]">퀴즈 만들기 가이드</div>
               <div
                 className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[2] ? "max-h-0" : "mt-4 max-h-52"
+                  rotate[2] ? "max-h-0" : "mt-4 max-h-80"
                 }`}
               >
                 1. 제목과 썸네일 등록 후 생성하기 버튼 클릭

@@ -89,7 +89,7 @@ const MobileNav = () => {
               onClick={toggleMenu}
               href="/login"
             >
-              로그인
+              LOGIN
             </Link>
           )}
         </div>

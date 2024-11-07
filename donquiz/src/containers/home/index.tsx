@@ -68,27 +68,27 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     }
   };
 
-  // const handlePopular = () => {
-  //   setAllUsersQuizLists((prevAllUsersQuizLists) => {
-  //     const sortedList = [...prevAllUsersQuizLists].sort(
-  //       (a, b) => b.participant - a.participant
-  //     );
-  //     return sortedList;
-  //   });
+  const handlePopular = () => {
+    setAllUsersQuizLists((prevAllUsersQuizLists) => {
+      const sortedList = [...prevAllUsersQuizLists].sort(
+        (a, b) => b.participant - a.participant
+      );
+      return sortedList;
+    });
 
-  //   setToggle(false);
-  // };
+    setToggle(false);
+  };
 
-  // const handleRecent = () => {
-  //   setAllUsersQuizLists((prevAllUsersQuizLists) => {
-  //     const sortedList = [...prevAllUsersQuizLists].sort(
-  //       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-  //     );
-  //     return sortedList;
-  //   });
+  const handleRecent = () => {
+    setAllUsersQuizLists((prevAllUsersQuizLists) => {
+      const sortedList = [...prevAllUsersQuizLists].sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      return sortedList;
+    });
 
-  //   setToggle(true);
-  // };
+    setToggle(true);
+  };
 
   const handleSearch = () => {
     setSearchWords(searchInput);
@@ -100,10 +100,10 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     }
   };
 
-  // const tabClass = (active: boolean) =>
-  //   `relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer p-1 px-2 rounded-xl ${
-  //     active ? "text-white bg-black" : "text-black bg-white"
-  //   }`;
+  const tabClass = (active: boolean) =>
+    `relative text-[16px] sm:text-[20px] mb-2 sm:mb-0 cursor-pointer p-1 px-2 rounded-xl ${
+      active ? "text-black" : "text-[#666666]"
+    }`;
 
   if (isLoading) return <Loading />;
 
@@ -134,26 +134,26 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             onClick={handleSearch}
           />
         </div>
-        {/* <div className="flex items-center justify-end w-full max-w-[200px] font-semibold">
+      </div>
+      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-280px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
+        <div className="flex items-center justify-end w-full max-w-[1400px] px-2">
           <div
             onClick={handleRecent}
             className={`${tabClass(
               toggle
-            )} rounded-xl p-[10px] px-3 text-sm sm:text-base`}
+            )} rounded-xl p-[10px]  text-sm sm:text-base`}
           >
-            최신순
+            • 최신순
           </div>
           <div
             onClick={handlePopular}
             className={`${tabClass(
               !toggle
-            )} rounded-xl p-[10px] px-3 text-sm sm:text-base`}
+            )} rounded-xl p-[10px]  text-sm sm:text-base`}
           >
-            인기순
+            • 인기순
           </div>
-        </div> */}
-      </div>
-      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-280px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto py-4 pt-12 px-2">
+        </div>
         {allUsersQuizLists.filter(
           (quiz) => quiz.quizList && quiz.title.includes(searchWords)
         ).length === 0 ? (
@@ -167,7 +167,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
               return (
                 <div
                   key={quiz.quizId}
-                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-[#dbdbdb] w-[300px] sm:w-[48%] md:w-[31%] lg:w-[24%] sm:min-w-[220px] min-h-[240px] rounded-2xl"
+                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-[#000000] w-[300px] sm:w-[48%] md:w-[31%] lg:w-[24%] sm:min-w-[220px] min-h-[240px] rounded-2xl"
                 >
                   <div className="w-[95%] flex items-center justify-between my-1">
                     <div className="text-[12px] sm:text-[14px] flex items-center">
@@ -220,7 +220,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
                         quiz.title
                       )
                     }
-                    className="bg-[#999999] hover:bg-[black] text-white rounded-3xl py-2 px-4 sm:px-6 my-2 text-sm sm:text-base"
+                    className="hover:bg-[#999999] bg-black text-white rounded-3xl py-2 px-4 sm:px-6 my-2 text-sm sm:text-base"
                   >
                     시작하기
                   </button>

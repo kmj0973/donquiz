@@ -21,7 +21,7 @@ const MyPage = () => {
         </Link>
       ) : (
         <Link className="text-base hover:text-black" href="/login">
-          로그인
+          LOGIN
         </Link>
       )}
     </div>
