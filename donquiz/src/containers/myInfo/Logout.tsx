@@ -55,7 +55,7 @@ const MyInfo = () => {
           </div>
         </div>
         <div className="w-full max-w-[95%] h-auto min-h-[200px] sm:min-h-[350px] flex flex-wrap justify-center items-center gap-2 sm:gap-4 mb-4 px-2">
-          {userData?.fetchedQuizList ? (
+          {userData?.fetchedQuizList.length ? (
             userData?.fetchedQuizList.map((quizData, index) => {
               return (
                 <div
