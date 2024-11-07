@@ -14,13 +14,13 @@ const MyPage = () => {
   }, [checkLogin]);
 
   return (
-    <div className="hidden sm:flex pl-4">
+    <div className="hidden sm:flex pl-4 text-base text-[#666666]">
       {isLogin ? (
-        <Link className="text-base" href={`/myInfo/${uid}`}>
+        <Link className="text-base hover:text-black" href={`/myInfo/${uid}`}>
           MYPAGE
         </Link>
       ) : (
-        <Link className="text-base" href="/login">
+        <Link className="text-base hover:text-black" href="/login">
           로그인
         </Link>
       )}

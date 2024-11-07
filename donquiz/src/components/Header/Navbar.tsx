@@ -23,24 +23,24 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="hidden sm:flex items-center space-x-6 gap-4">
-        <Link className="mx-2" href="/about">
+      <div className="hidden sm:flex items-center space-x-6 gap-4 text-lg text-[#666666]">
+        <Link className="mx-2 hover:text-black" href="/about">
           about
         </Link>
-        <button className="mx-2" onClick={onDialog}>
-          퀴즈 만들기
+        <button className="mx-2 hover:text-black" onClick={onDialog}>
+          Making Quiz
         </button>
-        <Link className="mx-2" href="/ranking">
-          랭킹
+        <Link className="mx-2 hover:text-black" href="/ranking">
+          Ranking
         </Link>
         <button
           onClick={() => {
             toast.error("곧 출시할 예정입니다", { duration: 800 });
             return;
           }}
-          className="mx-2"
+          className="mx-2 hover:text-black"
         >
-          교환소
+          Exchange
         </button>
       </div>
       {isOpen ? <CreateDialog /> : null}

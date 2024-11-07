@@ -5,11 +5,12 @@ import MobileNav from "./MobileNav";
 
 const Header = () => {
   return (
-    <header className="bg-black">
-      <nav className="w-full h-16 px-4 sm:px-10 py-4 sm:py-7 text-white text-xl font-bold flex justify-between items-center">
-        <Link className="text-5xl" href="/">
-          <span className="text-[#FF0000]">D</span>ON
-          <span className="text-[#FFF700]">Q</span>UIZ
+    <header>
+      <nav className="flex justify-between items-center w-full h-16 px-4 sm:px-10 py-4 sm:py-7 border-b-[1px] text-xl">
+        <Link className="text-[26px]" href="/">
+          <span className="hover:border-b-[2px] border-black">DONQUIZ</span>
+          {/* <span className="text-[#FF0000]">D</span>ON
+          <span className="text-[#FFF700]">Q</span>UIZ */}
         </Link>
 
         <Navbar />

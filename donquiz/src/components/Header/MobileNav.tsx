@@ -42,12 +42,12 @@ const MobileNav = () => {
         </button>
       </div>
       <div
-        className={`absolute top-16 left-0 w-full bg-black text-white sm:hidden transition-transform duration-300 z-10 ${
-          isMenuOpen ? "block" : "hidden"
+        className={`absolute top-16 left-0 w-full bg-white text-base text-[#666666] transition-all duration-300 ease-in-out overflow-hidden sm:hidden z-10 ${
+          isMenuOpen ? "max-h-52" : "max-h-0"
         }`}
       >
         <div className="flex flex-col items-center space-y-4 py-4">
-          <Link onClick={toggleMenu} href="/about">
+          <Link onClick={toggleMenu} className="hover:text-black" href="/about">
             About
           </Link>
           <button
@@ -57,26 +57,38 @@ const MobileNav = () => {
             }}
             className="mx-2"
           >
-            퀴즈 만들기
+            Making Quiz
           </button>
-          <Link onClick={toggleMenu} href="/ranking">
-            랭킹
+          <Link
+            onClick={toggleMenu}
+            className="hover:text-black"
+            href="/ranking"
+          >
+            Ranking
           </Link>
           <button
             onClick={() => {
               toast.error("곧 출시할 예정입니다", { duration: 800 });
               return;
             }}
-            className="mx-2"
+            className="mx-2 hover:text-black"
           >
-            교환소
+            Exchange
           </button>
           {isLogin ? (
-            <Link href={`/myInfo/${uid}`} onClick={toggleMenu}>
+            <Link
+              className="hover:text-black"
+              onClick={toggleMenu}
+              href={`/myInfo/${uid}`}
+            >
               MYPAGE
             </Link>
           ) : (
-            <Link href="/login" onClick={toggleMenu}>
+            <Link
+              className="hover:text-black"
+              onClick={toggleMenu}
+              href="/login"
+            >
               로그인
             </Link>
           )}
