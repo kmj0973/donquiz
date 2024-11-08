@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/firebasedb";
 
 const fetchUserPoints = async (uid: string | null) => {
@@ -11,13 +11,13 @@ const fetchUserPoints = async (uid: string | null) => {
 // 포인트 업데이트 함수 정의
 const updateUserPoints = async ({
   uid,
-  newPoints,
+  additionalPoints,
 }: {
   uid: string | null;
-  newPoints: number;
+  additionalPoints: number;
 }) => {
   const docRef = doc(db, `users/${uid}`);
-  await setDoc(docRef, { point: newPoints }, { merge: true });
+  await updateDoc(docRef, { point: increment(additionalPoints) });
 };
 
 // Custom Hook 정의
@@ -34,9 +34,9 @@ export const useUserPoints = (uid: string | null) => {
   // 포인트 업데이트용 useMutation
   const updatePointsMutation = useMutation({
     mutationFn: (additionalPoints: number) =>
-      updateUserPoints({ uid, newPoints: points + additionalPoints }),
+      updateUserPoints({ uid, additionalPoints }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userPoints"] });
+      queryClient.invalidateQueries({ queryKey: ["userPoints", uid] });
       queryClient.invalidateQueries({ queryKey: ["userRank", uid] });
       queryClient.invalidateQueries({ queryKey: ["userData", uid] }); // 업데이트 성공 시 캐시 무효화
     },
