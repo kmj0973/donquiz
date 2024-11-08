@@ -41,7 +41,8 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     queryKey: ["userQuizLists"],
     queryFn: async () => initialQuizzes,
     initialData: initialQuizzes,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 5000, // 5초마다 새 데이터를 가져옴
   });
 
   useEffect(() => {
