@@ -83,8 +83,8 @@ const CreateDialog = () => {
           onClick={(e) => e.stopPropagation()}
           className="relative w-[90%] text-black max-w-[550px] h-auto sm:h-[550px] bg-white rounded-3xl flex flex-col justify-center items-center p-6 sm:pb-8"
         >
-          <div className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-8">
-            퀴즈 만들기
+          <div className="text-2xl sm:text-4xl font-bold text-[#333333] mb-4 sm:mb-8">
+            Making Quiz
           </div>
           <form onSubmit={handleQuizFrame}>
             <input

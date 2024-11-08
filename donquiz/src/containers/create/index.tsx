@@ -188,12 +188,12 @@ const Create = () => {
     <div className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-around font-normal my-4">
       <form
         onSubmit={handleSubmitDB}
-        className="w-full max-w-[1000px] flex sm:flex-row justify-between items-center mb-6 sm:m-8 px-4 md:px-0"
+        className="w-full max-w-[1080px] flex sm:flex-row justify-between items-center mb-6 sm:my-8 px-4 md:px-0"
       >
-        <Link href="/" className="w-[80px] sm:w-[120px] ml-4">
+        <Link href="/" className="w-[80px] sm:w-[120px] ml-4 xl:ml-0">
           <FaArrowLeft size="30px" />
         </Link>
-        <div className="text-[24px] sm:text-[32px] lg:text-[40px] font-bold">
+        <div className="text-[24px] sm:text-[32px] lg:text-[40px] text-[#333333] font-bold">
           Making Quiz
         </div>
         <button
@@ -296,7 +296,7 @@ const Create = () => {
           <div className="w-full flex justify-center xl:justify-end ">
             <button
               type="submit"
-              className="w-[100px] sm:w-[120px] text-xl bg-[#222222] hover:bg-black rounded-xl py-2 px-3 text-white"
+              className="w-[80px] sm:w-[120px] h-[40px] sm:h-[50px] text-[16px] sm:text-[20px] text-xl bg-[#222222] hover:bg-black rounded-xl px-3 text-white"
             >
               SAVE
             </button>

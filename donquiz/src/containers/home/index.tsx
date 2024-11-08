@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
 import { useQuery } from "@tanstack/react-query";
-import logo from "../../../public/image/donquiz logo.png";
+import logo from "../../../public/image/donquiz logo2.png";
 
 interface Quiz {
   userId: string;
@@ -128,7 +128,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <input
-            className="rounded-xl p-[10px] bg-black text-white border-black text-sm sm:text-base cursor-pointer"
+            className="rounded-xl p-[10px] bg-black text-white border-black text-sm sm:text-base font-normal cursor-pointer"
             type="button"
             value="Search"
             onClick={handleSearch}
