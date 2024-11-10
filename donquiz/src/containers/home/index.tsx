@@ -49,7 +49,8 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     setAllUsersQuizLists(quizzes);
     setIsLoading(false);
     refetch();
-  }, [quizzes, refetch]);
+    console.log(allUsersQuizLists);
+  }, [quizzes, refetch, allUsersQuizLists]);
 
   const handleStartQuiz = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -156,14 +157,14 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             • 인기순
           </div>
         </div>
-        {allUsersQuizLists.filter(
+        {quizzes.filter(
           (quiz) => quiz.quizList && quiz.title.includes(searchWords)
         ).length === 0 ? (
           <div className="text-center w-full text-lg font-semibold my-auto pb-20">
             검색 결과가 없습니다...
           </div>
         ) : (
-          allUsersQuizLists
+          quizzes
             .filter((quiz) => quiz.quizList && quiz.title.includes(searchWords))
             .map((quiz) => {
               return (
