@@ -76,7 +76,8 @@ const KaKao = () => {
 
           setCookie("kakaoToken", access_token);
           setCookie("token", accessToken);
-          if (user.displayName) saveUser(user.displayName, user.uid);
+          if (user.displayName && user.email)
+            saveUser(user.displayName, user.email, user.uid);
           toast.success("로그인 성공", { duration: 1000 });
         }
       );
@@ -105,7 +106,8 @@ const KaKao = () => {
           setCookie("kakaoToken", access_token);
           setCookie("token", accessToken);
 
-          if (user.displayName) saveUser(user.displayName, user.uid);
+          if (user.displayName && user.email)
+            saveUser(user.displayName, user.email, user.uid);
           toast.success("로그인 성공", { duration: 1000 });
         }
       );

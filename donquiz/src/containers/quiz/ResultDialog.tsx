@@ -1,9 +1,6 @@
 "use client";
 
-import CelebrateLeft from "../../../public/image/CelebrateLeft.png";
-import CelebrateRight from "../../../public/image/CelebrateRight.png";
 import { useUpload } from "@/hooks/useUpload";
-import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useUserPoints } from "./hooks/useUserPoints";
@@ -31,31 +28,30 @@ const ResultDialog = ({
       <div className="fixed inset-0 flex justify-center items-center z-10">
         <div
           onClick={(e) => e.stopPropagation()}
-          className="relative w-[90%] max-w-[550px] h-auto sm:h-[550px] text-black bg-white rounded-3xl flex flex-col justify-center items-center p-4 sm:p-6"
+          className="relative w-[90%] max-w-[550px] h-auto sm:h-[550px] text-white rounded-3xl flex flex-col justify-between items-center p-4 sm:p-6 sm:mb-20"
         >
           <div className="text-[32px] sm:text-[50px] font-extrabold my-4 sm:my-2 flex items-center">
-            <Image src={CelebrateLeft} alt="결과" width="65" height="65" />
-            <span className="text-[25px] sm:text-[50px] mx-2">퀴즈 결과</span>
-            <Image src={CelebrateRight} alt="결과" width="65" height="65" />
+            <span className="text-[25px] sm:text-[80px] mx-2 mb-14">
+              RESULT
+            </span>
           </div>
-          <div className="flex flex-col justify-center items-center w-full max-w-[450px] h-auto sm:h-[430px] border-4 border-black mb-2 rounded-2xl p-4 sm:p-6">
+          <div className="flex flex-col justify-center items-center w-full max-w-[450px] h-auto sm:h-[430px] mb-2 rounded-2xl p-4 sm:p-6">
             <div className="text-[20px] sm:text-[30px] mb-2 sm:mb-4">
-              정답 개수 : {rightCount}개
+              CORRECT ANSWER : {rightCount}
             </div>
-            <div className="text-[20px] sm:text-[30px] mb-2 sm:mb-4">
-              오답 개수 : {wrongCount}개
+            <div className="text-[20px] sm:text-[30px] mb-2 sm:mb-20">
+              WRONG ANSWER : {wrongCount}
             </div>
-            <div className="text-[20px] sm:text-[30px] mb-8 sm:mb-14">
-              포인트 적립 :{" "}
-              <span className="text-red-500">{rightCount * 10}</span>점
+            <div className="text-[20px] sm:text-[30px] mb-8 sm:mb-20">
+              <span>+{rightCount * 10} POINT</span>
             </div>
             <Link
               onClick={handleAddPoint}
-              className="p-2 sm:px-6 bg-[#222222] hover:bg-black text-white text-[18px] sm:text-[20px] rounded-xl"
+              className="p-2 sm:px-6 bg-white text-black text-[18px] sm:text-[20px] rounded-xl"
               href="/"
               replace
             >
-              홈으로
+              Return Home
             </Link>
           </div>
         </div>

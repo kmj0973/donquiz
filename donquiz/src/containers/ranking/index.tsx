@@ -5,9 +5,19 @@ import crown from "../../../public/image/crown.png";
 import Image from "next/image";
 import Loading from "@/app/loading";
 import { useAllUserPoints } from "./hooks/useAllUserPoints";
+import { motion } from "framer-motion";
 
 const Ranking = () => {
   const { data: userRanking = { users: [] }, isLoading } = useAllUserPoints();
+
+  const variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: index * 0.3, duration: 0.3 },
+    }),
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -19,22 +29,34 @@ const Ranking = () => {
         <div className="absolute top-0 right-0 text-[#F9D132] text-[18px] sm:text-[24px] px-4 sm:px2">
           <div>1~100위</div>
         </div>
-        <div className="flex flex-col justify-center items-center">
+        <motion.div
+          custom={2}
+          initial="hidden"
+          animate="visible"
+          variants={variants}
+          className="flex flex-col justify-center items-center"
+        >
           <div className="w-[80px] sm:w-[100px] h-[80px] sm:h-[100px] rounded-full border-2 flex justify-center items-center">
             <FaUser size={55} />
           </div>
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[1].displayName}
           </div>
-          <div className="min-w-[100px] sm:min-w-[200px] h-[130px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[50px]">2nd</div>
+          <div className="min-w-[100px] sm:min-w-[180px] h-[130px] sm:h-[180px] bg-[#F1F1F1] rounded-lg flex flex-col justify-between items-center p-2 pt-1 shadow-2xl">
+            <div className="text-[50px] sm:text-[50px]">2</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[1].point}점
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col justify-center items-center">
+        <motion.div
+          custom={3}
+          initial="hidden"
+          animate="visible"
+          variants={variants}
+          className="flex flex-col justify-center items-center"
+        >
           <Image src={crown} alt="크라운" width={65} height={65} />
           <div className="w-[80px] sm:w-[100px] h-[80px] sm:h-[100px] rounded-full border-2 flex justify-center items-center mt-1">
             <FaUser size={55} />
@@ -42,31 +64,37 @@ const Ranking = () => {
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[0].displayName}
           </div>
-          <div className="min-w-[100px] sm:min-w-[200px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[50px]">1st</div>
+          <div className="min-w-[100px] sm:min-w-[180px] h-[160px] sm:h-[240px] bg-[#F9D132] rounded-lg flex flex-col justify-between items-center p-2 pt-1 shadow-2xl">
+            <div className="text-[50px] sm:text-[50px]">1</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[0].point}점
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col justify-center items-center">
+        <motion.div
+          custom={1}
+          initial="hidden"
+          animate="visible"
+          variants={variants}
+          className="flex flex-col justify-center items-center"
+        >
           <div className="w-[80px] sm:w-[100px] h-[80px] sm:h-[100px] rounded-full border-2 flex justify-center items-center">
             <FaUser size={55} />
           </div>
           <div className="text-[16px] sm:text-[20px] my-2">
             {userRanking?.users[2].displayName}
           </div>
-          <div className="min-w-[100px] sm:min-w-[200px] h-[110px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1">
-            <div className="text-[50px] sm:text-[50px]">3rd</div>
+          <div className="min-w-[100px] sm:min-w-[180px] h-[110px] sm:h-[150px] bg-[#DE9800] rounded-lg flex flex-col justify-between items-center p-2 pt-1 shadow-2xl">
+            <div className="text-[50px] sm:text-[50px]">3</div>
             <div className="text-[16px] sm:text-[20px]">
               {userRanking?.users[2].point}점
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="w-full max-w-[600px] h-[300px] sm:h-[400px] py-4 overflow-y-auto border-2 rounded-2xl flex flex-col justify-start items-center">
+      <div className="w-full max-w-[600px] h-[300px] sm:h-[400px] py-4 mt-4 overflow-y-auto border-2 rounded-2xl flex flex-col justify-start items-center">
         {userRanking?.users.map((user, index) => {
           if (index > 2) {
             return (

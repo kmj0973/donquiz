@@ -36,7 +36,8 @@ const Login = () => {
 
         setCookie("token", accessToken);
         console.log(user);
-        if (user.displayName) saveUser(user.displayName, user.uid);
+        if (user.displayName && user.email)
+          saveUser(user.displayName, user.email, user.uid);
         toast.success("로그인 성공", { duration: 1000 });
 
         router.replace("/");

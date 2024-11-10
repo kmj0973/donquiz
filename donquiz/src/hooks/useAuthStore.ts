@@ -4,9 +4,10 @@ import { persist } from "zustand/middleware";
 
 interface userInfoProps {
   displayName: string | null;
+  email: string | null;
   uid: string | null;
   isLogin: boolean; // 로그인 여부
-  saveUser: (displayName: string, uid: string) => void;
+  saveUser: (displayName: string, email: string, uid: string) => void;
   checkLogin: () => void; // 로그인 여부 확인 함수
   logout: () => void; // 로그아웃
 }
@@ -16,10 +17,11 @@ export const useAuthStore = create(
     (set) => {
       return {
         displayName: null,
+        email: null,
         uid: null,
         isLogin: false,
-        saveUser: (displayName, uid) => {
-          set({ displayName, uid, isLogin: true });
+        saveUser: (displayName, email, uid) => {
+          set({ displayName, email, uid, isLogin: true });
         },
         checkLogin: async () => {
           const accessToken = await getCookie("token");
@@ -27,13 +29,13 @@ export const useAuthStore = create(
           if (accessToken) {
             set({ isLogin: true });
           } else {
-            set({ displayName: null, uid: null, isLogin: false });
+            set({ displayName: null, email: null, uid: null, isLogin: false });
           }
         },
         logout: () => {
           deleteCookie("token");
           deleteCookie("kakaoToken");
-          set({ displayName: null, uid: null, isLogin: false });
+          set({ displayName: null, email: null, uid: null, isLogin: false });
         },
       };
     },
