@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
 // import { useQuery } from "@tanstack/react-query";
 import logo from "../../../public/image/donquiz logo2.png";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../../firebase/firebasedb";
 import { useQuery } from "@tanstack/react-query";
 
@@ -50,7 +50,10 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
         usersSnapshot.docs.map(async (userDoc) => {
           const userId = userDoc.id;
           const quizListSnapshot = await getDocs(
-            collection(db, `users/${userId}/quizList`)
+            query(
+              collection(db, `users/${userId}/quizList`),
+              orderBy("createdAt", "desc")
+            ) // 최신순 정렬
           );
 
           quizListSnapshot.docs.forEach((quizDoc) => {
@@ -71,7 +74,6 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     },
     initialData: initialQuizzes,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    refetchInterval: 10000, // Refetch every 10 seconds
   });
 
   useEffect(() => {
