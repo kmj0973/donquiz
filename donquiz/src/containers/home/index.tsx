@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import logo from "../../../public/image/donquiz logo2.png";
+import { collection, getDocs, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../../firebase/firebasedb";
 
 interface Quiz {
   userId: string;
@@ -32,26 +34,64 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
 
   const [searchWords, setSearchWords] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [allUsersQuizLists, setAllUsersQuizLists] = useState<Quiz[]>([]);
+  const [allUsersQuizLists, setAllUsersQuizLists] =
+    useState<Quiz[]>(initialQuizzes);
   const [toggle, setToggle] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Custom hook 사용하여 데이터 가져오기
-  const { data: quizzes, refetch } = useQuery<Quiz[]>({
-    queryKey: ["userQuizLists"],
-    queryFn: async () => initialQuizzes,
-    initialData: initialQuizzes,
-    staleTime: 1000 * 60 * 5,
-    refetchInterval: 5000, // 5초마다 새 데이터를 가져옴
-  });
+  // // Custom hook 사용하여 데이터 가져오기
+  // const { data: quizzes, refetch } = useQuery<Quiz[]>({
+  //   queryKey: ["userQuizLists"],
+  //   queryFn: async () => initialQuizzes,
+  //   initialData: initialQuizzes,
+  //   staleTime: 1000 * 60 * 5,
+  //   refetchInterval: 5000, // 5초마다 새 데이터를 가져옴
+  // });
+
+  // useEffect(() => {
+  //   setAllUsersQuizLists(quizzes);
+  //   setIsLoading(false);
+  //   refetch();
+  //   console.log(allUsersQuizLists);
+  // }, [quizzes, refetch, allUsersQuizLists]);
 
   useEffect(() => {
-    setAllUsersQuizLists(quizzes);
-    setIsLoading(false);
-    refetch();
-    console.log(allUsersQuizLists);
-  }, [quizzes, refetch, allUsersQuizLists]);
+    const q = query(collection(db, "users"));
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const updatedQuizzes: Quiz[] = [];
 
+      await Promise.all(
+        snapshot.docs.map(async (userDoc) => {
+          const userId = userDoc.id;
+          const quizListSnapshot = await getDocs(
+            collection(db, `users/${userId}/quizList`)
+          );
+
+          quizListSnapshot.docs.forEach((quizDoc) => {
+            const quizData = quizDoc.data();
+            updatedQuizzes.push({
+              userId: userId,
+              quizId: quizDoc.id,
+              createdAt: quizData.createdAt.toDate(),
+              title: quizData.title,
+              imageUrl: quizData.thumbnail || "",
+              participant: quizData.participant,
+              quizList: quizData.quizList,
+            });
+          });
+        })
+      );
+
+      setAllUsersQuizLists(
+        updatedQuizzes.sort(
+          (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+        )
+      );
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
   const handleStartQuiz = async (
     e: React.MouseEvent<HTMLButtonElement>,
     userId: string,
@@ -157,14 +197,14 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             • 인기순
           </div>
         </div>
-        {quizzes.filter(
+        {allUsersQuizLists.filter(
           (quiz) => quiz.quizList && quiz.title.includes(searchWords)
         ).length === 0 ? (
           <div className="text-center w-full text-lg font-semibold my-auto pb-20">
             검색 결과가 없습니다...
           </div>
         ) : (
-          quizzes
+          allUsersQuizLists
             .filter((quiz) => quiz.quizList && quiz.title.includes(searchWords))
             .map((quiz) => {
               return (
