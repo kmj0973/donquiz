@@ -28,6 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* PWA 메타 태그 */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/image/favicon.ico" />
+      </head>
       <body className={anta.className}>
         <ReactQueryProvider>
           <Header />
