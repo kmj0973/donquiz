@@ -199,7 +199,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
               return (
                 <div
                   key={quiz.quizId}
-                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-[#000000] w-[300px] sm:w-[48%] md:w-[31%] lg:w-[24%] sm:min-w-[220px] min-h-[240px] rounded-2xl"
+                  className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-[#000000] w-[300px] sm:w-[48%] md:w-[31%] lg:w-[24%] sm:min-w-[220px] min-h-[240px] rounded-2xl shadow-xl"
                 >
                   <div className="w-[95%] flex items-center justify-between my-1">
                     <div className="text-[12px] sm:text-[14px] flex items-center">

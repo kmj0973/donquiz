@@ -52,20 +52,20 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] font-bold flex flex-col items-center justify-center px-4 sm:px-6">
-      <div className="h-28 sm:h-36 text-[48px] sm:text-[72px] lg:text-[108px] text-white bg-black px-4 sm:px-6 pb-2 sm:pb-3 flex items-center mt-8 sm:mt-12 mb-10 sm:mb-20">
-        <span className="text-[#FF0000]">D</span>ON
-        <span className="text-[#FFF700]">Q</span>UIZ
+    <div className="w-full min-h-[calc(100vh-120px)] font-normal flex flex-col items-center justify-center px-4 sm:px-6 pb-10">
+      <div className="h-28 sm:h-36 text-[50px] text-black font-medium px-4 sm:px-6 pb-2 sm:pb-3 flex items-center mt-8 sm:mt-12">
+        Login
       </div>
-      <div className="mb-8 sm:mb-10 w-full max-w-[400px]">
+      <div className="mb-8 w-full max-w-[400px]">
         <form onSubmit={onSignIn} className="flex flex-col w-full">
           <label htmlFor="email" className="text-[#999999] mb-2">
             Email
           </label>
           <input
-            className="border-0 bg-[#f2f2f2] rounded-lg p-2 sm:p-3 mb-3"
+            className="border-0 bg-[#f2f2f2] rounded-lg p-2 mb-3"
             id="email"
             type="email"
+            placeholder="Email"
             onChange={(e) => {
               setEmail(e.target.value);
             }}
@@ -74,18 +74,19 @@ const Login = () => {
             Password
           </label>
           <input
-            className="border-0 bg-[#f2f2f2] rounded-lg p-2 sm:p-3 mb-5"
+            className="border-0 bg-[#f2f2f2] rounded-lg p-2 mb-14"
             id="password"
             type="password"
+            placeholder="Password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
           <button
             type="submit"
-            className="bg-[#222222] hover:bg-black rounded-lg p-2 sm:p-3 text-white"
+            className="w-full max-w-[350px] m-auto text-black bg-[#bbbbbb80] hover:bg-[#bbbbbb] hover:bg-black rounded-2xl p-2 mb-4"
           >
-            SIGN IN
+            Login
           </button>
           {isCheckAuth ? (
             <div className="text-red-600 font-bold mt-1 text-center">
@@ -94,19 +95,19 @@ const Login = () => {
           ) : null}
         </form>
       </div>
-      <div className="flex flex-col items-center justify-center w-full max-w-[400px]">
+      <div className="flex flex-col items-center justify-center w-full max-w-[350px]">
         <button
           onClick={onOpenPopUp}
-          className="w-full text-center text-white bg-[#222222] hover:bg-black rounded-lg p-2 sm:p-3 mb-2"
+          className="w-full text-center text-black bg-[#bbbbbb80] hover:bg-[#bbbbbb] rounded-2xl p-2 mb-2"
         >
-          SIGN UP
+          Sign Up
         </button>
         {isOpen ? <Auth /> : null}
         <Link
-          className="w-full text-center text-white bg-[#FEE500] rounded-lg p-2 sm:p-3 mb-2"
+          className="w-full text-center text-black bg-[#FEE500] hover:bg-[#c4b426] rounded-2xl p-2 mb-2"
           href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
         >
-          KAKAO
+          Sing up for kakao
         </Link>
 
         {/* <Image alt="kakao_login" src={kakao_image} width={400} height={50} />
