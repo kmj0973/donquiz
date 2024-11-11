@@ -50,11 +50,13 @@ const MyInfo = () => {
   };
 
   const handleLogout = () => {
-    kakaoLogout();
     logout();
+    // kakaoLogout();
     clearUserStorage();
     router.replace("/login");
   };
+
+  
 
   if (isLoading) return <Loading />;
   if (error) {
