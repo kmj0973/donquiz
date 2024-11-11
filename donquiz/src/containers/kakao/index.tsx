@@ -24,7 +24,7 @@ const KaKao = () => {
         client_id: process.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
         REDIRECT_URI:
           process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI ||
-          "http://localhost:3000/kakao",
+          "https://donquiz.vercel.app/kakao",
         code: code,
       };
 

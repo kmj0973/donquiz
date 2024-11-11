@@ -49,14 +49,12 @@ const MyInfo = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
-    // kakaoLogout();
+    await kakaoLogout();
     clearUserStorage();
     router.replace("/login");
   };
-
-  
 
   if (isLoading) return <Loading />;
   if (error) {
