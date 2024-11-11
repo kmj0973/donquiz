@@ -126,7 +126,7 @@ const MyInfo = () => {
                   key={index}
                   className="flex flex-col items-center justify-center p-4"
                 >
-                  <div className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-black w-full min-h-[250px] rounded-2xl overflow-hidden">
+                  <div className="duration-300 hover:scale-105 flex flex-col items-center justify-center border-[3px] border-black w-full min-h-[250px] rounded-2xl overflow-hidden shadow-xl">
                     <div className="w-[90%] flex items-center justify-between my-2">
                       <div className="text-[12px] sm:text-[14px] flex items-center">
                         <FaUser size="18" />
