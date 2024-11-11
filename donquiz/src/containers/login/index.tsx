@@ -84,7 +84,7 @@ const Login = () => {
           />
           <button
             type="submit"
-            className="w-full max-w-[350px] m-auto text-black bg-[#bbbbbb80] hover:bg-[#bbbbbb] hover:bg-black rounded-2xl p-2 mb-4"
+            className="w-full max-w-[350px] m-auto text-black bg-[#bbbbbb80] hover:bg-[#bbbbbb] rounded-2xl p-2 mb-4"
           >
             Login
           </button>

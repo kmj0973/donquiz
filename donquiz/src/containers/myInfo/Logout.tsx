@@ -64,7 +64,7 @@ const MyInfo = () => {
   return (
     <div className="w-full max-w-[1200px] flex flex-col items-center justify-center py-8 px-2">
       <div className="w-full max-w-[1200px] h-auto sm:h-[350px] rounded-2xl flex flex-col sm:flex-row justify-around items-center mb-8">
-        <div className="w-full max-w-[300px] flex flex-col justify-center items-center rounded-3xl shadow-xl py-10 px-4 mx-4">
+        <div className="w-full max-w-[300px] flex flex-col justify-center items-center rounded-3xl shadow-xl py-10 px-4 mx-4 duration-300 hover:scale-105">
           <div className="w-full flex flex-col justify-start pl-4">
             <div className="text-[20px]">{displayName}</div>
             <div className="text-[14px] text-[#666666]">{email}</div>
@@ -77,16 +77,16 @@ const MyInfo = () => {
           <div className="w-full flex justify-end">
             <button
               onClick={handleLogout}
-              className="bg-[#bbbbbb80] hover:bg-[#868686] font-normal rounded-xl shadow-xl py-2 px-8 my-4"
+              className="bg-[#bbbbbb80] hover:bg-[#868686] font-normal rounded-xl shadow-xl py-2 px-8 my-4 duration-300 hover:scale-105"
             >
               Logout
             </button>
           </div>
           <div className="w-full max-w-[400px]">
-            <div className="w-full py-4 px-8 text-[24px] mb-4 rounded-3xl shadow-xl">
+            <div className="w-full py-4 px-8 text-[24px] mb-4 rounded-3xl shadow-xl duration-300 hover:scale-105">
               Ranking : {userRanking?.rank}
             </div>
-            <div className="w-full py-4 px-8 text-[24px] mb-4 rounded-3xl shadow-xl">
+            <div className="w-full py-4 px-8 text-[24px] mb-4 rounded-3xl shadow-xl duration-300 hover:scale-105">
               Points : {userData?.userPoint}
             </div>
           </div>

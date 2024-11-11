@@ -160,14 +160,14 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <input
-            className="rounded-xl p-[10px] bg-black text-white border-black text-sm sm:text-base font-normal cursor-pointer"
+            className="rounded-xl p-[10px] bg-black hover:bg-[#999999] text-white border-black text-sm sm:text-base font-normal cursor-pointer"
             type="button"
             value="Search"
             onClick={handleSearch}
           />
         </div>
       </div>
-      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-280px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
+      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-230px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
         <div className="flex items-center justify-end w-full max-w-[1400px] px-2">
           <div
             onClick={handleRecent}
@@ -189,7 +189,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
         {allUsersQuizLists.filter(
           (quiz) => quiz.quizList && quiz.title.includes(searchWords)
         ).length === 0 ? (
-          <div className="text-center w-full text-lg font-semibold my-auto pb-20">
+          <div className="flex justify-center items-center text-center w-full text-lg font-semibold pb-20">
             검색 결과가 없습니다...
           </div>
         ) : (
