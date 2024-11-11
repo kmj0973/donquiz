@@ -164,7 +164,7 @@ const MyInfo = () => {
                           duration: 800,
                         });
                       }}
-                      className="bg-[#FF4848] hover:bg-red-600 text-white rounded-3xl py-1 px-4 sm:py-2 sm:px-6 my-2 text-sm sm:text-base"
+                      className="hover:bg-[#999999] bg-black text-white rounded-3xl py-2 px-4 sm:px-6 my-2 text-sm sm:text-base"
                     >
                       시작하기
                     </button>
