@@ -167,7 +167,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
           />
         </div>
       </div>
-      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-230px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
+      <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-112px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
         <div className="flex items-center justify-end w-full max-w-[1400px] px-2">
           <div
             onClick={handleRecent}

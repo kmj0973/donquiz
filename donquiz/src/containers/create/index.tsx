@@ -199,7 +199,7 @@ const Create = () => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-around font-normal my-4">
+    <div className="w-full min-h-[calc(100vh-112px)] flex flex-col items-center justify-around font-normal my-4">
       <form
         onSubmit={handleSubmitDB}
         className="w-full max-w-[1080px] flex sm:flex-row justify-between items-center mb-6 sm:my-8 px-4 md:px-0"
