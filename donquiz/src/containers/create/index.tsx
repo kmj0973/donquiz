@@ -1,5 +1,6 @@
 "use client";
 
+import imageCompression from "browser-image-compression";
 import { FaArrowLeft } from "react-icons/fa6";
 import { BsPlusSquare } from "react-icons/bs";
 import { CiImageOff } from "react-icons/ci";
@@ -159,28 +160,41 @@ const Create = () => {
     }
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files == null) {
       console.log("file error");
       return;
     }
-    setUploadFileList([...uploadFileList, e.target.files[0]]); //storage에 추가하기위한 file 변수
-    const reader = new FileReader();
+    const file = e.target.files[0];
 
-    reader.readAsDataURL(e.target.files[0]);
-
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setQuizList([
-          ...quizList,
-          { image: String(reader.result), answer: "", source: "" },
-        ]);
-        setShowImage(String(reader.result));
-        setShowImageIndex(quizList.length);
-        setAnswer("");
-        setSource("");
-      }
+    const options = {
+      maxSizeMB: 1, // 최대 파일 크기 설정
+      maxWidthOrHeight: 800, // 최대 가로 또는 세로 길이 설정
     };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setUploadFileList([...uploadFileList, compressedFile]); //storage에 추가하기위한 file 변수
+      const reader = new FileReader();
+
+      reader.readAsDataURL(compressedFile);
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setQuizList([
+            ...quizList,
+            { image: String(reader.result), answer: "", source: "" },
+          ]);
+          setShowImage(String(reader.result));
+          setShowImageIndex(quizList.length);
+          setAnswer("");
+          setSource("");
+        }
+      };
+    } catch (error) {
+      console.error("이미지 압축 오류:", error);
+    }
+
     e.target.value = "";
   };
 

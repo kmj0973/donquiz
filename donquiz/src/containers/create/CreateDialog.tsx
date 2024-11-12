@@ -1,5 +1,6 @@
 "use client";
 
+import imageCompression from "browser-image-compression";
 import { useDialog } from "@/hooks/useDialog";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -56,19 +57,30 @@ const CreateDialog = () => {
     }
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files == null) {
       return;
     }
-    setTitleImage(e.target.files[0]);
+    const file = e.target.files[0];
 
-    const reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-
-    reader.onloadend = () => {
-      setThumbnail(reader.result as string);
+    const options = {
+      maxSizeMB: 1, // 최대 파일 크기 설정
+      maxWidthOrHeight: 800, // 최대 가로 또는 세로 길이 설정
     };
 
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setTitleImage(compressedFile);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+
+      reader.onloadend = () => {
+        setThumbnail(reader.result as string);
+      };
+    } catch (error) {
+      console.error("이미지 압축 오류:", error);
+    }
     e.target.value = "";
   };
 
