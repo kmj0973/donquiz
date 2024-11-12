@@ -11,10 +11,10 @@ const About = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center h-auto min-h-[calc(100vh-120px)] z-30 pt-10">
+    <div className="flex flex-col justify-start items-center h-auto min-h-[calc(100vh-112px)] z-30 pt-10">
       <div className="font-bold text-[50px] text-[#333333] pb-10">About</div>
-      <div className="max-w-[1000px] w-full h-full px-4">
-        <div className="w-full h-auto bg-[#f2f2f2] rounded-3xl pt-1 pl-2">
+      <div className="max-w-[1000px] w-full h-full px-4 mb-8">
+        <div className="w-full h-auto bg-[#f2f2f2] rounded-3xl pt-1 px-2">
           <div
             onClick={() => handleRotate(0)}
             className="flex p-2 text-lg border-b-[1px] font-bold my-2 cursor-pointer"
@@ -34,8 +34,8 @@ const About = () => {
             <div className="mb-2">
               <div className=" text-[#333333]">로그인, 회원가입 가이드</div>
               <div
-                className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[0] ? "max-h-0" : "mt-4 max-h-80"
+                className={`text-[#666666] transition-all duration-3000 ease-in-out overflow-hidden ${
+                  rotate[0] ? "max-h-0" : "mt-4 max-h-100"
                 }`}
               >
                 1. 가입 방법: 카카오톡 또는 이메일로 회원가입이 가능합니다.
@@ -69,7 +69,7 @@ const About = () => {
               <div className="text-[#333333]">퀴즈 풀기 가이드</div>
               <div
                 className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[1] ? "max-h-0" : "mt-4 max-h-80"
+                  rotate[1] ? "max-h-0" : "mt-4 max-h-100"
                 }`}
               >
                 1. 퀴즈 시작: 퀴즈 리스트에서 시작하기 버튼을 클릭하면 퀴즈
@@ -108,7 +108,7 @@ const About = () => {
               <div className=" text-[#333333]">퀴즈 만들기 가이드</div>
               <div
                 className={`text-[#666666] transition-all duration-300 ease-in-out overflow-hidden ${
-                  rotate[2] ? "max-h-0" : "mt-4 max-h-80"
+                  rotate[2] ? "max-h-0" : "mt-4 max-h-100"
                 }`}
               >
                 1. 퀴즈 생성: 퀴즈 제목과 썸네일을 등록하고, 생성하기 버튼을
