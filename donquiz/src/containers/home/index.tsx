@@ -5,7 +5,6 @@ import { FaUser } from "react-icons/fa";
 import Loading from "@/app/loading";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
 // import { useQuery } from "@tanstack/react-query";
@@ -87,13 +86,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     quizId: string,
     title: string
   ) => {
-    if (uid == userId) {
-      toast.error("생성자는 참여할 수 없습니다", { duration: 800 });
-      return;
-    }
-
     if (!isLogin) {
-      toast.error("로그인이 필요합니다", { duration: 800 });
       router.push("/login");
     } else {
       router.push(`/quiz?userId=${userId}&quizId=${quizId}&title=${title}`);
@@ -153,7 +146,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
 
           <input
             className="w-[60%] rounded-xl mr-2 p-[10px] bg-[#F2F2F2] text-[#333333] text-sm sm:text-base "
-            type="text"
+            type="search"
             placeholder="검색어 입력"
             value={searchInput}
             onKeyDown={handleKeyDown}
@@ -187,14 +180,22 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
           </div>
         </div>
         {allUsersQuizLists.filter(
-          (quiz) => quiz.quizList && quiz.title.includes(searchWords)
+          (quiz) =>
+            quiz.quizList &&
+            quiz.title.includes(searchWords) &&
+            quiz.userId != uid
         ).length === 0 ? (
           <div className="flex justify-center items-center text-center w-full text-lg font-semibold pb-20">
             검색 결과가 없습니다...
           </div>
         ) : (
           allUsersQuizLists
-            .filter((quiz) => quiz.quizList && quiz.title.includes(searchWords))
+            .filter(
+              (quiz) =>
+                quiz.quizList &&
+                quiz.title.includes(searchWords) &&
+                quiz.userId != uid
+            )
             .map((quiz) => {
               return (
                 <div
