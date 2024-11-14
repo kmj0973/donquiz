@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "DONQUIZ",
   description: "Make your quiz, Make your point",
   icons: {
-    icon: "/image/favicon.ico",
-    shortcut: "/image/favicon.ico", // 브라우저 단축 아이콘
+    icon: "/image/mobile-icon.png",
+    shortcut: "/image/mobile-icon.png", // 브라우저 단축 아이콘
   },
 };
 
