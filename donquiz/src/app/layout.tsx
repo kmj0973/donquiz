@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/global/reactQuery";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Head from "next/head";
 
 const anta = Anta({ weight: ["400"], subsets: ["latin"] });
 
@@ -28,12 +29,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
+      <Head>
+        <title>DONQUIZ</title>
+        <meta name="description" content="퀴즈를 풀고 포인트를 쌓자!" />
+        <meta name="keywords" content="퀴즈, 퀴즈 게임, quiz game" />
+        <meta property="og:title" content="DONQUIZ" />
+        <meta property="og:description" content="퀴즈를 풀고 포인트를 쌓자!" />
+        <meta property="og:url" content="https://donquiz.vercel.app/" />
         {/* PWA 메타 태그 */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
         <link rel="apple-touch-icon" href="/image/favicon.ico" />
-      </head>
+      </Head>
       <body className={anta.className}>
         <ReactQueryProvider>
           <Header />
