@@ -14,7 +14,8 @@ const anta = Anta({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DONQUIZ",
-  description: "Make your quiz, Make your point",
+  description:
+    "퀴즈 게임! Make your quiz, Make your point : 퀴즈를 풀고 포인트를 쌓자!",
   icons: {
     icon: "/image/mobile-icon.png",
     shortcut: "/image/mobile-icon.png", // 브라우저 단축 아이콘
