@@ -31,6 +31,10 @@ export default function RootLayout({
     <html lang="en">
       <Head>
         <title>DONQUIZ</title>
+        <meta
+          name="google-site-verification"
+          content="rp575jxsVB0hY7LJ_bkLafnCserkjgxBFrRTHwwztDE"
+        />
         <meta name="description" content="퀴즈를 풀고 포인트를 쌓자!" />
         <meta name="keywords" content="퀴즈, 퀴즈 게임, quiz game" />
         <meta property="og:title" content="DONQUIZ" />
