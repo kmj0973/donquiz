@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://donquiz.vercel.app/
+
+# Sitemaps
+Sitemap: https://donquiz.vercel.app/sitemap.xml
