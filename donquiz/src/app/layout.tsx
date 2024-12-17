@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>퀴즈 풀고 포인트 쌓기 - DONQUIZ</title>
+        <title>DONQUIZ - 퀴즈 풀고 포인트 쌓기</title>
         <meta
           name="google-site-verification"
           content="rp575jxsVB0hY7LJ_bkLafnCserkjgxBFrRTHwwztDE"
