@@ -39,7 +39,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
   const [toggle, setToggle] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data: quizzes = [] } = useQuery({
+  const { data: quizzes = initialQuizzes } = useQuery({
     queryKey: ["userQuizLists"],
     queryFn: async () => {
       const updatedQuizzes: Quiz[] = [];
@@ -68,7 +68,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
       );
       return updatedQuizzes;
     },
-    initialData: initialQuizzes,
+    // initialData: initialQuizzes,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
