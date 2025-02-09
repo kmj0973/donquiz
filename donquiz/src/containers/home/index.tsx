@@ -68,7 +68,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
       );
       return updatedQuizzes;
     },
-    initialData: initialQuizzes,
+    // initialData: initialQuizzes,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
