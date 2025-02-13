@@ -1,5 +1,6 @@
 "use client";
 
+
 import Image from "next/image";
 import { FaUser } from "react-icons/fa";
 import Loading from "@/app/loading";
@@ -7,11 +8,9 @@ import { useAuthStore } from "@/hooks/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
-// import { useQuery } from "@tanstack/react-query";
 import logo from "../../../public/image/donquiz logo2.png";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/firebasedb";
-import { useQuery } from "@tanstack/react-query";
 
 interface Quiz {
   userId: string;
@@ -34,22 +33,22 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
 
   const [searchWords, setSearchWords] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [allUsersQuizLists, setAllUsersQuizLists] =
-    useState<Quiz[]>(initialQuizzes);
+  const [allUsersQuizLists, setAllUsersQuizLists] = useState<Quiz[]>(initialQuizzes);
   const [toggle, setToggle] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data: quizzes = initialQuizzes } = useQuery({
-    queryKey: ["userQuizLists"],
-    queryFn: async () => {
+  // ✅ Firebase 변경 감지하여 실시간 업데이트
+  useEffect(() => {
+    const q = query(collection(db, "users"));
+
+    const unsubscribe = onSnapshot(q, async (usersSnapshot) => {
       const updatedQuizzes: Quiz[] = [];
-      const usersSnapshot = await getDocs(query(collection(db, "users")));
 
       await Promise.all(
         usersSnapshot.docs.map(async (userDoc) => {
           const userId = userDoc.id;
           const quizListSnapshot = await getDocs(
-            collection(db, `users/${userId}/quizList`)
+            query(collection(db, `users/${userId}/quizList`), orderBy("createdAt", "desc"))
           );
 
           quizListSnapshot.docs.forEach((quizDoc) => {
@@ -66,19 +65,23 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
           });
         })
       );
-      return updatedQuizzes;
-    },
-    // initialData: initialQuizzes,
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-  });
 
-  useEffect(() => {
-    const sortedData = [...quizzes].sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    );
-    setAllUsersQuizLists(sortedData);
-    setIsLoading(false);
-  }, [quizzes]);
+      // 🔥 기존 데이터와 비교 후 변경이 있을 때만 업데이트
+      setAllUsersQuizLists((prevQuizzes) => {
+        const prevData = JSON.stringify(prevQuizzes);
+        const newData = JSON.stringify(updatedQuizzes);
+
+        if (prevData !== newData) {
+          return updatedQuizzes;
+        }
+        return prevQuizzes;
+      });
+
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe(); // ✅ 중복 구독 방지
+  }, []);
 
   const handleStartQuiz = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -131,6 +134,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     }`;
 
   if (isLoading) return <Loading />;
+
 
   return (
     <>

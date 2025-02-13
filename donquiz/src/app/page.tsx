@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase/firebasedb";
 import QuizList from "@/containers/home";
 
@@ -20,7 +20,10 @@ const fetchUserQuizLists = async (): Promise<Quiz[]> => {
     usersSnapshot.docs.map(async (userDoc) => {
       const userId = userDoc.id;
       const quizListSnapshot = await getDocs(
-        collection(db, `users/${userId}/quizList`)
+        query(
+          collection(db, `users/${userId}/quizList`),
+          orderBy("createdAt", "desc")
+        )
       );
 
       quizListSnapshot.docs.forEach((quizDoc) => {
@@ -38,18 +41,16 @@ const fetchUserQuizLists = async (): Promise<Quiz[]> => {
     })
   );
 
-  return quizzes.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  return quizzes;
 };
 
+// ✅ SSR에서 초기 데이터를 가져옴
 const HomePage = async () => {
-  const quizzes = await fetchUserQuizLists();
+  const initialQuizzes = await fetchUserQuizLists();
 
   return (
     <div className="w-full h-full font-bold flex flex-col items-center justify-center pt-12">
-      {/* <div className="text-[32px] sm:text-[40px] lg:text-[52px] my-4 sm:my-8">
-        Quiz List
-      </div> */}
-      <QuizList initialQuizzes={quizzes} />
+      <QuizList initialQuizzes={initialQuizzes} /> {/* 초기 데이터 전달 */}
     </div>
   );
 };
