@@ -1,6 +1,5 @@
 "use client";
 
-
 import Image from "next/image";
 import { FaUser } from "react-icons/fa";
 import Loading from "@/app/loading";
@@ -9,8 +8,15 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import basicImage from "../../../public/image/basic-image.png";
 import logo from "../../../public/image/donquiz logo2.png";
-import { collection, getDocs, query, orderBy, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../../firebase/firebasedb";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Quiz {
   userId: string;
@@ -30,25 +36,28 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
   const isLogin = useAuthStore((state) => state.isLogin);
   const uid = useAuthStore((state) => state.uid);
   const router = useRouter();
+  const queryClient = useQueryClient(); // 🔥 React Query 캐시 관리
 
   const [searchWords, setSearchWords] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [allUsersQuizLists, setAllUsersQuizLists] = useState<Quiz[]>(initialQuizzes);
+  const [sortType, setSortType] = useState<"recent" | "popular">("recent"); // 🔥 정렬 상태 추가
   const [toggle, setToggle] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // ✅ Firebase 변경 감지하여 실시간 업데이트
-  useEffect(() => {
-    const q = query(collection(db, "users"));
-
-    const unsubscribe = onSnapshot(q, async (usersSnapshot) => {
+  // ✅ Firebase 데이터 캐싱 및 가져오기 (staleTime 적용)
+  const { data: quizzes, isLoading } = useQuery({
+    queryKey: ["userQuizLists"],
+    queryFn: async () => {
       const updatedQuizzes: Quiz[] = [];
+      const usersSnapshot = await getDocs(collection(db, "users"));
 
       await Promise.all(
         usersSnapshot.docs.map(async (userDoc) => {
           const userId = userDoc.id;
           const quizListSnapshot = await getDocs(
-            query(collection(db, `users/${userId}/quizList`), orderBy("createdAt", "desc"))
+            query(
+              collection(db, `users/${userId}/quizList`),
+              orderBy("createdAt", "desc")
+            )
           );
 
           quizListSnapshot.docs.forEach((quizDoc) => {
@@ -66,18 +75,46 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
         })
       );
 
-      // 🔥 기존 데이터와 비교 후 변경이 있을 때만 업데이트
-      setAllUsersQuizLists((prevQuizzes) => {
-        const prevData = JSON.stringify(prevQuizzes);
-        const newData = JSON.stringify(updatedQuizzes);
+      return updatedQuizzes;
+    },
+    initialData: initialQuizzes, // 🔥 초기 데이터 유지
+    staleTime: 1000 * 60 * 5, // ✅ 5분 동안 캐싱 유지
+  });
 
-        if (prevData !== newData) {
-          return updatedQuizzes;
-        }
-        return prevQuizzes;
-      });
+  useEffect(() => {
+    // ✅ Firebase 실시간 변경 감지 (onSnapshot)
+    const q = query(collection(db, "users"));
 
-      setIsLoading(false);
+    const unsubscribe = onSnapshot(q, async (usersSnapshot) => {
+      const updatedQuizzes: Quiz[] = [];
+
+      await Promise.all(
+        usersSnapshot.docs.map(async (userDoc) => {
+          const userId = userDoc.id;
+          const quizListSnapshot = await getDocs(
+            query(
+              collection(db, `users/${userId}/quizList`),
+              orderBy("createdAt", "desc")
+            )
+          );
+
+          quizListSnapshot.docs.forEach((quizDoc) => {
+            const quizData = quizDoc.data();
+            updatedQuizzes.push({
+              userId: userId,
+              quizId: quizDoc.id,
+              createdAt: quizData.createdAt.toDate(),
+              title: quizData.title,
+              imageUrl: quizData.thumbnail || "",
+              participant: quizData.participant,
+              quizList: quizData.quizList,
+            });
+          });
+        })
+      );
+
+      // 🔥 Firebase 데이터 변경 감지 시 캐싱 업데이트
+      queryClient.setQueryData(["userQuizLists"], updatedQuizzes);
     });
 
     return () => unsubscribe(); // ✅ 중복 구독 방지
@@ -96,27 +133,35 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     }
   };
 
-  const handlePopular = () => {
-    setAllUsersQuizLists((prevAllUsersQuizLists) => {
-      const sortedList = [...prevAllUsersQuizLists].sort(
-        (a, b) => b.participant - a.participant
-      );
-      return sortedList;
-    });
+  // const handlePopular = () => {
+  //   setAllUsersQuizLists((prevAllUsersQuizLists) => {
+  //     const sortedList = [...prevAllUsersQuizLists].sort(
+  //       (a, b) => b.participant - a.participant
+  //     );
+  //     return sortedList;
+  //   });
 
-    setToggle(false);
-  };
+  //   setToggle(false);
+  // };
 
-  const handleRecent = () => {
-    setAllUsersQuizLists((prevAllUsersQuizLists) => {
-      const sortedList = [...prevAllUsersQuizLists].sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
-      return sortedList;
-    });
+  // const handleRecent = () => {
+  //   setAllUsersQuizLists((prevAllUsersQuizLists) => {
+  //     const sortedList = [...prevAllUsersQuizLists].sort(
+  //       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  //     );
+  //     return sortedList;
+  //   });
 
-    setToggle(true);
-  };
+  //   setToggle(true);
+  // };
+
+  const sortedQuizzes = [...quizzes].sort((a, b) => {
+    if (sortType === "recent") {
+      return b.createdAt.getTime() - a.createdAt.getTime(); // 최신순 정렬
+    } else {
+      return b.participant - a.participant; // 인기순 정렬
+    }
+  });
 
   const handleSearch = () => {
     setSearchWords(searchInput);
@@ -134,7 +179,6 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
     }`;
 
   if (isLoading) return <Loading />;
-
 
   return (
     <>
@@ -167,7 +211,10 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
       <div className="w-full max-w-[1400px] h-[100%] min-h-[calc(100vh-112px)] flex items-start justify-center xl:justify-start flex-wrap gap-4 overflow-auto pb-4 pt-12 px-2">
         <div className="flex items-center justify-end w-full max-w-[1400px] px-2">
           <div
-            onClick={handleRecent}
+            onClick={() => {
+              setSortType("recent");
+              setToggle(false);
+            }}
             className={`${tabClass(
               toggle
             )} rounded-xl p-[10px]  text-sm sm:text-base`}
@@ -175,7 +222,10 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             • 최신순
           </div>
           <div
-            onClick={handlePopular}
+            onClick={() => {
+              setSortType("popular");
+              setToggle(true);
+            }}
             className={`${tabClass(
               !toggle
             )} rounded-xl p-[10px]  text-sm sm:text-base`}
@@ -183,7 +233,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             • 인기순
           </div>
         </div>
-        {allUsersQuizLists.filter(
+        {sortedQuizzes.filter(
           (quiz) =>
             quiz.quizList &&
             quiz.title.includes(searchWords) &&
@@ -193,7 +243,7 @@ const QuizList = ({ initialQuizzes }: QuizListProps) => {
             검색 결과가 없습니다...
           </div>
         ) : (
-          allUsersQuizLists
+          sortedQuizzes
             .filter(
               (quiz) =>
                 quiz.quizList &&
