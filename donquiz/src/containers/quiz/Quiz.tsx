@@ -48,9 +48,11 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
   // ✅ 다음 문제의 이미지를 미리 로드하는 최적화된 `useEffect`
   useEffect(() => {
     if (targetIndex + 1 < quizList.length) {
-      setNextImageUrl(quizList[targetIndex + 1].quizList.image);
+      const nextImage = new window.Image(); // ✅ 새로운 이미지 객체 생성
+      nextImage.src = quizList[targetIndex + 1].quizList.image; // ✅ 다음 퀴즈의 이미지 URL 설정
+      nextImage.onload = () => setNextImageUrl(nextImage.src);
     }
-  }, [targetIndex, quizList]);
+  }, [targetIndex]);
 
   const handleIsAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
