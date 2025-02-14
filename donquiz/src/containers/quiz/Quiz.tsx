@@ -48,9 +48,7 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
   // ✅ 다음 문제의 이미지를 미리 로드하는 최적화된 `useEffect`
   useEffect(() => {
     if (targetIndex + 1 < quizList.length) {
-      const nextImage = new window.Image();
-      nextImage.src = quizList[targetIndex + 1].quizList.image;
-      nextImage.onload = () => setNextImageUrl(nextImage.src);
+      setNextImageUrl(quizList[targetIndex + 1].quizList.image);
     }
   }, [targetIndex, quizList]);
 
@@ -118,15 +116,7 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
           priority
           className="rounded-lg"
         />
-        {nextImageUrl && (
-          <Image
-            src={nextImageUrl}
-            style={{ display: "none" }}
-            fill
-            sizes="(max-width: 768px) 400, (max-width: 1200px) 500"
-            alt="preloaded"
-          />
-        )}
+        {nextImageUrl && <link rel="preload" as="image" href={nextImageUrl} />}
         {isAnswer === true && (
           <div className="animate-pulse absolute inset-0 flex justify-center items-center">
             <Image src={O} alt="맞음" width={250} height={250} />
