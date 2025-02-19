@@ -27,7 +27,6 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
   const [isAnswer, setIsAnswer] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false); // Last result page loading
   const [targetIndex, setTargetIndex] = useState<number>(0); // Target quiz index
-  const [nextImageUrl, setNextImageUrl] = useState<string | null>(null); // Preloaded next image
 
   const params = useSearchParams();
   const userId = params.get("userId") ?? "";
@@ -44,15 +43,6 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
       nextButtonRef.current.focus();
     }
   }, [targetIndex, isAnswer]);
-
-  // ✅ 다음 문제의 이미지를 미리 로드하는 최적화된 `useEffect`
-  useEffect(() => {
-    if (targetIndex + 1 < quizList.length) {
-      const nextImage = new window.Image(); // ✅ 새로운 이미지 객체 생성
-      nextImage.src = quizList[targetIndex + 1].quizList.image; // ✅ 다음 퀴즈의 이미지 URL 설정
-      nextImage.onload = () => setNextImageUrl(nextImage.src);
-    }
-  }, [targetIndex]);
 
   const handleIsAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -118,7 +108,16 @@ const QuizComponents = ({ quizList }: { quizList: QuizList[] }) => {
           priority
           className="rounded-lg"
         />
-        {nextImageUrl && <link rel="preload" as="image" href={nextImageUrl} />}
+        {quizList.length !== targetIndex + 1 && (
+          <Image
+            src={quizList[targetIndex + 1].quizList.image}
+            alt={quizList[targetIndex + 1].quizList.source}
+            fill
+            sizes="(max-width: 768px) 400, (max-width: 1200px) 500"
+            priority
+            className="rounded-lg hidden"
+          />
+        )}
         {isAnswer === true && (
           <div className="animate-pulse absolute inset-0 flex justify-center items-center">
             <Image src={O} alt="맞음" width={250} height={250} />
